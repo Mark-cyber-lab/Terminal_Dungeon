@@ -52,12 +52,14 @@ public class DirGenerator {
             String lineSeparator,
             String encoding,
             boolean createHiddenFiles,
-            Set<String> hiddenExtensions
+            Set<String> hiddenExtensions,
+            String sandboxPath
     ) {
         public GenerationConfig {
             if (lineSeparator == null) lineSeparator = System.lineSeparator();
             if (encoding == null) encoding = "UTF-8";
             if (hiddenExtensions == null) hiddenExtensions = Set.of();
+            if(sandboxPath == null) sandboxPath = "";
         }
 
         // Builder method for convenience
@@ -73,6 +75,7 @@ public class DirGenerator {
             private String encoding = "UTF-8";
             private boolean createHiddenFiles = true;
             private Set<String> hiddenExtensions = new HashSet<>(HIDDEN_EXTENSIONS);
+            private String sandboxPath = "";
 
             public Builder overwriteExisting(boolean overwriteExisting) {
                 this.overwriteExisting = overwriteExisting;
@@ -81,6 +84,11 @@ public class DirGenerator {
 
             public Builder verbose(boolean verbose) {
                 this.verbose = verbose;
+                return this;
+            }
+
+            public Builder sandboxPath(String sandboxPath) {
+                this.sandboxPath = sandboxPath;
                 return this;
             }
 
@@ -111,7 +119,7 @@ public class DirGenerator {
 
             public GenerationConfig build() {
                 return new GenerationConfig(overwriteExisting, verbose, lineSeparator,
-                        encoding, createHiddenFiles, hiddenExtensions);
+                        encoding, createHiddenFiles, hiddenExtensions, sandboxPath);
             }
         }
     }
@@ -129,9 +137,9 @@ public class DirGenerator {
         }
     }
 
-    public GenerationResult generateFromConfig(String configFilePath) {
+    public GenerationResult generateFromConfig(String configFilePath, String sandboxPath) {
         return generateFromConfig(configFilePath,
-                GenerationConfig.builder().build());
+                GenerationConfig.builder().sandboxPath(sandboxPath).build());
     }
 
     public GenerationResult generateFromConfig(String configFilePath, GenerationConfig config) {
@@ -150,6 +158,7 @@ public class DirGenerator {
 
             Path configPath = Paths.get(configFilePath);
             if (!Files.exists(configPath)) {
+//                IO.println("Config not found" + configPath.toAbsolutePath());
                 return new GenerationResult(false, "Config file not found: " + configFilePath,
                         createdDirs, createdFiles, createdHiddenFiles, skippedPaths, errorPaths);
             }
@@ -159,7 +168,22 @@ public class DirGenerator {
 
             for (FileSystemEntry entry : entries) {
                 processEntry(entry, config, createdDirs, createdFiles, createdHiddenFiles, skippedPaths, errorPaths);
+//                IO.println("Processing entry: " + entry.path);
+
+                // Use sandboxPath as base if specified, otherwise default to current entry path
+                Path basePath = (config.sandboxPath() != null && !config.sandboxPath().isBlank())
+                        ? Paths.get(config.sandboxPath())
+                        : Paths.get("."); // default base path
+
+                Path absolutePath = basePath.resolve(entry.path()).toAbsolutePath();
+
+//                if (entry.isDirectory()) {
+//                    System.out.println("Directory processed at: " + absolutePath);
+//                } else {
+//                    System.out.println("File processed at: " + absolutePath);
+//                }
             }
+
 
             String message = String.format(
                     "Generated %d directories, %d files, %d hidden files (%d skipped, %d errors)",
@@ -180,12 +204,16 @@ public class DirGenerator {
                               List<String> createdHiddenFiles, List<String> skippedPaths,
                               List<String> errorPaths) {
         try {
-            Path targetPath = Paths.get(entry.path());
+            Path basePath = (config.sandboxPath() != null && !config.sandboxPath().isBlank())
+                    ? Paths.get(config.sandboxPath())
+                    : Paths.get("."); // default base path
+
+            Path absolutePath = basePath.resolve(entry.path()).toAbsolutePath();
 
             if (entry.isDirectory()) {
-                processDirectory(targetPath, config, createdDirs, skippedPaths);
+                processDirectory(absolutePath, config, createdDirs, skippedPaths);
             } else {
-                processFile(entry, targetPath, config, createdDirs, createdFiles, createdHiddenFiles, skippedPaths);
+                processFile(entry, absolutePath, config, createdDirs, createdFiles, createdHiddenFiles, skippedPaths);
             }
         } catch (Exception e) {
             String error = entry.path() + " - " + e.getMessage();
@@ -201,14 +229,14 @@ public class DirGenerator {
         if (!Files.exists(dirPath)) {
             Files.createDirectories(dirPath);
             createdDirs.add(dirPath.toString());
-            if (config.verbose()) {
-                System.out.println("✓ Created directory: " + dirPath);
-            }
+//            if (config.verbose()) {
+//                System.out.println("✓ Created directory: " + dirPath);
+//            }
         } else {
             skippedPaths.add(dirPath.toString());
-            if (config.verbose()) {
-                System.out.println("⤳ Directory exists: " + dirPath);
-            }
+//            if (config.verbose()) {
+//                System.out.println("⤳ Directory exists: " + dirPath);
+//            }
         }
     }
 
@@ -237,16 +265,16 @@ public class DirGenerator {
                 }
             } else {
                 createdFiles.add(filePath.toString());
-                if (config.verbose()) {
-                    System.out.println("✓ Created file: " + filePath +
-                            " (" + entry.content().length() + " chars)");
-                }
+//                if (config.verbose()) {
+//                    System.out.println("✓ Created file: " + filePath +
+//                            " (" + entry.content().length() + " chars)");
+//                }
             }
         } else {
             skippedPaths.add(filePath.toString());
-            if (config.verbose()) {
-                System.out.println("⤳ File exists: " + filePath);
-            }
+//            if (config.verbose()) {
+//                System.out.println("⤳ File exists: " + filePath);
+//            }
         }
     }
 
@@ -301,10 +329,13 @@ public class DirGenerator {
         StringBuilder contentBuilder = null;
         boolean explicitHidden = false;
 
+        int lineNumber = 0;
         for (String rawLine : lines) {
+            lineNumber++;
             String line = rawLine.trim();
 
             if (line.isEmpty() || line.startsWith("#")) {
+                IO.println("Line is empty.");
                 continue; // Skip empty lines and comments
             }
 
@@ -314,26 +345,31 @@ public class DirGenerator {
                 currentEntry = new FileSystemEntry(dirPath, true, "", true);
                 contentBuilder = null;
                 explicitHidden = true;
+//                System.out.println("[DEBUG] Line " + lineNumber + ": HIDDEN_DIR -> " + dirPath);
             } else if (line.startsWith("DIR:")) {
                 finishCurrentEntry(entries, currentEntry, contentBuilder, explicitHidden);
                 String dirPath = line.substring(4).trim();
                 currentEntry = new FileSystemEntry(dirPath, true, "", false);
                 contentBuilder = null;
                 explicitHidden = false;
+//                System.out.println("[DEBUG] Line " + lineNumber + ": DIR -> " + dirPath);
             } else if (line.startsWith("HIDDEN_FILE:")) {
                 finishCurrentEntry(entries, currentEntry, contentBuilder, explicitHidden);
                 String filePath = line.substring(12).trim();
                 currentEntry = new FileSystemEntry(filePath, false, "", true);
                 contentBuilder = new StringBuilder();
                 explicitHidden = true;
+                System.out.println("[DEBUG] Line " + lineNumber + ": HIDDEN_FILE -> " + filePath);
             } else if (line.startsWith("FILE:")) {
                 finishCurrentEntry(entries, currentEntry, contentBuilder, explicitHidden);
                 String filePath = line.substring(5).trim();
                 currentEntry = new FileSystemEntry(filePath, false, "", false);
                 contentBuilder = new StringBuilder();
                 explicitHidden = false;
+//                System.out.println("[DEBUG] Line " + lineNumber + ": FILE -> " + filePath);
             } else if (line.equals("END_FILE") || line.equals("END")) {
                 finishCurrentEntry(entries, currentEntry, contentBuilder, explicitHidden);
+//                System.out.println("[DEBUG] Line " + lineNumber + ": END -> " + (currentEntry != null ? currentEntry.path() : "null"));
                 currentEntry = null;
                 contentBuilder = null;
                 explicitHidden = false;
@@ -349,10 +385,13 @@ public class DirGenerator {
                 entries.add(new FileSystemEntry(line, isDir, "", isHidden));
                 currentEntry = null;
                 explicitHidden = false;
+//                System.out.println("[DEBUG] Line " + lineNumber + ": Standalone entry -> " + line +
+//                        " | isDir=" + isDir + " | hidden=" + isHidden);
             }
         }
 
         finishCurrentEntry(entries, currentEntry, contentBuilder, explicitHidden);
+//        System.out.println("[DEBUG] Finished parsing config. Total entries: " + entries.size());
         return entries;
     }
 
