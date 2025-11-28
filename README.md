@@ -1,186 +1,160 @@
-# ⚔️ Terminal Knight Progression Guide
+# ⚔️ Terminal Dungeon: Full Gameplay & Implementation Guide
 
-Embark on your journey through the Kingdom of the Command Line, where each level grants you new powers, skills, and abilities. Master the path from a humble squire to an arcane knight.
-
----
-
-## Level 1 — Squire
-**Skills:** Navigation  
-**Description:**  
-A beginner explorer of the realm. The Squire can traverse directories and unveil the structure of unfamiliar lands.
-
-**Commands:**  
-`ls`, `cd`, `pwd`, `tree`
+Embark on your journey through the **Terminal Dungeon**, a mystical realm of directories and files. Each level grants new powers, skills, and abilities, progressing from Squire to Arcane Knight. Players learn Linux commands safely in a sandbox while sensitive commands are simulated.
 
 ---
 
-## Level 2 — Apprentice Knight
-**Skills:** Messenger  
-**Description:**  
-A keeper of stories and lore. The Apprentice Knight can read scrolls and ancient texts.
+## 🎮 Level & Stage Overview
 
-**Commands:**  
-`cat`
-
----
-
-## Level 3 — Scout Knight
-**Skills:** Combat  
-**Description:**  
-Trained in the art of destruction. The Scout Knight can eliminate enemies and clear obstacles—sometimes entire battalions.
-
-**Commands:**  
-`rm`, `rm -rf`
+- **Levels:** 1–7
+- **Stages per Level:** up to 3
+- **Stage types:**
+    - **Exploration** — learn navigation, find items
+    - **Combat** — defeat enemies (goblins, kobolds)
+    - **Puzzle** — move keys, open doors, deliver scrolls
 
 ---
 
-## Level 4 — Warrior Knight
-**Skills:** Key Keeper  
-**Description:**  
-Guardian of access and passage. The Warrior Knight controls who may enter doors—opened or sealed.
+## 🏁 Level Progression
 
-**Commands:**  
-`chmod`
+### Level 1 — Squire (Tutorial)
+- **Skills:** Navigation
+- **Description:** Fully guided introduction. The game teaches safe commands.
+- **Commands (real/sandboxed):** `ls`, `cd`, `pwd`, `tree`
 
----
+**Stage Example:**
+1. Navigate directories (`cd`)
+2. List files (`ls`)
+3. Show current path (`pwd`)
 
-## Level 5 — Guardian Knight
-**Skills:** The Saviour  
-**Description:**  
-A protector who brings order to chaos. The Guardian Knight can relocate precious items to safer grounds.
-
-**Commands:**  
-`cp`, `mv`
+**Goal:** Learn core commands safely. All actions are real, executed in a sandboxed directory.
 
 ---
 
-## Level 6 — Paladin
-**Skills:** Divine Restoration  
-**Description:**  
-A holy warrior capable of invoking higher authority. The Paladin can perform actions beyond mortal permission, restoring or altering the world with elevated power.
+### Level 2 — Apprentice Knight (Messenger)
+- **Skills:** Scroll Reading (`cat`)
+- **Description:** Players read scrolls containing lore, guidance, and combat instructions.
+- **Commands:** `cat` (real/sandboxed)
 
-**Commands:**  
-`sudo`
+**Stage Example:**
+1. `cat scroll.txt` → learns about goblins (`rm`)
+2. `cat scroll.txt` → learns about hidden keys (`mv`)
+3. `cat scroll.txt` → learns about doors and orbs (`chmod`)
 
----
-
-## Level 7 — Arcane Knight
-**Skills:** The Master  
-**Description:**  
-A wielder of mystical forces. The Arcane Knight can weave commands together, forming powerful chains of magic.
-
-**Commands:**  
-`&`, `|`
+**Goal:** Read scrolls to gain knowledge and unlock abilities. Scrolls teach both lore and mechanics.
 
 ---
 
-# 🧩 Game Elements & How They Work
+### Level 3 — Scout Knight
+- **Skills:** Combat (`rm`)
+- **Description:** Trained to eliminate enemies.
+- **Commands:** `rm`, `rm -rf`
 
-Below are the interactive elements found in the dungeon world and how they behave inside the game.
+**Execution:**
+- Safe deletions can run in sandbox directories.
+- Sensitive paths (like system root) are simulated, showing effects without harming files.
 
----
-
-## 🗝️ Treasure Chest
-**Description:**  
-A container holding valuable loot or scrolls.
-
-**Mechanics:**  
-- Appears as a directory or a file.  
-- Requires navigation (`cd`) to open.  
-- Sometimes contains hidden items readable via `ls -a`.  
-
----
-
-## 🔐 Hidden Key
-**Description:**  
-A small but essential file needed to open blocked doors.
-
-**Mechanics:**  
-- Found inside obscure folders, often only visible using `ls -a`.  
-- The key must be moved to a door directory to unlock it.  
-- Sometimes requires `chmod` to "activate" the key.
+**Stage Example:**
+1. Defeat goblins blocking paths
+2. Clear temporary enemy directories
+3. Remove multiple enemies at once (`rm -rf` in simulation)
 
 ---
 
-## 👹 Goblin
-**Description:**  
-A hostile creature blocking your path.
+### Level 4 — Warrior Knight
+- **Skills:** Key Keeper (`chmod`)
+- **Description:** Guardian of doors and access.
+- **Commands:** `chmod`
 
-**Mechanics:**  
-- Represented as a file or directory.  
-- Must be defeated using `rm` or `rm -rf`.  
-- Some goblins drop keys or scrolls when removed.
-
----
-
-## 🐲 Kobold
-**Description:**  
-A tougher enemy than goblins, sometimes guarding treasure.
-
-**Mechanics:**  
-- Appears as protected files (permission-locked).  
-- Requires `sudo rm` to defeat.  
-- Can trigger traps if deleted without sudo.
+**Execution:**
+- Simulated for sensitive permissions.
+- Safe changes allowed in sandbox directories.
 
 ---
 
-## 🔮 Orbs
-**Description:**  
-Mystical artifacts that aid the knight.
+### Level 5 — Guardian Knight
+- **Skills:** The Saviour (`cp`, `mv`)
+- **Description:** Protects treasures and items.
+- **Commands:** `cp`, `mv`
 
-**Mechanics:**  
-- Found as files named `orb_of_*`.  
-- Collecting orbs grants passive buffs like:  
-  - revealing hidden files (auto-use `ls -a`)  
-  - unlocking new commands  
-  - shortening paths  
-- Orbs cannot be destroyed.
+**Execution:**
+- Can move and copy files inside the sandbox.
+- Some locked doors require moving hidden keys.
 
 ---
 
-## 🚪 Blocked Doors
-**Description:**  
-Doors preventing access to new areas.
+### Level 6 — Paladin
+- **Skills:** Divine Restoration (`sudo`)
+- **Description:** Invokes higher authority for powerful effects.
+- **Commands:** `sudo`
 
-**Mechanics:**  
-- Appears as a directory with restricted permissions.  
-- Can be opened using:  
-  - a Hidden Key  
-  - `chmod`  
-  - or `sudo` for very strong doors.  
-- Some doors require moving a key into the door folder:  
-  - `mv key ./door/`
+**Execution:**
+- Fully simulated.
+- Provides feedback for actions like `sudo rm` without executing dangerous commands.
 
 ---
 
-## 📜 Hidden Scrolls (Lost Scrolls)
-**Description:**  
-Ancient lore fragments hidden deep within the world.
+### Level 7 — Arcane Knight
+- **Skills:** The Master (`&`, `|`)
+- **Description:** Wielder of complex command chains.
+- **Commands:** `&`, `|`
 
-**Mechanics:**  
-- Appears as files like `lost_scroll.txt`.  
-- Must be found via deep navigation.  
-- Contents can be read using `cat`.  
-- Some are encrypted and require a wizard.
-
----
-
-## 🧙 Wizard
-**Description:**  
-A wise entity that deciphers Lost Scrolls.
-
-**Mechanics:**  
-- The wizard exists in a directory like `/wizard_tower/`.  
-- To have a scroll deciphered, it must be delivered via:  
-  - `mv lost_scroll.txt /wizard_tower/`  
-- Once the scroll is brought, the wizard can “read” it and unlock new areas or commands.
+**Execution:**
+- Sandbox-safe execution for combining commands.
+- Simulated effects for sensitive operations.
 
 ---
 
-# 🗺️ Suggested Interactions & Flow
+## 🧩 Game Elements & How They Work
 
-- Find **Hidden Keys** → unlock **Blocked Doors**.  
-- Defeat **Goblins** and **Kobolds** → clear paths or gain items.  
-- Collect **Orbs** → gain passive abilities.  
-- Discover **Lost Scrolls** → bring them to the **Wizard** via `mv`.  
-- Use **Knight Levels** (command skills) to traverse, fight, unlock, and progress.
+| Element | Description | Mechanics |
+|---------|------------|-----------|
+| 🗝️ Treasure Chest | Holds loot or scrolls | Navigate (`cd`) and list (`ls -a`) to find contents |
+| 🔐 Hidden Key | Opens blocked doors | Move key to door (`mv key ./door/`) and sometimes activate via `chmod` |
+| 👹 Goblin | Hostile enemy | Defeat using `rm` or `rm -rf` (simulated for sensitive paths) |
+| 🐲 Kobold | Tough enemy | Requires `sudo rm` simulation |
+| 🔮 Orbs | Mystical buffs | Grant passive abilities (hidden file detection, unlock commands) |
+| 🚪 Blocked Doors | Restrict access | Unlock using keys, `chmod`, or `sudo` |
+| 📜 Hidden Scrolls | Lore & guidance | Read using `cat`, deliver to wizard to unlock areas |
+| 🧙 Wizard | Deciphers scrolls | Scrolls delivered via `mv`, unlocks commands or levels |
+
+---
+
+## 🏰 Stage-by-Stage Layout
+
+| Level | Stage | Goal / Interaction | Objects | Commands / Mechanics |
+|-------|-------|-----------------|---------|--------------------|
+| 1 — Squire (Tutorial) | 1 | Learn directory navigation | None or simple directories | `cd`, `pwd` |
+|  | 2 | List files and directories | Basic files/folders | `ls`, `tree` |
+|  | 3 | Explore a mini-map / exit tutorial | None | Sandbox commands only |
+| 2 — Apprentice Knight (Messenger) | 1 | Read scroll about Goblins | `scroll.txt` | `cat scroll.txt` → learn `rm` basics |
+|  | 2 | Read scroll about Hidden Keys | `scroll.txt`, `key.txt` | `cat scroll.txt`, `mv key ./door/` |
+|  | 3 | Read scroll about Doors & Orbs | `scroll.txt`, `orb_of_vision` | `cat scroll.txt`, passive buffs activate |
+| 3 — Scout Knight | 1 | Defeat Goblins blocking path | Goblins as files | `rm filename` (simulated if sensitive) |
+|  | 2 | Clear enemy mini-directory | Multiple goblins | `rm -rf` (simulated) |
+|  | 3 | Defeat Kobold guarding treasure | Kobold | `sudo rm` simulation |
+| 4 — Warrior Knight | 1 | Unlock Blocked Door | Door directory + Hidden Key | `mv key ./door/`, `chmod` (simulated) |
+|  | 2 | Explore deeper dungeon | Orbs, loot | Collect orbs, buffs auto-trigger |
+|  | 3 | Solve permission puzzle | Multi-layer door | `chmod` + keys to progress |
+| 5 — Guardian Knight | 1 | Move treasure to safe location | Treasure Chest | `mv chest ./safe_room` |
+|  | 2 | Copy critical scroll | `lost_scroll.txt` | `cp scroll.txt ./backup` |
+|  | 3 | Combine movement & combat | Enemy + treasure | Use `mv` + `rm` together (simulated for dangerous commands) |
+| 6 — Paladin | 1 | Restore corrupted dungeon files | Protected directories | `sudo cp /sandbox/...` (simulation) |
+|  | 2 | Unlock sealed boss room | Strong door + Key | `sudo chmod` (simulated) |
+|  | 3 | Clear large enemy block | Enemy cluster | `sudo rm -rf ./enemies` (simulated) |
+| 7 — Arcane Knight | 1 | Chain commands for complex puzzle | Orbs, doors | `cat scroll.txt | grep "key"` |
+|  | 2 | Combine combat & puzzles | Enemies + Doors | `rm -rf enemies & mv key ./door/` (simulated) |
+|  | 3 | Master terminal dungeon | All mechanics combined | `&`, `|` |
+
+---
+
+## ✅ Notes on Gameplay Flow
+
+- **Level 1 Tutorial:** Fully guided; players learn navigation commands safely.
+- **Level 2 (Messenger):** Scrolls introduce lore and teach `cat` usage, gradually unlocking gameplay mechanics.
+- **Level 3+:** Combat and puzzles rely on a mix of **real sandbox commands** (safe) and **simulated commands** (sensitive).
+- **Scrolls:** Each stage may contain scrolls. Reading them is essential to learn enemy weaknesses, key usage, or dungeon lore.
+- **Orbs:** Grant passive buffs automatically when collected.
+- **Keys & Doors:** Introduce puzzles requiring multiple commands (`mv`, `chmod`, `sudo`).
+- **Boss / Arcane Level:** Commands are combined using `&` or `|` for chaining actions — the ultimate test of Terminal Dungeon mastery.
+
