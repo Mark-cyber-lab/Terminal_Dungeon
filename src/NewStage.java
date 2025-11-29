@@ -40,16 +40,15 @@ public class NewStage {
         sandbox.loadBackup();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if(!exitedNormally) {
                 DebugLogger.log("Saving player configuration before exit...");
                 try {
+                    if(!exitedNormally)
+                        sandbox.backup();
                     config.save();
-                    sandbox.backup();
                     DebugLogger.log("Player configuration saved successfully!");
                 } catch (Exception e) {
                     DebugLogger.log("Failed to save player configuration: " + e.getMessage());
                 }
-            }
         }));
 
         IO.println();
@@ -101,12 +100,13 @@ public class NewStage {
             String input = IO.readln("Retry adventure? (yes/no): ").trim().toLowerCase();
             boolean retry = input.equals("yes");
 
+            player.getStats().setStage(1);
+            player.getStats().setLevel(1);
+            player.getStats().setCurrentDir("");
+            player.getStats().setHealth(100);
+
             if (!retry) {
-                player.setHealth(0);
-            } else {
-                playerStats.setStage(1);
-                playerStats.setLevel(1);
-                playerStats.setCurrentDir("");
+                break;
             }
         }
 
