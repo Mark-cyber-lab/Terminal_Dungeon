@@ -162,7 +162,7 @@ public class Level1_Squire extends Level {
                 System.out.print(">> ");
                 String input = IO.readln().trim();
 
-                if (input.equals("E") || input.equals("Exit")) {
+                if (input.equalsIgnoreCase("e") || input.equalsIgnoreCase("exit")) {
                     break;
                 }
                 if (input.startsWith("cd ")) {
