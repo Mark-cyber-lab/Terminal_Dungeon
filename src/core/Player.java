@@ -1,20 +1,22 @@
 package core;
 
-public class Player {
+import utilities.AsciiArt;
+import utilities.CLIUtils;
+
+public class Player extends Alive {
 
     private int level = 1;
     private final Inventory inventory = new Inventory();
 
-    // Rank names for each level (1–7)
     private static final String[] RANKS = {
-            "Unknown",          // index 0 (unused)
-            "Squire",           // Level 1
-            "Apprentice Knight",// Level 2
-            "Scout Knight",     // Level 3
-            "Warrior Knight",   // Level 4
-            "Guardian Knight",  // Level 5
-            "Paladin",          // Level 6
-            "Arcane Knight"     // Level 7
+            "Unknown",
+            "Squire",
+            "Apprentice Knight",
+            "Scout Knight",
+            "Warrior Knight",
+            "Guardian Knight",
+            "Paladin",
+            "Arcane Knight"
     };
 
     public Player() {}
@@ -27,7 +29,6 @@ public class Player {
         return level;
     }
 
-    /** Returns the rank name based on current level. */
     public String getRankName() {
         if (level >= 1 && level < RANKS.length) {
             return RANKS[level];
@@ -35,7 +36,6 @@ public class Player {
         return "Unknown Rank";
     }
 
-    /** Promote player to the next level (max = 7). */
     public void promoteLevel() {
         int MAX_LEVEL = 7;
 
@@ -43,7 +43,29 @@ public class Player {
             level++;
             IO.println("You have been promoted to: " + getRankName() + "!");
         } else {
-            IO.println("You have already reached maximum level: " + getRankName());
+            IO.println("You have already reached maximum level!");
         }
+    }
+
+    /** --- Alive abstract hooks implementation --- */
+
+    @Override
+    protected void onDamage(int amount) {
+        IO.println("You took " + amount + " damage! Health: " + health + "/" + MAX_HEALTH);
+    }
+
+    @Override
+    protected void onHeal(int amount) {
+        IO.println("You healed " + amount + " HP! Health: " + health + "/" + MAX_HEALTH);
+    }
+
+    @Override
+    protected void onDeath() {
+        CLIUtils.clearScreen();
+        IO.println();
+        CLIUtils.printCentered(AsciiArt.getGameOver());
+        IO.println();
+        IO.println(CLIUtils.center("⚠You have fallen in battle..."));
+        IO.println();
     }
 }

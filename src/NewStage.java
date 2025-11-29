@@ -34,9 +34,7 @@ public class NewStage {
         List<Level> levels = new ArrayList<>();
         levels.add(new Level1_Squire(sandbox, player));
 
-        boolean retry = true;
-
-        while (retry) {
+        while (player.isAlive()) {
 
             CLIUtils.header("A NEW DUNGEON CYCLE BEGINS");
             CLIUtils.typewriter("Current rank: " + player.getRankName(), 20, true);
@@ -70,18 +68,12 @@ public class NewStage {
             CLIUtils.typewriter("You have conquered the dungeon cycle.", 20);
 
             String input = IO.readln("Retry adventure? (yes/no): ").trim().toLowerCase();
-            retry = input.equals("yes");
+            boolean retry = input.equals("yes");
 
-            if (retry) {
-                CLIUtils.loading("Resetting dungeon", 3, 300);
-                CLIUtils.waitAnyKey("Press any key to restart...");
-                CLIUtils.clearScreen();
+            if (!retry) {
+                player.setHealth(0);
             }
         }
-
-        CLIUtils.clearScreen();
-
-        CLIUtils.printCentered(AsciiArt.getGameOver());
 
         CLIUtils.typewriter("Your legend will echo in the Terminal Dungeon.", 20);
         CLIUtils.waitAnyKey();
