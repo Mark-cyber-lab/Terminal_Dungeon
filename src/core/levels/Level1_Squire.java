@@ -196,8 +196,7 @@ public class Level1_Squire extends Level {
 
         @Override
         public void setupEnvironment() {
-            // optionally create a subfolder to explore
-            sandbox.getDirGenerator().generateFromConfig("./src/stages/stage4.txt", sandbox.getRootPath());
+            // no need to set up for this stage
         }
     }
 
