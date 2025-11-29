@@ -1,3 +1,3 @@
-DIR: dungeon1
-DIR: dungeon2
-DIR: dungeoon3
+DIR: lv1
+DIR: lv1/hallway_1
+DIR: lv1/hallway_2
