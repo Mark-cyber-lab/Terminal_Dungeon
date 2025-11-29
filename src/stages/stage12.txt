@@ -1,0 +1,39 @@
+DIR: level_12/
+DIR: level_12/sacred_grounds/
+DIR: level_12/blessed_chamber/
+DIR: level_12/purification_hall/
+LOCKED_DIR: level_12/high_paladin/
+
+FILE: level_12/sacred_grounds/welcome.txt
+Paladin Level 2: Master divine power
+Advanced sudo techniques
+
+FILE: level_12/blessed_chamber/lesson_1.txt
+Perform complex restorations
+Some corruption runs deep
+
+FILE: level_12/purification_hall/challenge.txt
+Cleanse heavily corrupted areas
+Multiple sudo actions required
+
+FILE: level_12/sacred_grounds/corrupted_goblin.mob
+Deeply corrupted goblin
+FILE: level_12/sacred_grounds/corrupted_kobold.mob
+Dark kobold priest
+
+FILE: level_12/blessed_chamber/corrupted_document.txt
+Severely damaged text
+FILE: level_12/blessed_chamber/corrupted_goblin.mob
+Guardian of corruption
+
+FILE: level_12/purification_hall/corrupted_kobold.mob
+Corruption source
+FILE: level_12/purification_hall/corrupted_scroll.txt
+Text needing purification
+
+HIDDEN_FILE: level_12/blessed_chamber/.paladin_key.secr
+Key of ultimate divine authority
+
+FILE: level_12/high_paladin/test.txt
+Final divine challenge
+Become high paladin

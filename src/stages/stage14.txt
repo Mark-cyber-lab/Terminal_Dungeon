@@ -1,0 +1,39 @@
+DIR: level_14/
+DIR: level_14/magic_circle/
+DIR: level_14/spell_weaving/
+DIR: level_14/command_nexus/
+LOCKED_DIR: level_14/archmage/
+
+FILE: level_14/magic_circle/welcome.txt
+Arcane Knight Level 2: Master command magic
+Advanced chaining techniques
+
+FILE: level_14/spell_weaving/lesson_1.txt
+Weave complex command sequences
+Some puzzles need multiple chains
+
+FILE: level_14/command_nexus/challenge.txt
+Solve multi-layered command puzzles
+Combine & and | in creative ways
+
+FILE: level_14/magic_circle/magic_goblin.mob
+Arcane goblin guardian
+FILE: level_14/magic_circle/arcane_kobold.mob
+Kobold archmage
+
+FILE: level_14/spell_weaving/complex_puzzle.txt
+Advanced command challenge
+FILE: level_14/spell_weaving/magic_goblin.mob
+Spell-weaving goblin
+
+FILE: level_14/command_nexus/arcane_kobold.mob
+Nexus guardian kobold
+FILE: level_14/command_nexus/final_puzzle.txt
+Ultimate command chain test
+
+HIDDEN_FILE: level_14/spell_weaving/.archmage_key.secr
+Key of ultimate arcane power
+
+FILE: level_14/archmage/test.txt
+Final arcane challenge
+Become archmage

@@ -1,0 +1,24 @@
+DIR: level_3/
+DIR: level_3/scroll_library/
+DIR: level_3/study_room/
+DIR: level_3/reading_hall/
+LOCKED_DIR: level_3/archivist_chamber/
+
+FILE: level_3/scroll_library/welcome.txt
+Apprentice Knight Level 1: Learn to read
+Command: cat
+
+FILE: level_3/study_room/lesson_1.txt
+Use 'cat filename' to read documents
+Start with simple scrolls
+
+FILE: level_3/reading_hall/practice.txt
+Read various types of documents
+Some contain important information
+
+HIDDEN_FILE: level_3/study_room/.study_key.secr
+Key found through careful reading
+
+FILE: level_3/archivist_chamber/challenge.txt
+Test your reading skills
+Understand what you read

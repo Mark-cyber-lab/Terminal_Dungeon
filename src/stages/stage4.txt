@@ -1,0 +1,24 @@
+DIR: level_4/
+DIR: level_4/archive_room/
+DIR: level_4/knowledge_vault/
+DIR: level_4/research_hall/
+LOCKED_DIR: level_4/lore_master/
+
+FILE: level_4/archive_room/welcome.txt
+Apprentice Knight Level 2: Master reading
+Advanced document analysis
+
+FILE: level_4/knowledge_vault/lesson_1.txt
+Read complex ancient texts
+Extract hidden meanings
+
+FILE: level_4/research_hall/challenge.txt
+Analyze multiple documents
+Find connections between texts
+
+HIDDEN_FILE: level_4/knowledge_vault/.ancient_key.secr
+Key revealed through deep study
+
+FILE: level_4/lore_master/test.txt
+Final reading comprehension test
+Become a master of texts

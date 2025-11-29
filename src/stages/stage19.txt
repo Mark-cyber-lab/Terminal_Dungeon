@@ -1,0 +1,39 @@
+DIR: level_19/
+DIR: level_19/throne_room/
+DIR: level_19/command_nexus/
+DIR: level_19/final_test/
+LOCKED_DIR: level_19/terminal_throne/
+
+FILE: level_19/throne_room/welcome.txt
+Terminal Lord Level 1: Ultimate power
+Master of all commands
+
+FILE: level_19/command_nexus/lesson_1.txt
+Control the dungeon itself
+Commands affect reality
+
+FILE: level_19/final_test/practice.txt
+Solve reality-bending challenges
+Your will shapes the dungeon
+
+FILE: level_19/throne_room/lord_goblin.mob
+Goblin of immense power
+FILE: level_19/throne_room/lord_kobold.mob
+Kobold of ultimate strength
+
+FILE: level_19/command_nexus/reality_puzzle.txt
+Challenge that tests reality control
+FILE: level_19/command_nexus/dungeon_guardian.mob
+Guardian of dungeon essence
+
+FILE: level_19/final_test/ultimate_force.mob
+Ultimate enemy force
+FILE: level_19/final_test/ultimate_force.mob
+Ultimate enemy force
+
+HIDDEN_FILE: level_19/command_nexus/.lord_key.secr
+Key of terminal lordship
+
+FILE: level_19/terminal_throne/challenge.txt
+Terminal lordship examination
+Prove worthiness of ultimate power

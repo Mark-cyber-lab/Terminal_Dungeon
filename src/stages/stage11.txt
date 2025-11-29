@@ -1,0 +1,33 @@
+DIR: level_11/
+DIR: level_11/holy_sanctum/
+DIR: level_11/divine_hall/
+DIR: level_11/restoration_room/
+LOCKED_DIR: level_11/divine_judge/
+
+FILE: level_11/holy_sanctum/welcome.txt
+Paladin Level 1: Learn divine authority
+Command: sudo
+
+FILE: level_11/divine_hall/lesson_1.txt
+Use sudo for powerful actions
+Restore corrupted areas
+
+FILE: level_11/restoration_room/practice.txt
+Fix damaged dungeon sections
+Some repairs need elevated access
+
+FILE: level_11/holy_sanctum/corrupted_goblin.mob
+Goblin touched by darkness
+
+FILE: level_11/divine_hall/corrupted_kobold.mob
+Kobold with dark powers
+
+FILE: level_11/restoration_room/damaged_scroll.txt
+Document needing restoration
+
+HIDDEN_FILE: level_11/divine_hall/.holy_key.secr
+Key blessed with divine power
+
+FILE: level_11/divine_judge/challenge.txt
+Test your sudo authority
+Wield power responsibly

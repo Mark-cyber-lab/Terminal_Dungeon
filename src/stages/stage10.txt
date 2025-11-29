@@ -1,0 +1,39 @@
+DIR: level_10/
+DIR: level_10/defense_post/
+DIR: level_10/evacuation_center/
+DIR: level_10/backup_vault/
+LOCKED_DIR: level_10/guardian_master/
+
+FILE: level_10/defense_post/welcome.txt
+Guardian Knight Level 2: Master protection
+Advanced file management
+
+FILE: level_10/evacuation_center/lesson_1.txt
+Coordinate multiple rescues
+Move people and items to safety
+
+FILE: level_10/backup_vault/challenge.txt
+Create comprehensive backups
+Protect against total loss
+
+FILE: level_10/defense_post/goblin.mob
+Raiding goblin
+FILE: level_10/defense_post/kobold.mob
+Raiding kobold
+
+FILE: level_10/evacuation_center/civilian.txt
+Person needing evacuation
+FILE: level_10/evacuation_center/important_item.txt
+Item needing relocation
+
+FILE: level_10/backup_vault/critical_data.txt
+Data requiring backup
+FILE: level_10/backup_vault/kobold.mob
+Kobold data thief
+
+HIDDEN_FILE: level_10/evacuation_center/.guardian_key.secr
+Key for guardian mastery
+
+FILE: level_10/guardian_master/test.txt
+Final protection challenge
+Become master guardian
