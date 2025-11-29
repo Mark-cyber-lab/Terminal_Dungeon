@@ -12,7 +12,9 @@ import java.util.Objects;
  */
 public abstract class Level {
 
-    /** Level number, e.g., 1, 2, 3 */
+    /**
+     * Level number, e.g., 1, 2, 3
+     */
     protected final Sandbox sandbox;
     protected Player player;
     protected final ArrayList<Stage> stages = new ArrayList<>();
@@ -32,18 +34,23 @@ public abstract class Level {
     public void execute() {
         sandbox.updateRootDir(prev -> prev + basePath);
         onBeforeInit();
-        for (int stageNumber = player.getStats().getStage() - 1; stageNumber < stages.size(); stageNumber++) {
+        for (int stageNumber = player.getStats().getStage() - 1; stageNumber < (stages.size() * player.getStats().getLevel()); stageNumber++) {
             player.getStats().setStage(stageNumber + 1);
             stages.get(stageNumber).execute();
         }
         onLevelComplete();
-        if(!basePath.isEmpty()) sandbox.updateRootDir(prev -> prev + "/../");
+        if (!basePath.isEmpty()) sandbox.updateRootDir(prev -> prev + "/../");
     }
 
     public abstract String getDescription();
+
     public abstract void printLevelHeader();
+
     public abstract String[] getLevelHeader();
+
     public abstract void onBeforeInit();
+
     public abstract void onLevelComplete();
+
     public abstract void setup();
 }
