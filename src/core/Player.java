@@ -1,49 +1,96 @@
 package core;
 
-public class Player {
+import core.levels.Level;
+import utilities.AsciiArt;
+import utilities.CLIUtils;
 
-    private int level = 1;
+public class Player extends Alive {
+
+    private final PlayerStats playerStats;
+    public int initialLevel = 1;
+    private final int maxLevel = 7;
     private final Inventory inventory = new Inventory();
+    private Level levelObj;
 
-    // Rank names for each level (1–7)
     private static final String[] RANKS = {
-            "Unknown",          // index 0 (unused)
-            "Squire",           // Level 1
-            "Apprentice Knight",// Level 2
-            "Scout Knight",     // Level 3
-            "Warrior Knight",   // Level 4
-            "Guardian Knight",  // Level 5
-            "Paladin",          // Level 6
-            "Arcane Knight"     // Level 7
+            "Unknown",
+            "Squire",
+            "Apprentice Knight",
+            "Scout Knight",
+            "Warrior Knight",
+            "Guardian Knight",
+            "Paladin",
+            "Arcane Knight"
     };
 
-    public Player() {}
+    public Player(PlayerStats stats) {
+        super(stats);
+        this.playerStats = stats;
+    }
+
+    public PlayerStats getStats() {
+        return playerStats;
+    }
 
     public Inventory getInventory() {
         return inventory;
     }
 
-    public int getLevel() {
-        return level;
+    public Level getLevelObj() {
+        return levelObj;
     }
 
-    /** Returns the rank name based on current level. */
+    public void setLevelObj(Level levelObj) {
+        this.levelObj = levelObj;
+    }
+
     public String getRankName() {
+        int level = playerStats.getLevel();
         if (level >= 1 && level < RANKS.length) {
             return RANKS[level];
         }
         return "Unknown Rank";
     }
 
-    /** Promote player to the next level (max = 7). */
     public void promoteLevel() {
-        int MAX_LEVEL = 7;
-
-        if (level < MAX_LEVEL) {
-            level++;
-            IO.println("✨ You have been promoted to: " + getRankName() + "!");
+        int level = playerStats.getLevel();
+        if (level < maxLevel) {
+            playerStats.setLevel(level + 1);
+            IO.println("You have been promoted to: " + getRankName() + "!");
         } else {
-            IO.println("⚠️ You have already reached maximum level: " + getRankName());
+            IO.println("You have already reached maximum level!");
         }
+    }
+
+    public void promoteLevelTo(int newLevel) {
+        int level = playerStats.getLevel();
+        if (level < maxLevel) {
+            playerStats.setLevel(newLevel);
+            initialLevel = newLevel;
+        } else {
+            throw new IllegalArgumentException("You have already reached maximum level!");
+        }
+    }
+
+    /** --- Alive abstract hooks implementation --- */
+
+    @Override
+    protected void onDamage(int amount) {
+        IO.println("You took " + amount + " damage! Health: " + playerStats.getHealth() + "/" + playerStats.MAX_HEALTH);
+    }
+
+    @Override
+    protected void onHeal(int amount) {
+        IO.println("You healed " + amount + " HP! Health: " + playerStats.getHealth() + "/" + playerStats.MAX_HEALTH);
+    }
+
+    @Override
+    protected void onDeath() {
+        CLIUtils.clearScreen();
+        IO.println();
+        CLIUtils.printCentered(AsciiArt.getGameOver());
+        IO.println();
+        IO.println(CLIUtils.center("⚠You have fallen in battle..."));
+        IO.println();
     }
 }
