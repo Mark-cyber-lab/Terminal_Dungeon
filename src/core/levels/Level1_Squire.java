@@ -24,11 +24,9 @@ public class Level1_Squire extends Level {
         Stage Stage1 = new Stage1();
         Stage Stage2 = new Stage2();
         Stage Stage3 = new Stage3();
-        Stage Stage4 = new Stage4();
         addStage(Stage1);
         addStage(Stage2);
         addStage(Stage3);
-        addStage(Stage4);
     }
 
     private class Stage1 extends Stage {
@@ -103,6 +101,7 @@ public class Level1_Squire extends Level {
             // No environments to set for this stage
         }
     }
+
     private class Stage3 extends Stage {
         Stage3() {
             super(3, Level1_Squire.this);
@@ -110,42 +109,7 @@ public class Level1_Squire extends Level {
 
         @Override
         public String[] getStageHeader() {
-            return new String[]{"Stage 3 — Map of the Training Grounds"};
-        }
-
-        @Override
-        public void play() {
-            CLIUtils.typewriter("A parchment unfolds in front of you.", 30);
-            CLIUtils.typewriter("\"Before you enter deeper floors, learn to **visualize** the rooms.\"", 30);
-            IO.println("Type **tree** to inspect the room structure.");
-            IO.println();
-            waitForStageCommand("tree");
-        }
-
-        @Override
-        public void onSuccessPlay() {
-            // Nothing to do, this is the last stage
-        }
-
-        @Override
-        public void onFailedPlay(Exception exception) {
-
-        }
-
-        @Override
-        public void setupEnvironment() {
-            // No environments to set for this stage
-        }
-    }
-
-    private class Stage4 extends Stage {
-        Stage4() {
-            super(4, Level1_Squire.this);
-        }
-
-        @Override
-        public String[] getStageHeader() {
-            return new String[]{"Stage 4 — Exploration of the Dungeon Chambers"};
+            return new String[]{"Stage 3 — Exploration of the Dungeon Chambers"};
         }
 
         @Override

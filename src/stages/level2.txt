@@ -1,0 +1,83 @@
+DIR: lv2
+
+# For stage 1
+DIR: lv2
+FILE: lv2/scroll.txt
+The Scroll of Scrolls
+
+Beware, young knight. Scrolls speak not just in words, but in secrets.
+Each scroll hides knowledge of the dungeon—keys, doors, enemies, and spells.
+Read with care, deliver with purpose, and the wizard shall grant what the parchment conceals.
+
+A scroll unread is a path unseen.
+A scroll misplaced is power lost.
+END
+
+# For stage 2
+# say that it seems like there's a scroll in hallway_1
+DIR: lv2/hallway_1
+FILE: lv2/hallway_1/scroll.txt
+Apprentice Knight, heed these words:
+
+The shadows of the dungeon are not empty. Small creatures, goblins, roam the passages, mischievous and cunning.
+Though they appear weak, even a single goblin can block your path and delay your progress.
+Fear not, for you hold the power to remove obstacles with the proper incantation.
+
+Within this scroll lies the secret of command: 'rm'. This simple but mighty rune allows you to remove entities safely in your domain—the sandbox.
+To defeat a goblin, navigate to its resting place and execute:
+
+    rm goblin_name.txt
+
+A goblin removed in this way vanishes completely, yet the dungeon’s magic ensures that no harm comes to the sacred realm beyond your sandbox.
+Attempting this on forbidden paths will invoke illusions: goblins will vanish, but your curiosity shall be tested without true danger.
+
+Remember: timing and order matter. Observe the goblins' movements. Some will appear only after others have been cleared.
+
+May your hands be steady, and your resolve unwavering.
+END
+
+# For stage 3
+
+DIR: lv2/hallway_2
+FILE: lv2/hallway_2/scroll.txt
+A mysterious scroll lies before you, blank yet potent:
+
+Though no words appear, you sense a latent magic woven within.
+Perhaps the dungeon itself speaks in silence, urging you to explore, investigate, and trust your instincts.
+Sometimes, a scroll's power is in what it does not say—an invitation to observation and experimentation.
+END
+DIR: lv2/hallway_3
+FILE: lv2/hallway_3/scroll.txt
+Scroll of Hidden Lore and Orbs
+
+Beyond the threshold of this hallway lie orbs of power. Small, glowing spheres that hum with mystical energy.
+They grant abilities imperceptible yet potent: uncovering hidden files, enhancing your perception, or unlocking commands previously unknown.
+
+Observe the doors carefully. Some doors are locked by magic and key, while others by the mere will of the dungeon.
+Your mission is to combine observation, courage, and acquired skills to advance.
+
+Use the knowledge gained: move keys to doors, read scrolls, and collect orbs.
+These actions will shape your abilities, preparing you for trials to come.
+Each orb may only be taken once, but its influence lingers as long as you tread the dungeon.
+END
+DIR: lv2/hallway_3/hallway_3_1
+FILE: lv2/hallway_3/hallway_3_1/scroll.txt
+Scroll of Doors and Wizard Guidance
+
+Apprentice Knight, you now face the ultimate challenge of this stage.
+Doors before you are not mere obstacles—they are guardians of knowledge and treasure.
+Some doors require only a key, but others require the harmony of key and command, the combination of physical and mystical effort.
+
+Move the key:
+
+    mv key ./door/
+
+Adjust the permissions as needed:
+
+    chmod 700 ./door/
+
+Deliver scrolls to the wizard when prompted. Only through this ritual can new paths be revealed, secrets unlocked, and abilities bestowed upon you.
+The wizard observes your mastery and rewards diligence. Ignore their counsel at your peril.
+
+Remember: patience, precision, and curiosity are your allies. Fail not in your duties, for the dungeon never forgets.
+END

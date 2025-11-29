@@ -1,4 +1,5 @@
 import core.levels.Level1_Squire;
+import core.levels.Level2_Apprentice_Knight;
 import engine.Sandbox;
 import core.*;
 import core.levels.Level;
@@ -17,9 +18,11 @@ public class NewStage {
     private final Player player = new Player(playerStats);
     private final List<Level> levels = new ArrayList<>();
     private final Sandbox sandbox = new Sandbox(SANDBOX_ROOT);
+    private boolean exitedNormally = false;
 
     private void initializeLevels () {
         levels.add(new Level1_Squire(sandbox, player));
+        levels.add(new Level2_Apprentice_Knight(sandbox, player));
     }
 
     public void upStage() throws IOException {
@@ -37,13 +40,15 @@ public class NewStage {
         sandbox.loadBackup();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            DebugLogger.log("Saving player configuration before exit...");
-            try {
-                config.save();
-                sandbox.backup();
-                DebugLogger.log("Player configuration saved successfully!");
-            } catch (Exception e) {
-                DebugLogger.log("Failed to save player configuration: " + e.getMessage());
+            if(!exitedNormally) {
+                DebugLogger.log("Saving player configuration before exit...");
+                try {
+                    config.save();
+                    sandbox.backup();
+                    DebugLogger.log("Player configuration saved successfully!");
+                } catch (Exception e) {
+                    DebugLogger.log("Failed to save player configuration: " + e.getMessage());
+                }
             }
         }));
 
@@ -105,6 +110,7 @@ public class NewStage {
             }
         }
 
+        exitedNormally = true;
         CLIUtils.typewriter("Your legend will echo in the Terminal Dungeon.", 20);
         CLIUtils.waitAnyKey();
     }

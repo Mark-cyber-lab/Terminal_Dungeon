@@ -34,9 +34,17 @@ public abstract class Level {
     public void execute() {
         sandbox.updateRootDir(prev -> prev + basePath);
         onBeforeInit();
-        for (int stageNumber = player.getStats().getStage() - 1; stageNumber < (stages.size() * player.getStats().getLevel()); stageNumber++) {
+        for (int stageNumber = player.getStats().getStage() - 1;
+             stageNumber < (3 * player.getStats().getLevel());
+             stageNumber++) {
+
             player.getStats().setStage(stageNumber + 1);
-            stages.get(stageNumber).execute();
+
+            int finalStageNumber = stageNumber;
+            stages.stream()
+                    .filter(stage -> stage.getStageNumber() == finalStageNumber)
+                    .findFirst()
+                    .ifPresent(Stage::execute);
         }
         onLevelComplete();
         if (!basePath.isEmpty()) sandbox.updateRootDir(prev -> prev + "/../");
