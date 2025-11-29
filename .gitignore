@@ -30,5 +30,6 @@ bin/
 .DS_Store
 
 sandbox/
-backup-sandbox/
 logs/
+player.json
+sandbox_backup/
