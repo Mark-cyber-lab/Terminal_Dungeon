@@ -2,6 +2,7 @@ package utilities;
 
 import java.io.Console;
 import java.io.IOException;
+import java.util.Scanner;
 
 /**
  * Utility class providing enhanced console/terminal features such as
@@ -193,7 +194,6 @@ public class CLIUtils {
             while (System.in.available() > 0);
         } catch (IOException ignored) {
         }
-        clearScreen();
     }
 
     /**
@@ -211,21 +211,37 @@ public class CLIUtils {
      * @return terminal width in characters
      */
     public static int getTerminalWidth() {
-        Console console = System.console();
-        if (console != null) {
+        // 1. Try COLUMNS env var (works in many shells)
+        String columnsEnv = System.getenv("COLUMNS");
+        if (columnsEnv != null) {
             try {
-                String[] cmd = {"/bin/sh", "-c", "tput cols"};
-                Process process = new ProcessBuilder(cmd).start();
-                java.util.Scanner s = new java.util.Scanner(process.getInputStream());
-                if (s.hasNextInt()) {
-                    return s.nextInt();
-                }
-            } catch (Exception ignored) {
-            }
+                int width = Integer.parseInt(columnsEnv);
+                DebugLogger.log("CLIUtils"," Terminal width from COLUMNS env: " + width);
+                return width;
+            } catch (NumberFormatException ignored) {}
         }
-        // fallback width for IDEs or unknown terminals
-        return 100;
+
+        try {
+            Process process = new ProcessBuilder("/bin/sh", "-c", "stty size 2>/dev/null || echo 0 0").start();
+            try (java.util.Scanner scanner = new java.util.Scanner(process.getInputStream())) {
+                if (scanner.hasNextInt()) {
+                    scanner.nextInt(); // rows
+                    int cols = scanner.nextInt(); // columns
+                    if (cols > 0) {
+                        DebugLogger.log("CLIUtils", "Terminal width from stty: " + cols);
+                        return cols;
+                    }
+                }
+            }
+        } catch (Exception ignored) {}
+
+
+        int fallback = 125;
+        DebugLogger.log("CLIUtils", "Using fallback terminal width: " + fallback);
+        return fallback;
     }
+
+
 
     /**
      * Centers a single line of text using the detected terminal width.

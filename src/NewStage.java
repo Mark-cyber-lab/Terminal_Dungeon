@@ -39,23 +39,23 @@ public class NewStage {
         while (retry) {
 
             CLIUtils.header("A NEW DUNGEON CYCLE BEGINS");
-            CLIUtils.typewriter("Current rank: " + player.getRankName(), 20);
+            CLIUtils.typewriter("Current rank: " + player.getRankName(), 20, true);
             CLIUtils.waitAnyKey();
 
             for (Level level : levels) {
-
-                CLIUtils.header(level.getLevelHeader(), 1);
+                CLIUtils.clearScreen();
+                level.printLevelHeader();
                 CLIUtils.center(level.getDescription());
                 CLIUtils.sleep(500);
                 CLIUtils.waitAnyKey("Press any key to start this level...");
 
                 CLIUtils.loading("Preparing environment", 3, 500);
-                level.setupEnvironment();
+                level.setup();
 
                 CLIUtils.typewriter("Environment ready.", 20);
                 CLIUtils.sleep(300);
 
-                level.play();
+                level.execute();
 
                 CLIUtils.header("LEVEL COMPLETE");
                 CLIUtils.sleep(300);

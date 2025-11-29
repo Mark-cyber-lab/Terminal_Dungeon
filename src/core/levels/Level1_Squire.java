@@ -5,6 +5,8 @@ import engine.Sandbox;
 import utilities.AsciiArt;
 import utilities.CLIUtils;
 
+import java.util.ArrayList;
+
 public class Level1_Squire extends Level {
 
     private final Sandbox sandbox;
@@ -16,47 +18,123 @@ public class Level1_Squire extends Level {
     }
 
     @Override
-    public void setupEnvironment() {
+    public void setup() {
+        // level based setup, because there is nothing yet to do with stages
         sandbox.getDirGenerator().generateFromConfig(configPath, sandbox.getRootPath());
+        Stage Stage1 = new Stage1();
+        Stage Stage2 = new Stage2();
+        Stage Stage3 = new Stage3();
+        addStage(Stage1);
+        addStage(Stage2);
+        addStage(Stage3);
     }
 
-    /** Stage 1: Learn 'pwd' */
-    private void stage1() {
-        CLIUtils.repeat('━');
-        IO.println(CLIUtils.center("Stage 1 — Orientation of the Young Squire"));
-        CLIUtils.repeat('━');
-        CLIUtils.typewriter("The old knight approaches you...", 30);
-        CLIUtils.typewriter("\"To survive this dungeon lad, you must first know **where** you stand.\"", 30);
-        IO.println("Type **pwd** to sense your current location.");
-        IO.println();
-        waitForStageCommand("pwd");
-//        player.remember("Learned pwd (location awareness)");
-    }
+    private class Stage1 extends Stage {
+        Stage1() {
+            super(1, Level1_Squire.this);
+        }
 
-    /** Stage 2: Learn 'ls' */
-    private void stage2() {
-        IO.println("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        IO.println("📜 Stage 2 — Sight of the Squire");
-        IO.println("A glowing orb hovers beside you...");
-        IO.println("\"Now look around you, Squire. The dungeon hides much.\"");
-        IO.println("➡️   Type **ls** to reveal what lies in this chamber.");
-        IO.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        waitForStageCommand("ls");
-//        player.remember("Learned ls (item awareness)");
-    }
+        @Override
+        public String[] getStageHeader() {
+            return new String[]{"Stage 1 — Orientation of the Young Squire"};
+        }
 
-    /** Stage 3: Learn 'tree' */
-    private void stage3() {
-        IO.println("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        IO.println("📜 Stage 3 — Map of the Training Grounds");
-        IO.println("A parchment unfolds in front of you.");
-        IO.println("\"Before you enter deeper floors, learn to **visualize** the rooms.\"");
-        IO.println("➡️   Type **tree** to inspect the room structure.");
-        IO.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        waitForStageCommand("tree");
-//        player.remember("Learned tree (map awareness)");
-    }
+        @Override
+        public void play() {
+            CLIUtils.typewriter("The old knight approaches you...", 30);
+            CLIUtils.typewriter("\"To survive this dungeon lad, you must first know **where** you stand.\"", 30);
+            IO.println("Type **pwd** to sense your current location.");
+            IO.println();
+            waitForStageCommand("pwd");
+        }
 
+        @Override
+        public void onSuccessPlay() {
+            //        player.remember("Learned pwd (location awareness)");
+            IO.println("Stage complete! Proceeding to Stage 2...\n");
+            CLIUtils.waitAnyKey();
+        }
+
+        @Override
+        public void onFailedPlay(Exception exception) {
+
+        }
+
+        @Override
+        public void setupEnvironment() {
+            // No environments to set for this stage
+        }
+    }
+    private class Stage2 extends Stage {
+        Stage2() {
+            super(2, Level1_Squire.this);
+        }
+
+        @Override
+        public String[] getStageHeader() {
+            return new String[]{"Stage 2 — Sight of the Squire"};
+        }
+
+        @Override
+        public void play() {
+            CLIUtils.typewriter("A glowing orb hovers beside you...", 30);
+            CLIUtils.typewriter("\"Now look around you, Squire. The dungeon hides much.\"", 30);
+            IO.println("Type **ls** to reveal what lies in this chamber.");
+            IO.println();
+            waitForStageCommand("ls");
+        }
+
+        @Override
+        public void onSuccessPlay() {
+            //        player.remember("Learned pwd (location awareness)");
+            IO.println("Stage complete! Proceeding to Stage 3...\n");
+            CLIUtils.waitAnyKey();
+        }
+
+        @Override
+        public void onFailedPlay(Exception exception) {
+
+        }
+
+        @Override
+        public void setupEnvironment() {
+            // No environments to set for this stage
+        }
+    }
+    private class Stage3 extends Stage {
+        Stage3() {
+            super(3, Level1_Squire.this);
+        }
+
+        @Override
+        public String[] getStageHeader() {
+            return new String[]{"Stage 3 — Map of the Training Grounds"};
+        }
+
+        @Override
+        public void play() {
+            CLIUtils.typewriter("A parchment unfolds in front of you.", 30);
+            CLIUtils.typewriter("\"Before you enter deeper floors, learn to **visualize** the rooms.\"", 30);
+            IO.println("Type **tree** to inspect the room structure.");
+            IO.println();
+            waitForStageCommand("tree");
+        }
+
+        @Override
+        public void onSuccessPlay() {
+            // Nothing to do, this is the last stage
+        }
+
+        @Override
+        public void onFailedPlay(Exception exception) {
+
+        }
+
+        @Override
+        public void setupEnvironment() {
+            // No environments to set for this stage
+        }
+    }
 
     /**
      * Waits for the correct command for this stage.
@@ -73,32 +151,15 @@ public class Level1_Squire extends Level {
 //            player.addCommandHistory(input);
 
             if (!input.equals(expectedCommand)) {
-                IO.println("❌ The spirits whisper: \"That is not the command you were meant to use.\"");
-                IO.println("💡 Try again with: **" + expectedCommand + "**");
+                IO.println("The spirits whisper: \"That is not the command you were meant to use.\"");
+                IO.println("Try again with: **" + expectedCommand + "**");
                 continue;
             }
 
-            // Execute the command safely in the sandbox and show output
-            String output = sandbox.safeExecute(input);
-            IO.println("\n📤 Command Output:");
-            IO.println(output);
+            sandbox.safeExecute(input);
 
-            IO.println("✅ Stage complete!\n");
             break;
         }
-    }
-
-    @Override
-    public void play() {
-        IO.println("\n🏅 You are now a Squire — the lowest but bravest rank of Terminal Knights.");
-        IO.println("Your training begins...\n");
-
-        stage1();
-        stage2();
-        stage3();
-
-        IO.println("🎉 You have mastered the fundamentals, young Squire!");
-        IO.println("You feel a surge of confidence as you prepare for Level 2...\n");
     }
 
     @Override
@@ -107,12 +168,24 @@ public class Level1_Squire extends Level {
     }
 
     @Override
-    public void printLevelHeader(){
-        CLIUtils.printCentered(AsciiArt.getLevel1Squire());
+    public void printLevelHeader() {
+        CLIUtils.header(getLevelHeader(), 1);
     }
 
     @Override
-    public String[] getLevelHeader(){
+    public String[] getLevelHeader() {
         return AsciiArt.getLevel1Squire();
+    }
+
+    @Override
+    public void onBeforePlay() {
+        IO.println("\n🏅 You are now a Squire — the lowest but bravest rank of Terminal Knights.");
+        IO.println("Your training begins...\n");
+    }
+
+    @Override
+    public void onAfterPlay() {
+        IO.println("🎉 You have mastered the fundamentals, young Squire!");
+        IO.println("You feel a surge of confidence as you prepare for Level 2...\n");
     }
 }
