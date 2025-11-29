@@ -2,6 +2,8 @@ package core.levels;
 
 import core.Player;
 import engine.Sandbox;
+import utilities.AsciiArt;
+import utilities.CLIUtils;
 
 public class Level1_Squire extends Level {
 
@@ -15,19 +17,18 @@ public class Level1_Squire extends Level {
 
     @Override
     public void setupEnvironment() {
-        IO.println("\n⚔️ Preparing your training grounds...");
         sandbox.getDirGenerator().generateFromConfig(configPath, sandbox.getRootPath());
-        IO.println("📁 A mysterious training room materializes around you...");
     }
 
     /** Stage 1: Learn 'pwd' */
     private void stage1() {
-        IO.println("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        IO.println("📜 Stage 1 — Orientation of the Young Squire");
-        IO.println("The old knight approaches you...");
-        IO.println("\"To survive this dungeon lad, you must first know **where** you stand.\"");
-        IO.println("➡️   Type **pwd** to sense your current location.");
-        IO.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        CLIUtils.repeat('━');
+        IO.println(CLIUtils.center("Stage 1 — Orientation of the Young Squire"));
+        CLIUtils.repeat('━');
+        CLIUtils.typewriter("The old knight approaches you...", 30);
+        CLIUtils.typewriter("\"To survive this dungeon lad, you must first know **where** you stand.\"", 30);
+        IO.println("Type **pwd** to sense your current location.");
+        IO.println();
         waitForStageCommand("pwd");
 //        player.remember("Learned pwd (location awareness)");
     }
@@ -103,5 +104,15 @@ public class Level1_Squire extends Level {
     @Override
     public String getDescription() {
         return "Level 1 — Squire (Navigation Training)";
+    }
+
+    @Override
+    public void printLevelHeader(){
+        CLIUtils.printCentered(AsciiArt.getLevel1Squire());
+    }
+
+    @Override
+    public String[] getLevelHeader(){
+        return AsciiArt.getLevel1Squire();
     }
 }

@@ -24,6 +24,9 @@ public abstract class Level {
 
     public abstract String getDescription();
 
+    public abstract void printLevelHeader();
+    public abstract String[] getLevelHeader();
+
     public abstract void play();
 
     public abstract void setupEnvironment();

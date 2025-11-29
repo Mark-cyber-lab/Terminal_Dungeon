@@ -18,7 +18,7 @@ public class LinuxCommandExecutor {
 
     public LinuxCommandExecutor(String startDir) {
         this.currentDirectory = Paths.get(startDir).toAbsolutePath();
-        logger.info("Executor starting in: " + currentDirectory);
+        DebugLogger.log("COMMAND_EXECUTOR","Executor starting in: " + currentDirectory);
     }
 
     public Path getCurrentDirectory() {

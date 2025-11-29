@@ -2,6 +2,8 @@ import core.levels.Level1_Squire;
 import engine.Sandbox;
 import core.*;
 import core.levels.Level;
+import utilities.CLIUtils;
+import utilities.AsciiArt;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,27 +13,24 @@ public class NewStage {
     private static final String SANDBOX_ROOT = "./sandbox";
     private final Player player = new Player();
 
-    private void sleep(int ms) {
-        try { Thread.sleep(ms); }
-        catch (InterruptedException e) { Thread.currentThread().interrupt(); }
-    }
-
     public void upStage() {
         Sandbox sandbox = new Sandbox(SANDBOX_ROOT);
 
-        IO.println("==============================================");
-        IO.println("        ⚔️  WELCOME TO TERMINAL DUNGEON  ⚔️");
-        IO.println("==============================================");
-        sleep(500);
-        IO.println("You awaken inside a mysterious cavern...");
-        sleep(700);
-        IO.println("A whisper echoes through the stone walls:");
-        sleep(900);
-        IO.println("\"Only those who command the Terminal may survive.\"");
-        IO.println();
-        sleep(1000);
+        CLIUtils.clearScreen();
 
-        // Available levels
+        CLIUtils.printCentered(AsciiArt.getTitleDungeon());
+
+        CLIUtils.sleep(600);
+
+        IO.println();
+        CLIUtils.typewriter("You awaken inside a dark cavern...", 20, true);
+        CLIUtils.sleep(100);
+        CLIUtils.typewriter("A distant voice whispers:", 30, true);
+        CLIUtils.sleep(100);
+        CLIUtils.typewriter("\"Only those who master the Terminal may survive.\"", 30, true);
+        IO.println();
+        CLIUtils.waitAnyKey();
+
         List<Level> levels = new ArrayList<>();
         levels.add(new Level1_Squire(sandbox, player));
 
@@ -39,77 +38,52 @@ public class NewStage {
 
         while (retry) {
 
-            IO.println("🏰 A new dungeon cycle begins...");
-            sleep(700);
-            IO.println("Your current rank: " + player.getRankName());
-            IO.println("----------------------------------------------");
-            sleep(700);
+            CLIUtils.header("A NEW DUNGEON CYCLE BEGINS");
+            CLIUtils.typewriter("Current rank: " + player.getRankName(), 20);
+            CLIUtils.waitAnyKey();
 
             for (Level level : levels) {
 
-                IO.println();
-                IO.println("==============================================");
-                IO.println("          🛡️ ENTERING LEVEL " + level.getLevelNumber());
-                IO.println("==============================================");
-                sleep(700);
+                CLIUtils.header(level.getLevelHeader(), 1);
+                CLIUtils.center(level.getDescription());
+                CLIUtils.sleep(500);
+                CLIUtils.waitAnyKey("Press any key to start this level...");
 
-                IO.println(level.getDescription());
-                IO.println();
-                sleep(900);
-
-                IO.println("🌌 Preparing your training ground...");
-                sleep(1000);
-
+                CLIUtils.loading("Preparing environment", 3, 500);
                 level.setupEnvironment();
-                IO.println("✨ Environment ready!");
-                sleep(600);
 
-                IO.println("The dungeon stirs as you step inside...");
-                IO.println();
-                sleep(900);
+                CLIUtils.typewriter("Environment ready.", 20);
+                CLIUtils.sleep(300);
 
-                // Play the level
                 level.play();
 
-                IO.println();
-                IO.println("🎉 LEVEL COMPLETE!");
-                sleep(600);
-                IO.println("The ancient energies surge through you...");
-                sleep(800);
-                IO.println("You are promoted to the next rank!");
-                IO.println();
+                CLIUtils.header("LEVEL COMPLETE");
+                CLIUtils.sleep(300);
 
+                CLIUtils.typewriter("Energy flows through you...", 20);
                 player.promoteLevel();
-                sleep(500);
-                IO.println("----------------------------------------------");
-                sleep(800);
+                CLIUtils.typewriter("New Rank: " + player.getRankName(), 20);
+                CLIUtils.waitAnyKey("Press any key to continue...");
             }
 
-            IO.println();
-            IO.println("🏁 You have conquered the cycle of the dungeon.");
-            sleep(800);
-            IO.println("Would you dare to relive the fate again?");
-            sleep(600);
+            System.out.println();
+            CLIUtils.typewriter("You have conquered the dungeon cycle.", 20);
 
-            String input = IO.readln("🔁 Retry the adventure? (yes/no): ").trim().toLowerCase();
+            String input = IO.readln("Retry adventure? (yes/no): ").trim().toLowerCase();
             retry = input.equals("yes");
 
             if (retry) {
-                IO.println();
-                IO.println("🌙 The dungeon resets...");
-                sleep(1000);
-                IO.println("Your memories fade, but your spirit persists.");
-                IO.println();
-                sleep(900);
-                // player.reset(); // optional if you plan it later
+                CLIUtils.loading("Resetting dungeon", 3, 300);
+                CLIUtils.waitAnyKey("Press any key to restart...");
+                CLIUtils.clearScreen();
             }
         }
 
-        IO.println();
-        IO.println("==============================================");
-        IO.println("          🏆 THANK YOU FOR PLAYING! 🏆");
-        IO.println("==============================================");
-        sleep(900);
-        IO.println("Your legend will echo through the Terminal Dungeon forever.");
+        CLIUtils.clearScreen();
+
+        CLIUtils.printCentered(AsciiArt.getGameOver());
+
+        CLIUtils.typewriter("Your legend will echo in the Terminal Dungeon.", 20);
+        CLIUtils.waitAnyKey();
     }
 }
