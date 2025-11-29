@@ -70,6 +70,7 @@ public class LinuxCommandExecutor {
             case "cd" -> internalCd(inputParts);
             case "pwd" -> internalPwd();
             case "history" -> internalHistory();
+            case "cat" -> internalCat(inputParts);
             default -> externalCommand(inputParts);
         };
     }
@@ -77,6 +78,41 @@ public class LinuxCommandExecutor {
     // ============================
     // INTERNAL COMMANDS (LOCAL)
     // ============================
+
+    private boolean internalCat(String[] parts) {
+        if (parts.length < 2) {
+            System.out.println("cat: missing file argument");
+            return false;
+        }
+
+        boolean success = true;
+        for (int i = 1; i < parts.length; i++) {
+            Path filePath = currentDirectory.resolve(parts[i]).normalize();
+            if (!Files.exists(filePath)) {
+                System.out.println("cat: " + parts[i] + ": No such file");
+                success = false;
+                continue;
+            }
+
+            if (Files.isDirectory(filePath)) {
+                System.out.println("cat: " + parts[i] + ": Is a directory");
+                success = false;
+                continue;
+            }
+
+            try {
+                List<String> lines = Files.readAllLines(filePath);
+                for (String line : lines) {
+                    System.out.println(line);
+                }
+            } catch (IOException e) {
+                System.out.println("cat: " + parts[i] + ": Error reading file");
+                success = false;
+            }
+        }
+
+        return success;
+    }
 
     private boolean internalCd(String[] parts) {
         if (parts.length < 2) {
