@@ -81,8 +81,6 @@ public class NewStage {
 
                 player.promoteLevel();
                 sleep(500);
-
-                IO.println("🆙 New Rank Obtained: " + player.getRankName());
                 IO.println("----------------------------------------------");
                 sleep(800);
             }

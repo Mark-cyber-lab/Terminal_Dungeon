@@ -7,13 +7,11 @@ import java.nio.charset.Charset;
 
 public class DirGenerator {
 
-    // Set of file extensions that should be hidden
     private static final Set<String> HIDDEN_EXTENSIONS = Set.of(
             ".env", ".gitignore", ".gitattributes", ".dockerignore",
             ".npmignore", ".eslintignore", ".prettierignore"
     );
 
-    // Record for generation result
     public record GenerationResult(
             boolean success,
             String message,
@@ -23,7 +21,6 @@ public class DirGenerator {
             List<String> skippedPaths,
             List<String> errorPaths
     ) {
-        // Compact constructor for defensive copying
         public GenerationResult {
             createdDirs = createdDirs != null ? new ArrayList<>(createdDirs) : List.of();
             createdFiles = createdFiles != null ? new ArrayList<>(createdFiles) : List.of();
@@ -35,17 +32,8 @@ public class DirGenerator {
         public int getTotalCreated() {
             return createdDirs.size() + createdFiles.size() + createdHiddenFiles.size();
         }
-
-        @Override
-        public String toString() {
-            return String.format(
-                    "GenerationResult[success=%s, totalCreated=%d, dirs=%d, files=%d, hidden=%d, skipped=%d, errors=%d]",
-                    success, getTotalCreated(), createdDirs.size(), createdFiles.size(),
-                    createdHiddenFiles.size(), skippedPaths.size(), errorPaths.size());
-        }
     }
 
-    // Record for generation configuration
     public record GenerationConfig(
             boolean overwriteExisting,
             boolean verbose,
@@ -62,12 +50,10 @@ public class DirGenerator {
             if(sandboxPath == null) sandboxPath = "";
         }
 
-        // Builder method for convenience
         public static Builder builder() {
             return new Builder();
         }
 
-        // Builder class
         public static class Builder {
             private boolean overwriteExisting = false;
             private boolean verbose = true;
@@ -77,45 +63,13 @@ public class DirGenerator {
             private Set<String> hiddenExtensions = new HashSet<>(HIDDEN_EXTENSIONS);
             private String sandboxPath = "";
 
-            public Builder overwriteExisting(boolean overwriteExisting) {
-                this.overwriteExisting = overwriteExisting;
-                return this;
-            }
-
-            public Builder verbose(boolean verbose) {
-                this.verbose = verbose;
-                return this;
-            }
-
-            public Builder sandboxPath(String sandboxPath) {
-                this.sandboxPath = sandboxPath;
-                return this;
-            }
-
-            public Builder lineSeparator(String lineSeparator) {
-                this.lineSeparator = lineSeparator;
-                return this;
-            }
-
-            public Builder encoding(String encoding) {
-                this.encoding = encoding;
-                return this;
-            }
-
-            public Builder createHiddenFiles(boolean createHiddenFiles) {
-                this.createHiddenFiles = createHiddenFiles;
-                return this;
-            }
-
-            public Builder hiddenExtensions(Set<String> hiddenExtensions) {
-                this.hiddenExtensions = new HashSet<>(hiddenExtensions);
-                return this;
-            }
-
-            public Builder addHiddenExtension(String extension) {
-                this.hiddenExtensions.add(extension);
-                return this;
-            }
+            public Builder overwriteExisting(boolean value) { overwriteExisting = value; return this; }
+            public Builder verbose(boolean value) { verbose = value; return this; }
+            public Builder sandboxPath(String value) { sandboxPath = value; return this; }
+            public Builder lineSeparator(String value) { lineSeparator = value; return this; }
+            public Builder encoding(String value) { encoding = value; return this; }
+            public Builder createHiddenFiles(boolean value) { createHiddenFiles = value; return this; }
+            public Builder hiddenExtensions(Set<String> value) { hiddenExtensions = value; return this; }
 
             public GenerationConfig build() {
                 return new GenerationConfig(overwriteExisting, verbose, lineSeparator,
@@ -124,7 +78,6 @@ public class DirGenerator {
         }
     }
 
-    // Record for file system entries
     private record FileSystemEntry(
             String path,
             boolean isDirectory,
@@ -150,50 +103,40 @@ public class DirGenerator {
         List<String> errorPaths = new ArrayList<>();
 
         try {
-            // Validate inputs
             if (configFilePath == null || configFilePath.trim().isEmpty()) {
+                DebugLogger.log("DIRGEN", "Config file path missing");
                 return new GenerationResult(false, "Config file path is required",
                         createdDirs, createdFiles, createdHiddenFiles, skippedPaths, errorPaths);
             }
 
-            Path configPath = Paths.get(configFilePath);
-            if (!Files.exists(configPath)) {
-//                IO.println("Config not found" + configPath.toAbsolutePath());
-                return new GenerationResult(false, "Config file not found: " + configFilePath,
+            Path path = Paths.get(configFilePath);
+            if (!Files.exists(path)) {
+                DebugLogger.log("DIRGEN", "Config file not found: " + configFilePath);
+                return new GenerationResult(false, "Config not found: " + configFilePath,
                         createdDirs, createdFiles, createdHiddenFiles, skippedPaths, errorPaths);
             }
 
-            // Parse and process entries
-            List<FileSystemEntry> entries = parseConfigFile(configPath, config);
+            DebugLogger.log("DIRGEN", "Reading config from: " + path.toAbsolutePath());
+
+            List<FileSystemEntry> entries = parseConfigFile(path, config);
 
             for (FileSystemEntry entry : entries) {
+                DebugLogger.log("DIRGEN", "Processing entry: " + entry.path());
                 processEntry(entry, config, createdDirs, createdFiles, createdHiddenFiles, skippedPaths, errorPaths);
-//                IO.println("Processing entry: " + entry.path);
-
-                // Use sandboxPath as base if specified, otherwise default to current entry path
-                Path basePath = (config.sandboxPath() != null && !config.sandboxPath().isBlank())
-                        ? Paths.get(config.sandboxPath())
-                        : Paths.get("."); // default base path
-
-                Path absolutePath = basePath.resolve(entry.path()).toAbsolutePath();
-
-//                if (entry.isDirectory()) {
-//                    System.out.println("Directory processed at: " + absolutePath);
-//                } else {
-//                    System.out.println("File processed at: " + absolutePath);
-//                }
             }
 
+            String message = "Generated " +
+                    createdDirs.size() + " dirs, " +
+                    createdFiles.size() + " files, " +
+                    createdHiddenFiles.size() + " hidden files";
 
-            String message = String.format(
-                    "Generated %d directories, %d files, %d hidden files (%d skipped, %d errors)",
-                    createdDirs.size(), createdFiles.size(), createdHiddenFiles.size(),
-                    skippedPaths.size(), errorPaths.size());
+            DebugLogger.log("DIRGEN", "Generation completed: " + message);
 
             return new GenerationResult(errorPaths.isEmpty(), message,
                     createdDirs, createdFiles, createdHiddenFiles, skippedPaths, errorPaths);
 
         } catch (Exception e) {
+            DebugLogger.log("DIRGEN", "Generation FAILED: " + e.getMessage());
             return new GenerationResult(false, "Generation failed: " + e.getMessage(),
                     createdDirs, createdFiles, createdHiddenFiles, skippedPaths, errorPaths);
         }
@@ -203,209 +146,187 @@ public class DirGenerator {
                               List<String> createdDirs, List<String> createdFiles,
                               List<String> createdHiddenFiles, List<String> skippedPaths,
                               List<String> errorPaths) {
-        try {
-            Path basePath = (config.sandboxPath() != null && !config.sandboxPath().isBlank())
-                    ? Paths.get(config.sandboxPath())
-                    : Paths.get("."); // default base path
 
-            Path absolutePath = basePath.resolve(entry.path()).toAbsolutePath();
+        Path base = config.sandboxPath().isBlank()
+                ? Paths.get(".")
+                : Paths.get(config.sandboxPath());
+
+        try {
+            Path path = base.resolve(entry.path()).toAbsolutePath();
+
+            DebugLogger.log("DIRGEN", "Resolved path: " + path);
 
             if (entry.isDirectory()) {
-                processDirectory(absolutePath, config, createdDirs, skippedPaths);
+                processDirectory(path, config, createdDirs, skippedPaths);
             } else {
-                processFile(entry, absolutePath, config, createdDirs, createdFiles, createdHiddenFiles, skippedPaths);
+                processFile(entry, path, config, createdDirs, createdFiles, createdHiddenFiles, skippedPaths);
             }
-        } catch (Exception e) {
-            String error = entry.path() + " - " + e.getMessage();
-            errorPaths.add(error);
-            if (config.verbose()) {
-                System.err.println("✗ Failed: " + error);
-            }
+
+        } catch (Exception ex) {
+            errorPaths.add(entry.path() + ": " + ex.getMessage());
+            DebugLogger.log("DIRGEN", "ERROR processing " + entry.path() + ": " + ex.getMessage());
         }
     }
 
-    private void processDirectory(Path dirPath, GenerationConfig config,
-                                  List<String> createdDirs, List<String> skippedPaths) throws IOException {
-        if (!Files.exists(dirPath)) {
-            Files.createDirectories(dirPath);
-            createdDirs.add(dirPath.toString());
-//            if (config.verbose()) {
-//                System.out.println("✓ Created directory: " + dirPath);
-//            }
+    private void processDirectory(Path dir, GenerationConfig config,
+                                  List<String> createdDirs, List<String> skipped) throws IOException {
+
+        if (!Files.exists(dir)) {
+            Files.createDirectories(dir);
+            createdDirs.add(dir.toString());
+            DebugLogger.log("DIRGEN", "Created directory: " + dir);
         } else {
-            skippedPaths.add(dirPath.toString());
-//            if (config.verbose()) {
-//                System.out.println("⤳ Directory exists: " + dirPath);
-//            }
+            skipped.add(dir.toString());
+            DebugLogger.log("DIRGEN", "Skipped existing directory: " + dir);
         }
     }
 
-    private void processFile(FileSystemEntry entry, Path filePath, GenerationConfig config,
+    private void processFile(FileSystemEntry entry, Path file,
+                             GenerationConfig config,
                              List<String> createdDirs, List<String> createdFiles,
-                             List<String> createdHiddenFiles, List<String> skippedPaths) throws IOException {
-        // Create parent directories if needed
-        Path parentDir = filePath.getParent();
-        if (parentDir != null && !Files.exists(parentDir)) {
-            Files.createDirectories(parentDir);
-            createdDirs.add(parentDir.toString());
+                             List<String> createdHidden, List<String> skipped) throws IOException {
+
+        Path parent = file.getParent();
+        if (parent != null && !Files.exists(parent)) {
+            Files.createDirectories(parent);
+            createdDirs.add(parent.toString());
+            DebugLogger.log("DIRGEN", "Created parent folder: " + parent);
         }
 
-        // Create or overwrite file
-        if (!Files.exists(filePath) || config.overwriteExisting()) {
-            Files.write(filePath, entry.content().getBytes(config.encoding()));
+        boolean shouldWrite = !Files.exists(file) || config.overwriteExisting();
 
-            // Make file hidden if configured and applicable
-            boolean isHidden = entry.hidden() || shouldBeHidden(filePath, config);
-            if (isHidden && config.createHiddenFiles()) {
-                makeFileHidden(filePath);
-                createdHiddenFiles.add(filePath.toString());
-                if (config.verbose()) {
-                    System.out.println("✓ Created hidden file: " + filePath +
-                            " (" + entry.content().length() + " chars)");
-                }
+        if (shouldWrite) {
+            Files.write(file, entry.content().getBytes(config.encoding()));
+            boolean hidden = entry.hidden() || shouldBeHidden(file, config);
+
+            if (hidden && config.createHiddenFiles()) {
+                makeFileHidden(file);
+                createdHidden.add(file.toString());
+                DebugLogger.log("DIRGEN", "Created hidden file: " + file);
             } else {
-                createdFiles.add(filePath.toString());
-//                if (config.verbose()) {
-//                    System.out.println("✓ Created file: " + filePath +
-//                            " (" + entry.content().length() + " chars)");
-//                }
+                createdFiles.add(file.toString());
+                DebugLogger.log("DIRGEN", "Created file: " + file);
             }
         } else {
-            skippedPaths.add(filePath.toString());
-//            if (config.verbose()) {
-//                System.out.println("⤳ File exists: " + filePath);
-//            }
+            skipped.add(file.toString());
+            DebugLogger.log("DIRGEN", "Skipped existing file: " + file);
         }
     }
 
-    private boolean shouldBeHidden(Path filePath, GenerationConfig config) {
-        if (!config.createHiddenFiles()) {
-            return false;
-        }
+    private boolean shouldBeHidden(Path file, GenerationConfig config) {
+        String name = file.getFileName().toString();
+        if (name.startsWith(".")) return true;
 
-        String fileName = filePath.getFileName().toString();
-
-        // Check if file starts with dot (standard hidden file convention)
-        if (fileName.startsWith(".")) {
-            return true;
-        }
-
-        // Check if file extension is in hidden extensions list
-        int lastDotIndex = fileName.lastIndexOf('.');
-        if (lastDotIndex > 0) {
-            String extension = fileName.substring(lastDotIndex);
-            return config.hiddenExtensions().contains(extension.toLowerCase());
+        int idx = name.lastIndexOf('.');
+        if (idx > 0) {
+            return config.hiddenExtensions().contains(name.substring(idx).toLowerCase());
         }
 
         return false;
     }
 
-    private void makeFileHidden(Path filePath) {
+    private void makeFileHidden(Path file) {
         try {
             String os = System.getProperty("os.name").toLowerCase();
-
             if (os.contains("win")) {
-                // Windows: use attrib command
-                ProcessBuilder pb = new ProcessBuilder("attrib", "+H", filePath.toAbsolutePath().toString());
-                pb.start().waitFor();
+                new ProcessBuilder("attrib", "+H", file.toAbsolutePath().toString()).start().waitFor();
             } else {
-                // Unix-like systems: rename to start with dot
-                if (!filePath.getFileName().toString().startsWith(".")) {
-                    Path hiddenPath = filePath.resolveSibling("." + filePath.getFileName());
-                    Files.move(filePath, hiddenPath, StandardCopyOption.REPLACE_EXISTING);
+                if (!file.getFileName().toString().startsWith(".")) {
+                    Files.move(file, file.resolveSibling("." + file.getFileName()));
                 }
-                // File already starts with dot, no need to rename
             }
         } catch (Exception e) {
-            System.err.println("Warning: Could not hide file " + filePath + ": " + e.getMessage());
+            DebugLogger.log("DIRGEN", "Could not hide file: " + e.getMessage());
         }
     }
 
     private List<FileSystemEntry> parseConfigFile(Path configPath, GenerationConfig config) throws IOException {
-        List<FileSystemEntry> entries = new ArrayList<>();
         List<String> lines = Files.readAllLines(configPath, Charset.forName(config.encoding()));
+        List<FileSystemEntry> entries = new ArrayList<>();
 
-        FileSystemEntry currentEntry = null;
-        StringBuilder contentBuilder = null;
+        FileSystemEntry current = null;
+        StringBuilder builder = null;
         boolean explicitHidden = false;
+        int lineNo = 0;
 
-        int lineNumber = 0;
-        for (String rawLine : lines) {
-            lineNumber++;
-            String line = rawLine.trim();
+        for (String raw : lines) {
+            lineNo++;
+            String line = raw.trim();
 
             if (line.isEmpty() || line.startsWith("#")) {
-                IO.println("Line is empty.");
-                continue; // Skip empty lines and comments
+                DebugLogger.log("DIRGEN", "Ignored blank/comment line " + lineNo);
+                continue;
             }
 
             if (line.startsWith("HIDDEN_DIR:")) {
-                finishCurrentEntry(entries, currentEntry, contentBuilder, explicitHidden);
-                String dirPath = line.substring(11).trim();
-                currentEntry = new FileSystemEntry(dirPath, true, "", true);
-                contentBuilder = null;
+                finish(entries, current, builder, explicitHidden);
+                current = new FileSystemEntry(line.substring(11).trim(), true, "", true);
+                builder = null;
                 explicitHidden = true;
-//                System.out.println("[DEBUG] Line " + lineNumber + ": HIDDEN_DIR -> " + dirPath);
-            } else if (line.startsWith("DIR:")) {
-                finishCurrentEntry(entries, currentEntry, contentBuilder, explicitHidden);
-                String dirPath = line.substring(4).trim();
-                currentEntry = new FileSystemEntry(dirPath, true, "", false);
-                contentBuilder = null;
+                DebugLogger.log("DIRGEN", "Parsed HIDDEN_DIR at line " + lineNo);
+            }
+            else if (line.startsWith("DIR:")) {
+                finish(entries, current, builder, explicitHidden);
+                current = new FileSystemEntry(line.substring(4).trim(), true, "", false);
+                builder = null;
                 explicitHidden = false;
-//                System.out.println("[DEBUG] Line " + lineNumber + ": DIR -> " + dirPath);
-            } else if (line.startsWith("HIDDEN_FILE:")) {
-                finishCurrentEntry(entries, currentEntry, contentBuilder, explicitHidden);
-                String filePath = line.substring(12).trim();
-                currentEntry = new FileSystemEntry(filePath, false, "", true);
-                contentBuilder = new StringBuilder();
+                DebugLogger.log("DIRGEN", "Parsed DIR at line " + lineNo);
+            }
+            else if (line.startsWith("HIDDEN_FILE:")) {
+                finish(entries, current, builder, explicitHidden);
+                current = new FileSystemEntry(line.substring(12).trim(), false, "", true);
+                builder = new StringBuilder();
                 explicitHidden = true;
-                System.out.println("[DEBUG] Line " + lineNumber + ": HIDDEN_FILE -> " + filePath);
-            } else if (line.startsWith("FILE:")) {
-                finishCurrentEntry(entries, currentEntry, contentBuilder, explicitHidden);
-                String filePath = line.substring(5).trim();
-                currentEntry = new FileSystemEntry(filePath, false, "", false);
-                contentBuilder = new StringBuilder();
+                DebugLogger.log("DIRGEN", "Parsed HIDDEN_FILE at line " + lineNo);
+            }
+            else if (line.startsWith("FILE:")) {
+                finish(entries, current, builder, explicitHidden);
+                current = new FileSystemEntry(line.substring(5).trim(), false, "", false);
+                builder = new StringBuilder();
                 explicitHidden = false;
-//                System.out.println("[DEBUG] Line " + lineNumber + ": FILE -> " + filePath);
-            } else if (line.equals("END_FILE") || line.equals("END")) {
-                finishCurrentEntry(entries, currentEntry, contentBuilder, explicitHidden);
-//                System.out.println("[DEBUG] Line " + lineNumber + ": END -> " + (currentEntry != null ? currentEntry.path() : "null"));
-                currentEntry = null;
-                contentBuilder = null;
+                DebugLogger.log("DIRGEN", "Parsed FILE at line " + lineNo);
+            }
+            else if (line.equals("END") || line.equals("END_FILE")) {
+                finish(entries, current, builder, explicitHidden);
+                current = null;
+                builder = null;
                 explicitHidden = false;
-            } else if (contentBuilder != null) {
-                // We're in a file content block
-                contentBuilder.append(rawLine).append(config.lineSeparator());
-            } else {
-                // Standalone entry (file or directory)
-                finishCurrentEntry(entries, currentEntry, contentBuilder, explicitHidden);
+                DebugLogger.log("DIRGEN", "Parsed END at line " + lineNo);
+            }
+            else if (builder != null) {
+                builder.append(raw).append(config.lineSeparator());
+            }
+            else {
+                finish(entries, current, builder, explicitHidden);
                 boolean isDir = line.endsWith("/");
                 boolean isHidden = line.startsWith(".") ||
                         config.hiddenExtensions().stream().anyMatch(line::endsWith);
+
                 entries.add(new FileSystemEntry(line, isDir, "", isHidden));
-                currentEntry = null;
+                current = null;
                 explicitHidden = false;
-//                System.out.println("[DEBUG] Line " + lineNumber + ": Standalone entry -> " + line +
-//                        " | isDir=" + isDir + " | hidden=" + isHidden);
+                DebugLogger.log("DIRGEN", "Parsed standalone entry at line " + lineNo + ": " + line);
             }
         }
 
-        finishCurrentEntry(entries, currentEntry, contentBuilder, explicitHidden);
-//        System.out.println("[DEBUG] Finished parsing config. Total entries: " + entries.size());
+        finish(entries, current, builder, explicitHidden);
+        DebugLogger.log("DIRGEN", "Finished parsing config. Entries=" + entries.size());
+
         return entries;
     }
 
-    private void finishCurrentEntry(List<FileSystemEntry> entries, FileSystemEntry currentEntry,
-                                    StringBuilder contentBuilder, boolean explicitHidden) {
-        if (currentEntry != null) {
-            if (contentBuilder != null && !contentBuilder.isEmpty()) {
-                // File with content
-                String content = contentBuilder.toString().trim();
-                boolean hidden = explicitHidden || currentEntry.hidden();
-                entries.add(new FileSystemEntry(currentEntry.path(), false, content, hidden));
+    private void finish(List<FileSystemEntry> entries, FileSystemEntry current,
+                        StringBuilder builder, boolean explicitHidden) {
+
+        if (current != null) {
+            if (builder != null && !builder.isEmpty()) {
+                entries.add(new FileSystemEntry(current.path(),
+                        false,
+                        builder.toString().trim(),
+                        explicitHidden || current.hidden()
+                ));
             } else {
-                // Directory or file without content
-                entries.add(currentEntry);
+                entries.add(current);
             }
         }
     }
