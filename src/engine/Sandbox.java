@@ -13,7 +13,7 @@ public class Sandbox {
     private String rootPath;
     private final CommandValidator validator;
     private final DirGenerator dirGenerator;
-    private LinuxCommandExecutor executor;
+    private final LinuxCommandExecutor executor;
 
     public Sandbox(String rootPath) {
         this.rootPath = rootPath;
@@ -68,30 +68,6 @@ public class Sandbox {
     public void updateRootDir(UpdateCallback callback) {
         String path = new String(rootPath);
         updateRootDir(callback.onUpdate(path));
-    }
-
-    /**
-     * Safely execute a command in the sandbox.
-     */
-    public void safeExecute(String command) {
-        CommandValidator.ValidationResult result = validator.validate(command);
-
-        if (!result.isValid()) {
-            return;
-        }
-
-        try {
-            // Commands that require Linux execution
-            if (command.startsWith("rm") || command.startsWith("sudo")) {
-                String[] parts = command.split("\\s+");
-                boolean success = this.executor.executeCommand(parts);
-                return;
-            }
-
-            this.executor.executeCommand(command);
-
-        } catch (Exception e) {
-        }
     }
 
     public DirGenerator.GenerationResult generateStructure(String configFilePath) {

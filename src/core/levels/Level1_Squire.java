@@ -220,7 +220,7 @@ public class Level1_Squire extends Level {
                 continue;
             }
 
-            sandbox.safeExecute(input);
+            sandbox.getExecutor().executeCommand(input);
 
             break;
         }
