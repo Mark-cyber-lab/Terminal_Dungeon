@@ -1,12 +1,16 @@
 package core;
 
+import core.levels.Level;
 import utilities.AsciiArt;
 import utilities.CLIUtils;
 
 public class Player extends Alive {
 
-    private int level = 1;
+    private final PlayerStats playerStats;
+    public int initialLevel = 1;
+    private final int maxLevel = 7;
     private final Inventory inventory = new Inventory();
+    private Level levelObj;
 
     private static final String[] RANKS = {
             "Unknown",
@@ -19,17 +23,29 @@ public class Player extends Alive {
             "Arcane Knight"
     };
 
-    public Player() {}
+    public Player(PlayerStats stats) {
+        super(stats);
+        this.playerStats = stats;
+    }
+
+    public PlayerStats getStats() {
+        return playerStats;
+    }
 
     public Inventory getInventory() {
         return inventory;
     }
 
-    public int getLevel() {
-        return level;
+    public Level getLevelObj() {
+        return levelObj;
+    }
+
+    public void setLevelObj(Level levelObj) {
+        this.levelObj = levelObj;
     }
 
     public String getRankName() {
+        int level = playerStats.getLevel();
         if (level >= 1 && level < RANKS.length) {
             return RANKS[level];
         }
@@ -37,13 +53,22 @@ public class Player extends Alive {
     }
 
     public void promoteLevel() {
-        int MAX_LEVEL = 7;
-
-        if (level < MAX_LEVEL) {
-            level++;
+        int level = playerStats.getLevel();
+        if (level < maxLevel) {
+            playerStats.setLevel(level + 1);
             IO.println("You have been promoted to: " + getRankName() + "!");
         } else {
             IO.println("You have already reached maximum level!");
+        }
+    }
+
+    public void promoteLevelTo(int newLevel) {
+        int level = playerStats.getLevel();
+        if (level < maxLevel) {
+            playerStats.setLevel(newLevel);
+            initialLevel = newLevel;
+        } else {
+            throw new IllegalArgumentException("You have already reached maximum level!");
         }
     }
 
@@ -51,12 +76,12 @@ public class Player extends Alive {
 
     @Override
     protected void onDamage(int amount) {
-        IO.println("You took " + amount + " damage! Health: " + health + "/" + MAX_HEALTH);
+        IO.println("You took " + amount + " damage! Health: " + playerStats.getHealth() + "/" + playerStats.MAX_HEALTH);
     }
 
     @Override
     protected void onHeal(int amount) {
-        IO.println("You healed " + amount + " HP! Health: " + health + "/" + MAX_HEALTH);
+        IO.println("You healed " + amount + " HP! Health: " + playerStats.getHealth() + "/" + playerStats.MAX_HEALTH);
     }
 
     @Override

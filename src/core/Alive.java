@@ -8,78 +8,10 @@ package core;
  * Subclasses define specific behaviors upon damage, healing, or death.
  */
 public abstract class Alive {
+    private final AliveStats stats;
 
-    /** Current health of the entity (0–100). */
-    protected int health = 100;
-
-    /** Maximum possible health. */
-    protected final int MAX_HEALTH = 100;
-
-    /** Minimum possible health, representing death. */
-    protected final int MIN_HEALTH = 0;
-
-    /**
-     * Returns the current health value.
-     *
-     * @return current health (0–100)
-     */
-    public int getHealth() {
-        return health;
-    }
-
-    /**
-     * Checks if the entity is still alive.
-     *
-     * @return {@code true} if health is above 0, otherwise false.
-     */
-    public boolean isAlive() {
-        return health > MIN_HEALTH;
-    }
-
-    /**
-     * Returns the current health percentage (0–100%).
-     *
-     * @return percentage representing remaining health
-     */
-    public int getHealthPercent() {
-        return (int) ((health / (double) MAX_HEALTH) * 100);
-    }
-
-    /**
-     * Returns an ASCII health bar using the default width of 30 characters.
-     *
-     * @return formatted health bar string
-     */
-    public String getHealthBar() {
-        return buildHealthBar(30);
-    }
-
-    /**
-     * Returns an ASCII health bar using a custom width.
-     *
-     * @param width total width of the bar in characters
-     * @return formatted health bar string
-     */
-    public String getHealthBar(int width) {
-        return buildHealthBar(width);
-    }
-
-    /**
-     * Constructs an ASCII health bar based on current HP.
-     * Filled segments use '█' and empty segments use '░'.
-     *
-     * @param width total number of segments in the bar
-     * @return string containing the rendered health bar
-     */
-    private String buildHealthBar(int width) {
-        double ratio = health / (double) MAX_HEALTH;
-        int filled = (int) Math.round(ratio * width);
-        int empty = width - filled;
-
-        return "[" +
-                "█".repeat(Math.max(0, filled)) +
-                "░".repeat(Math.max(0, empty)) +
-                "] " + getHealthPercent() + "%";
+    Alive(AliveStats stats) {
+        this.stats = stats;
     }
 
     // ----------------------------------------------------------------------
@@ -98,16 +30,18 @@ public abstract class Alive {
     public void takeDamage(int amount) {
         if (amount <= 0) return;
 
-        int old = health;
+        int old = this.stats.getHealth();
+        int newHealth = old - amount;
 
-        health -= amount;
-        if (health < MIN_HEALTH) health = MIN_HEALTH;
+        this.stats.setHealth(newHealth);
+
+        if (newHealth < this.stats.MIN_HEALTH) setHealth(this.stats.MIN_HEALTH);
 
         onDamage(amount);
 
-        IO.println("HP: " + getHealthBar());
+        IO.println("HP: " + this.stats.getHealthBar());
 
-        if (health == MIN_HEALTH) {
+        if (newHealth == this.stats.MIN_HEALTH) {
             onDeath();
         }
     }
@@ -126,14 +60,16 @@ public abstract class Alive {
     public void heal(int amount) {
         if (amount <= 0) return;
 
-        int old = health;
+        int old = this.stats.getHealth();
+        int newHealth = old + amount;
 
-        health += amount;
-        if (health > MAX_HEALTH) health = MAX_HEALTH;
+        this.stats.setHealth(newHealth);
+
+        if (newHealth > this.stats.MIN_HEALTH) setHealth(this.stats.MIN_HEALTH);
 
         onHeal(amount);
 
-        IO.println("HP: " + getHealthBar());
+        IO.println("HP: " + this.stats.getHealthBar());
     }
 
     // ----------------------------------------------------------------------
@@ -149,14 +85,12 @@ public abstract class Alive {
      * @param value new health value (clamped between MIN_HEALTH and MAX_HEALTH)
      */
     public void setHealth(int value) {
-        if (value < MIN_HEALTH) value = MIN_HEALTH;
-        if (value > MAX_HEALTH) value = MAX_HEALTH;
+        if (value < stats.MIN_HEALTH) stats.setHealth(stats.MIN_HEALTH);
+        if (value > stats.MAX_HEALTH) stats.setHealth(stats.MAX_HEALTH);
 
-        health = value;
+        stats.setHealth(value);
 
-        IO.println("HP: " + getHealthBar());
-
-        if (health == MIN_HEALTH) {
+        if (stats.getHealth() == stats.MIN_HEALTH) {
             onDeath();
         }
     }

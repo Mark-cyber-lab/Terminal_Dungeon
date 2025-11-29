@@ -4,23 +4,48 @@ import core.*;
 import core.levels.Level;
 import utilities.CLIUtils;
 import utilities.AsciiArt;
+import utilities.DebugLogger;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NewStage {
 
     private static final String SANDBOX_ROOT = "./sandbox";
-    private final Player player = new Player();
+    private final PlayerStats playerStats = new PlayerStats();
+    private final Player player = new Player(playerStats);
+    private final List<Level> levels = new ArrayList<>();
+    private final Sandbox sandbox = new Sandbox(SANDBOX_ROOT);
 
-    public void upStage() {
-        Sandbox sandbox = new Sandbox(SANDBOX_ROOT);
+    private void initializeLevels () {
+        levels.add(new Level1_Squire(sandbox, player));
+    }
+
+    public void upStage() throws IOException {
 
         CLIUtils.clearScreen();
 
         CLIUtils.printCentered(AsciiArt.getTitleDungeon());
 
         CLIUtils.sleep(600);
+
+        initializeLevels();
+
+        PlayerConfig config = new PlayerConfig("./player.json", player);
+        config.load();
+        sandbox.loadBackup();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            DebugLogger.log("Saving player configuration before exit...");
+            try {
+                config.save();
+                sandbox.backup();
+                DebugLogger.log("Player configuration saved successfully!");
+            } catch (Exception e) {
+                DebugLogger.log("Failed to save player configuration: " + e.getMessage());
+            }
+        }));
 
         IO.println();
         CLIUtils.typewriter("You awaken inside a dark cavern...", 20, true);
@@ -31,16 +56,17 @@ public class NewStage {
         IO.println();
         CLIUtils.waitAnyKey();
 
-        List<Level> levels = new ArrayList<>();
-        levels.add(new Level1_Squire(sandbox, player));
 
-        while (player.isAlive()) {
+        while (playerStats.isAlive()) {
 
             CLIUtils.header("A NEW DUNGEON CYCLE BEGINS");
             CLIUtils.typewriter("Current rank: " + player.getRankName(), 20, true);
             CLIUtils.waitAnyKey();
 
-            for (Level level : levels) {
+            for (int i = player.initialLevel - 1; i < levels.size(); i++) {
+                Level level = levels.get(i);
+                player.setLevelObj(level);
+
                 CLIUtils.clearScreen();
                 level.printLevelHeader();
                 CLIUtils.center(level.getDescription());
@@ -72,6 +98,10 @@ public class NewStage {
 
             if (!retry) {
                 player.setHealth(0);
+            } else {
+                playerStats.setStage(1);
+                playerStats.setLevel(1);
+                playerStats.setCurrentDir("");
             }
         }
 

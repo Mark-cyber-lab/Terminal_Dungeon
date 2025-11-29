@@ -4,6 +4,7 @@ import core.Player;
 import engine.Sandbox;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Abstract base class for all Levels in Terminal Dungeon.
@@ -13,21 +14,15 @@ public abstract class Level {
 
     /** Level number, e.g., 1, 2, 3 */
     protected final Sandbox sandbox;
-    protected final int levelNumber;
     protected Player player;
     protected final ArrayList<Stage> stages = new ArrayList<>();
     protected final String basePath;
 
     public Level(int levelNumber, Player player, Sandbox sandbox, String basePath) {
-        this.levelNumber = levelNumber;
+        player.getStats().setLevel(levelNumber);
         this.player = player;
         this.basePath = basePath;
         this.sandbox = sandbox;
-    }
-
-    /** Return the level number */
-    public int getLevelNumber() {
-        return levelNumber;
     }
 
     public void addStage(Stage stage) {
@@ -37,11 +32,12 @@ public abstract class Level {
     public void execute() {
         sandbox.updateRootDir(prev -> prev + basePath);
         onBeforeInit();
-        for (Stage stage : stages) {
-            stage.execute();
+        for (int stageNumber = player.getStats().getStage() - 1; stageNumber < stages.size(); stageNumber++) {
+            player.getStats().setStage(stageNumber + 1);
+            stages.get(stageNumber).execute();
         }
         onLevelComplete();
-        sandbox.updateRootDir(prev -> prev + "/../");
+        if(!basePath.isEmpty()) sandbox.updateRootDir(prev -> prev + "/../");
     }
 
     public abstract String getDescription();

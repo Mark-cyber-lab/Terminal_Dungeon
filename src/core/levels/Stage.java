@@ -3,7 +3,7 @@ package core.levels;
 import utilities.CLIUtils;
 
 public abstract class Stage {
-    protected final int stageNumber;
+    protected int stageNumber;
     protected Level level;
 
     public Stage(int stageNumber, Level level) {
@@ -13,6 +13,10 @@ public abstract class Stage {
 
     public int getStageNumber() {
         return stageNumber;
+    }
+
+    public void setStageNumber(int  newStageNumber) {
+        stageNumber = newStageNumber;
     }
 
     public void printStageHeader() {
