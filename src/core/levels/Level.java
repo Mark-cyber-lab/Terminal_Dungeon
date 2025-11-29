@@ -1,6 +1,7 @@
 package core.levels;
 
 import core.Player;
+import engine.Sandbox;
 
 import java.util.ArrayList;
 
@@ -11,13 +12,17 @@ import java.util.ArrayList;
 public abstract class Level {
 
     /** Level number, e.g., 1, 2, 3 */
+    protected final Sandbox sandbox;
     protected final int levelNumber;
     protected Player player;
     protected final ArrayList<Stage> stages = new ArrayList<>();
+    protected final String basePath;
 
-    public Level(int levelNumber, Player player) {
+    public Level(int levelNumber, Player player, Sandbox sandbox, String basePath) {
         this.levelNumber = levelNumber;
         this.player = player;
+        this.basePath = basePath;
+        this.sandbox = sandbox;
     }
 
     /** Return the level number */
@@ -30,17 +35,19 @@ public abstract class Level {
     }
 
     public void execute() {
-        onBeforePlay();
+        sandbox.updateRootDir(prev -> prev + basePath);
+        onBeforeInit();
         for (Stage stage : stages) {
             stage.execute();
         }
-        onAfterPlay();
+        onLevelComplete();
+        sandbox.updateRootDir(prev -> prev + "/../");
     }
 
     public abstract String getDescription();
     public abstract void printLevelHeader();
     public abstract String[] getLevelHeader();
-    public abstract void onBeforePlay();
-    public abstract void onAfterPlay();
+    public abstract void onBeforeInit();
+    public abstract void onLevelComplete();
     public abstract void setup();
 }

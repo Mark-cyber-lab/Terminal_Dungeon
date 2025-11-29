@@ -5,16 +5,13 @@ import engine.Sandbox;
 import utilities.AsciiArt;
 import utilities.CLIUtils;
 
-import java.util.ArrayList;
-
 public class Level1_Squire extends Level {
 
-    private final Sandbox sandbox;
-    private final String configPath = "./src/stages/stage1.txt";
+    private static final String configPath = "./src/stages/stage1.txt";
+    private static final String basePath = "/lv1";
 
     public Level1_Squire(Sandbox sandbox, Player player) {
-        super(1, player);
-        this.sandbox = sandbox;
+        super(1, player, sandbox, basePath);
     }
 
     @Override
@@ -178,13 +175,13 @@ public class Level1_Squire extends Level {
     }
 
     @Override
-    public void onBeforePlay() {
+    public void onBeforeInit() {
         IO.println("\n🏅 You are now a Squire — the lowest but bravest rank of Terminal Knights.");
         IO.println("Your training begins...\n");
     }
 
     @Override
-    public void onAfterPlay() {
+    public void onLevelComplete() {
         IO.println("🎉 You have mastered the fundamentals, young Squire!");
         IO.println("You feel a surge of confidence as you prepare for Level 2...\n");
     }

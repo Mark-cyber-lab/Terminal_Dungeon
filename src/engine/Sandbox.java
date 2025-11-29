@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class Sandbox {
 
-    private final String rootPath;
+    private String rootPath;
     private final CommandValidator validator;
     private final DirGenerator dirGenerator;
     private LinuxCommandExecutor executor;
@@ -51,14 +51,29 @@ public class Sandbox {
 
     }
 
+    public void updateRootDir(String path) {
+        rootPath = path;
+        executor.setCurrentDirectory(rootPath);
+    }
+
+    @FunctionalInterface
+    public interface UpdateCallback {
+        String onUpdate(String prevVal);
+    }
+
+    public void updateRootDir(UpdateCallback callback) {
+        String path = new String(rootPath);
+        updateRootDir(callback.onUpdate(path));
+    }
+
     /**
      * Safely execute a command in the sandbox.
      */
-    public String safeExecute(String command) {
+    public void safeExecute(String command) {
         CommandValidator.ValidationResult result = validator.validate(command);
 
         if (!result.isValid()) {
-            return "[Sandbox] ❌ Invalid command: " + result.getErrorMessage();
+            return;
         }
 
         try {
@@ -66,16 +81,12 @@ public class Sandbox {
             if (command.startsWith("rm") || command.startsWith("sudo")) {
                 String[] parts = command.split("\\s+");
                 boolean success = this.executor.executeCommand(parts);
-                return success ? "[Sandbox] ✅ Command executed successfully"
-                        : "[Sandbox] ❌ Command failed";
+                return;
             }
 
             this.executor.executeCommand(command);
 
-            return "Success";
-
         } catch (Exception e) {
-            return "[Sandbox] ❌ Exception: " + e.getMessage();
         }
     }
 
