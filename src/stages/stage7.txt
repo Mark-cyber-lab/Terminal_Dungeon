@@ -1,0 +1,33 @@
+DIR: level_7/
+DIR: level_7/kobold_tunnels/
+DIR: level_7/guard_post/
+DIR: level_7/permission_hall/
+LOCKED_DIR: level_7/access_master/
+
+FILE: level_7/kobold_tunnels/welcome.txt
+Warrior Knight Level 1: Learn permissions
+Command: chmod
+
+FILE: level_7/guard_post/lesson_1.txt
+Some areas need permission changes
+Use chmod to access them
+
+FILE: level_7/permission_hall/practice.txt
+Practice permission commands
+Learn to control access
+
+FILE: level_7/kobold_tunnels/kobold.mob
+Kobold guard blocks path
+
+FILE: level_7/guard_post/kobold.mob
+Kobold sentry at post
+
+FILE: level_7/permission_hall/goblin.mob
+Goblin in training area
+
+HIDDEN_FILE: level_7/guard_post/.guard_key.secr
+Key for permission mastery
+
+FILE: level_7/access_master/challenge.txt
+Test your permission skills
+Access controlled areas

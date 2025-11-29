@@ -1,0 +1,33 @@
+DIR: level_9/
+DIR: level_9/treasure_room/
+DIR: level_9/rescue_hall/
+DIR: level_9/strategy_center/
+LOCKED_DIR: level_9/protector/
+
+FILE: level_9/treasure_room/welcome.txt
+Guardian Knight Level 1: Learn protection
+Commands: cp, mv
+
+FILE: level_9/rescue_hall/lesson_1.txt
+Use 'mv' to move important items
+Keep valuables safe
+
+FILE: level_9/strategy_center/practice.txt
+Use 'cp' to backup documents
+Always have plans B and C
+
+FILE: level_9/treasure_room/kobold.mob
+Kobold trying to steal
+
+FILE: level_9/rescue_hall/civilian.txt
+Person needing rescue
+
+FILE: level_9/strategy_room/important_plans.txt
+Documents needing backup
+
+HIDDEN_FILE: level_9/rescue_hall/.rescue_key.secr
+Key earned through protection
+
+FILE: level_9/protector/challenge.txt
+Test your protection skills
+Guard what matters most

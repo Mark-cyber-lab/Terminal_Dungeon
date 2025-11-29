@@ -130,10 +130,6 @@ public class LinuxCommandExecutor {
         }
     }
 
-    // ============================
-    // OS-ADJUSTED COMMAND MAPPING
-    // ============================
-
     private String[] adjustCommandForOS(String[] command) {
         if (!OS.contains("win")) return command;  // Linux/macOS stays the same
 

@@ -1,0 +1,24 @@
+DIR: level_2/
+DIR: level_2/advanced_training/
+DIR: level_2/exploration_hall/
+DIR: level_2/pathfinding_maze/
+LOCKED_DIR: level_2/mastery_chamber/
+
+FILE: level_2/advanced_training/welcome.txt
+Squire Level 2: Master navigation
+Command: pwd
+
+FILE: level_2/exploration_hall/lesson_1.txt
+Use 'pwd' to track your location
+Never get lost in complex areas
+
+FILE: level_2/pathfinding_maze/challenge.txt
+Navigate this complex maze
+Use all navigation commands
+
+HIDDEN_FILE: level_2/exploration_hall/.explorer_key.secr
+Key for those who master exploration
+
+FILE: level_2/mastery_chamber/test.txt
+Final navigation challenge
+Become a master of movement

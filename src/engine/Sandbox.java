@@ -13,7 +13,7 @@ public class Sandbox {
     private final String rootPath;
     private final CommandValidator validator;
     private final DirGenerator dirGenerator;
-    private LinuxCommandExecutor executor;
+    private final LinuxCommandExecutor executor;
 
     public Sandbox(String rootPath) {
         this.rootPath = rootPath;

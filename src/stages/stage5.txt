@@ -1,0 +1,30 @@
+DIR: level_5/
+DIR: level_5/combat_training/
+DIR: level_5/goblin_caves/
+DIR: level_5/arena/
+LOCKED_DIR: level_5/combat_master/
+
+FILE: level_5/combat_training/welcome.txt
+Scout Knight Level 1: Learn combat
+Command: rm
+
+FILE: level_5/goblin_caves/lesson_1.txt
+Use 'rm enemy.mob' to defeat foes
+Start with weak goblins
+
+FILE: level_5/arena/practice.txt
+Practice combat techniques
+Face single enemies
+
+FILE: level_5/goblin_caves/goblin.mob
+A weak goblin stands guard
+
+FILE: level_5/arena/goblin.mob
+Training goblin for practice
+
+HIDDEN_FILE: level_5/combat_training/.training_key.secr
+Key earned through basic combat
+
+FILE: level_5/combat_master/challenge.txt
+Test your basic combat skills
+Defeat the training master

@@ -1,0 +1,37 @@
+DIR: level_8/
+DIR: level_8/security_hall/
+DIR: level_8/restricted_zone/
+DIR: level_8/authority_chamber/
+LOCKED_DIR: level_8/security_chief/
+
+FILE: level_8/security_hall/welcome.txt
+Warrior Knight Level 2: Master permissions
+Advanced access control
+
+FILE: level_8/restricted_zone/lesson_1.txt
+Work with complex permissions
+Some areas have multiple locks
+
+FILE: level_8/authority_chamber/challenge.txt
+Solve permission puzzles
+Combine combat and access control
+
+FILE: level_8/security_hall/kobold.mob
+Security kobold guard
+
+FILE: level_8/restricted_zone/kobold.mob
+Elite kobold sentry
+FILE: level_8/restricted_zone/goblin.mob
+Goblin infiltrator
+
+FILE: level_8/authority_chamber/kobold.mob
+Authority kobold
+FILE: level_8/authority_chamber/kobold.mob
+Authority kobold
+
+HIDDEN_FILE: level_8/restricted_zone/.security_key.secr
+Key for security mastery
+
+FILE: level_8/security_chief/test.txt
+Final permission challenge
+Become security master
