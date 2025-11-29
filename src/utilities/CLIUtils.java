@@ -1,6 +1,5 @@
 package utilities;
 
-import java.io.Console;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -10,6 +9,8 @@ import java.util.Scanner;
  * input pauses. Designed to work both in real terminals and IDE consoles.
  */
 public class CLIUtils {
+
+    private static Integer cachedTerminalWidth = null;
 
     /**
      * Clears the terminal screen using the best available method.
@@ -129,7 +130,7 @@ public class CLIUtils {
     public static void header(String[] text) {
         String levelHeader = AsciiArt.getLevelHeader()[0];
         System.out.println(center(levelHeader));
-        for(String line: text) {
+        for (String line : text) {
             System.out.println(center(line));
         }
         System.out.println(center(levelHeader));
@@ -138,13 +139,14 @@ public class CLIUtils {
     public static void header(String[] text, int padding) {
         header(text, padding, padding);
     }
+
     public static void header(String[] text, int paddingTop, int paddingBottom) {
         String levelHeader = AsciiArt.getLevelHeader()[0];
         System.out.println(center(levelHeader));
         for (int p = 0; p < paddingTop; p++) {
             IO.println();
         }
-        for(String line: text) {
+        for (String line : text) {
             System.out.println(center(line));
         }
         for (int p = 0; p < paddingBottom; p++) {
@@ -211,37 +213,47 @@ public class CLIUtils {
      * @return terminal width in characters
      */
     public static int getTerminalWidth() {
-        // 1. Try COLUMNS env var (works in many shells)
+        if (cachedTerminalWidth != null) {
+            return cachedTerminalWidth;
+        }
+
+        // 1. Try COLUMNS env var
         String columnsEnv = System.getenv("COLUMNS");
         if (columnsEnv != null) {
             try {
-                int width = Integer.parseInt(columnsEnv);
-                DebugLogger.log("CLIUtils"," Terminal width from COLUMNS env: " + width);
-                return width;
-            } catch (NumberFormatException ignored) {}
+                cachedTerminalWidth = Integer.parseInt(columnsEnv);
+                DebugLogger.log("CLIUtils", "Terminal width from COLUMNS env: " + cachedTerminalWidth);
+                return cachedTerminalWidth;
+            } catch (NumberFormatException ignored) {
+            }
         }
 
+        // 2. Try stty command (Unix/Linux/macOS)
         try {
             Process process = new ProcessBuilder("/bin/sh", "-c", "stty size 2>/dev/null || echo 0 0").start();
-            try (java.util.Scanner scanner = new java.util.Scanner(process.getInputStream())) {
+            try (Scanner scanner = new Scanner(process.getInputStream())) {
                 if (scanner.hasNextInt()) {
                     scanner.nextInt(); // rows
                     int cols = scanner.nextInt(); // columns
                     if (cols > 0) {
-                        DebugLogger.log("CLIUtils", "Terminal width from stty: " + cols);
-                        return cols;
+                        cachedTerminalWidth = cols;
+                        DebugLogger.log("CLIUtils", "Terminal width from stty: " + cachedTerminalWidth);
+                        return cachedTerminalWidth;
                     }
                 }
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
-
-        int fallback = 125;
-        DebugLogger.log("CLIUtils", "Using fallback terminal width: " + fallback);
-        return fallback;
+        // 3. Fallback default
+        cachedTerminalWidth = 125;
+        DebugLogger.log("CLIUtils", "Using fallback terminal width: " + cachedTerminalWidth);
+        return cachedTerminalWidth;
     }
 
-
+    public static void resetTerminalWidthCache() {
+        cachedTerminalWidth = null;
+    }
 
     /**
      * Centers a single line of text using the detected terminal width.
