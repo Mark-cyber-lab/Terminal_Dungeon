@@ -41,9 +41,9 @@ public class Player {
 
         if (level < MAX_LEVEL) {
             level++;
-            IO.println("✨ You have been promoted to: " + getRankName() + "!");
+            IO.println("You have been promoted to: " + getRankName() + "!");
         } else {
-            IO.println("⚠️ You have already reached maximum level: " + getRankName());
+            IO.println("You have already reached maximum level: " + getRankName());
         }
     }
 }

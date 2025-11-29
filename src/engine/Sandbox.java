@@ -51,6 +51,10 @@ public class Sandbox {
 
     }
 
+    public LinuxCommandExecutor getExecutor() {
+        return executor;
+    }
+
     public void updateRootDir(String path) {
         rootPath = path;
         executor.setCurrentDirectory(rootPath);

@@ -5,9 +5,12 @@ import engine.Sandbox;
 import utilities.AsciiArt;
 import utilities.CLIUtils;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class Level1_Squire extends Level {
 
-    private static final String configPath = "./src/stages/stage1.txt";
+    private static final String configPath = "./src/stages/level1.txt";
     private static final String basePath = "/lv1";
 
     public Level1_Squire(Sandbox sandbox, Player player) {
@@ -21,9 +24,11 @@ public class Level1_Squire extends Level {
         Stage Stage1 = new Stage1();
         Stage Stage2 = new Stage2();
         Stage Stage3 = new Stage3();
+        Stage Stage4 = new Stage4();
         addStage(Stage1);
         addStage(Stage2);
         addStage(Stage3);
+        addStage(Stage4);
     }
 
     private class Stage1 extends Stage {
@@ -130,6 +135,69 @@ public class Level1_Squire extends Level {
         @Override
         public void setupEnvironment() {
             // No environments to set for this stage
+        }
+    }
+
+    private class Stage4 extends Stage {
+        Stage4() {
+            super(4, Level1_Squire.this);
+        }
+
+        @Override
+        public String[] getStageHeader() {
+            return new String[]{"Stage 4 — Exploration of the Dungeon Chambers"};
+        }
+
+        @Override
+        public void play() {
+            CLIUtils.typewriter("Now, brave Squire, you must explore the dungeon chambers.", 30);
+            CLIUtils.typewriter("\"Move through the folders to discover their secrets.\"", 30);
+            IO.println("Type **ls** to see what folders are here.");
+            IO.println("Then type **cd ./<folder_name>** to enter a folder.");
+            IO.println("Finally, type **pwd** to confirm your location.\n");
+            IO.println("Type 'E' or 'Exit' if you are ready to exit the dungeon.\n");
+
+            boolean success = false;
+            while (!success) {
+                System.out.print(">> ");
+                String input = IO.readln().trim();
+
+                if (input.equals("E") || input.equals("Exit")) {
+                    break;
+                }
+                if (input.startsWith("cd ")) {
+                    sandbox.getExecutor().executeCommand(input.split(" "));
+                } else if (input.equals("ls") || input.equals("pwd")) {
+                    sandbox.getExecutor().executeCommand(input);
+                } else {
+                    IO.println("The spirits whisper: \"That is not the command you were meant to use.\"");
+                    IO.println("Try using **ls** or **cd ./<folder_name>** and **pwd**");
+                    continue;
+                }
+
+                // simple success condition: pwd inside a subfolder of basePath
+                Path current = sandbox.getRootPath() != null ? Paths.get(sandbox.getRootPath()) : null;
+                if (current != null && !current.toAbsolutePath().equals(Paths.get(sandbox.getRootPath()).toAbsolutePath())) {
+                    success = true;
+                }
+            }
+        }
+
+        @Override
+        public void onSuccessPlay() {
+            IO.println("Stage complete! You have learned to navigate through folders.\n");
+            CLIUtils.waitAnyKey();
+        }
+
+        @Override
+        public void onFailedPlay(Exception exception) {
+            IO.println("Something went wrong while exploring. Try again.");
+        }
+
+        @Override
+        public void setupEnvironment() {
+            // optionally create a subfolder to explore
+            sandbox.getDirGenerator().generateFromConfig("./src/stages/stage4.txt", sandbox.getRootPath());
         }
     }
 
