@@ -7,10 +7,11 @@ import core.levels.stages.Stage2;
 import engine.Sandbox;
 import utilities.AsciiArt;
 import utilities.CLIUtils;
+import utilities.DebugLogger;
 
 public class Level1_Squire extends Level {
 
-    private static final String basePath = "/level_1";
+    private static final String basePath = "";
 
     public Level1_Squire(Sandbox sandbox, Player player) {
         super(1, player, sandbox, basePath);
@@ -18,6 +19,12 @@ public class Level1_Squire extends Level {
 
     @Override
     public void setup() {
+        try {
+            sandbox.flush();
+        } catch (Exception e) {
+            DebugLogger.log(e.getMessage());
+        }
+
         Stage Stage1 = new Stage1(this);
         Stage Stage2 = new Stage2(this);
         addStage(Stage1);
@@ -41,8 +48,7 @@ public class Level1_Squire extends Level {
 
     @Override
     public void onBeforeInit() {
-        IO.println("\n🏅 You are now a Squire — the lowest but bravest rank of Terminal Knights.");
-        IO.println("Your training begins...\n");
+
     }
 
     @Override

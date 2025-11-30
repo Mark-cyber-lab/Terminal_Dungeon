@@ -7,7 +7,7 @@ public class Stage2 extends Stage {
     private static final String configPath = "./src/stages/revised/stage2.txt";
 
     public Stage2(Level level) {
-        super(1, level);
+        super(2, level);
     }
 
     @Override

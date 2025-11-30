@@ -147,6 +147,14 @@ public class Sandbox {
                 });
     }
 
+    public void flush () throws IOException {
+        File backupDir = new File(initialRootPath + "_backup");
+        if (!backupDir.exists()) return; // nothing to restore
+
+        File rootDir = new File(initialRootPath);
+        if (rootDir.exists()) deleteDirectoryRecursively(rootDir.toPath());
+    }
+
     public void loadBackup() throws IOException {
         File backupDir = new File(initialRootPath + "_backup");
         if (!backupDir.exists()) return; // nothing to restore

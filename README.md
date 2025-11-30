@@ -153,3 +153,11 @@ Embark on your journey through the **Terminal Dungeon**, a mystical realm of dir
 - **Keys & Doors:** Introduce puzzles requiring multiple commands (`mv`, `chmod`, `sudo`).
 - **Boss / Arcane Level:** Commands are combined using `&` or `|` for chaining actions — the ultimate test of Terminal Dungeon mastery.
 
+## Development
+
+Run via wsl:
+
+```wsl
+javac -d out $(find src -name "*.java")
+java -cp out Main
+```

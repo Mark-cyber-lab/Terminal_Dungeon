@@ -91,7 +91,7 @@ public class LinuxCommandExecutor {
                 break;
             }
 
-            executeCommand(input);
+            executeCommand(input.split(" "));
 
             break;
         }
