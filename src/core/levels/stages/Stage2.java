@@ -1,5 +1,6 @@
 package core.levels.stages;
 
+import core.items.Letter;
 import core.levels.Level;
 import utilities.CLIUtils;
 import utilities.CommandResult;
@@ -39,14 +40,18 @@ public class Stage2 extends Stage {
 
             CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));
 
-            if(Objects.equals(result.command(), "cat") && result.subject().contains("dear_squire.txt")){
-                // sample
+            if(result.success() && Objects.equals(result.command(), "cat") && result.subject().contains("dear_squire.txt")){
+                // obtain letter
+                Letter letter = new Letter("dear_squire", result);
+                level.getInventory().addItem(letter);
                 break;
             }
 
         }
 
-        CLIUtils.typewriter("A warm glow fills the archives as you read the letter:", 30);
+        CLIUtils.typewriter("Keep that letter fellas, and let's continue our journey. Type done if you are ready.", 30);
+        level.sandbox.getExecutor().executeStrict("done");
+
         CLIUtils.typewriter("The Old Knight nods: 'Your Stage 2 training is complete. Greater adventures await…'", 30);
         CLIUtils.typewriter("\"Stage 2 complete. Prepare for what comes next.\"", 30);
 
@@ -55,7 +60,7 @@ public class Stage2 extends Stage {
     @Override
     public void onSuccessPlay() {
         //        player.remember("Learned pwd (location awareness)");
-        IO.println("Stage complete! Proceeding to Stage 2...\n");
+        IO.println("Stage complete! Proceeding to Stage 3...\n");
         CLIUtils.waitAnyKey();
     }
 
