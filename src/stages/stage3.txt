@@ -3,7 +3,6 @@
 # Goal / Interaction: Master directory navigation (pwd, ls, cd, cat)
 # Theme: Complex exploration through advanced training grounds
 
-DIR: level_2/
 DIR: advanced_training/
 DIR: advanced_training/combat_prep/
 DIR: advanced_training/strategy_room/

@@ -49,6 +49,7 @@ public class Level2_Apprentice_Knight extends Level {
             CLIUtils.typewriter("These scrolls contain knowledge of enemies, hidden keys, and secret passages.", 25);
 
             boolean success = false;
+            boolean correct = false;
             while (!success) {
                 IO.println("Type 'cat scroll.txt' to read the scroll.");
                 IO.println();
@@ -56,15 +57,18 @@ public class Level2_Apprentice_Knight extends Level {
                 System.out.print(">> ");
                 String input = IO.readln().trim();
 
-                IO.println("input: " + input);
-
                 if (input.equalsIgnoreCase("e") || input.equalsIgnoreCase("exit")) {
                     break;
                 }
 
                 if (input.startsWith("cat")) {
                     sandbox.getExecutor().executeCommand(input.split(" "));
-                    success = true;
+                    if(!correct) {
+                        CLIUtils.typewriter("Correct. now explore the all the corridors of dungeon", 25);
+                        CLIUtils.typewriter("you might uncover some secrets of the world.", 25);
+                        correct = true;
+                    }
+                    CLIUtils.typewriter("Type \"Done\" if you want to move on to the next stage.", 25);
                 } else {
                     IO.println("The spirits whisper: \"That is not the command you were meant to use.\"");
                     IO.println("Try using **cat** ./<file_name.txt>**");
