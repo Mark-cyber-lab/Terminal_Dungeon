@@ -75,6 +75,29 @@ public class LinuxCommandExecutor {
         };
     }
 
+    public void executeStrict(String expectedCommand) {
+        String input;
+        while (true) {
+            System.out.print(">> ");
+            input = IO.readln().trim();
+
+            if (!input.equals(expectedCommand)) {
+                IO.println("The spirits whisper: \"That is not the command you were meant to use.\"");
+                IO.println("Try again with: **" + expectedCommand + "**");
+                continue;
+            }
+
+            if(input.equals("done")) {
+                break;
+            }
+
+            executeCommand(input);
+
+            break;
+        }
+    }
+
+
     // ============================
     // INTERNAL COMMANDS (LOCAL)
     // ============================

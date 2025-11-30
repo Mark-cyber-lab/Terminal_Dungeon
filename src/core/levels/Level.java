@@ -1,10 +1,10 @@
 package core.levels;
 
 import core.Player;
+import core.levels.stages.Stage;
 import engine.Sandbox;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * Abstract base class for all Levels in Terminal Dungeon.
@@ -15,7 +15,7 @@ public abstract class Level {
     /**
      * Level number, e.g., 1, 2, 3
      */
-    protected final Sandbox sandbox;
+    public final Sandbox sandbox;
     protected Player player;
     protected final ArrayList<Stage> stages = new ArrayList<>();
     protected final String basePath;

@@ -51,7 +51,7 @@ Prove your mastery of movement
 #
 # After 'pwd':
 # type "The knight nods: 'Good. A warrior who knows his ground cannot be lost.'"
-# type "\"Now, observe the chambers around you: ls\""
+# type "\"Now, observe the surrounding chambers: ls\""
 # input
 # continue
 #

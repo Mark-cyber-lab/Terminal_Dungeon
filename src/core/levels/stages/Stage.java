@@ -1,5 +1,6 @@
-package core.levels;
+package core.levels.stages;
 
+import core.levels.Level;
 import utilities.CLIUtils;
 
 public abstract class Stage {

@@ -1,12 +1,10 @@
 package core.levels;
 
 import core.Player;
+import core.levels.stages.Stage;
 import engine.Sandbox;
 import utilities.AsciiArt;
 import utilities.CLIUtils;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Level2_Apprentice_Knight extends Level {
 
