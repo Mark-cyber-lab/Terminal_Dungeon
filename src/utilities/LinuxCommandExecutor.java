@@ -372,7 +372,7 @@ public class LinuxCommandExecutor {
 
         try {
             // Build full tree text
-            buildTree(target, target, sb, "");
+            buildTree(target, target, sb, "", false);
 
             // Print each line using IO.println
             for (String line : sb.toString().split("\n")) {
@@ -399,20 +399,29 @@ public class LinuxCommandExecutor {
         }
     }
 
-    private void buildTree(Path base, Path path, StringBuilder sb, String indent) throws IOException {
-        // Print current
-        sb.append(indent).append(base.equals(path) ? path.getFileName() == null ? path.toString() : path.getFileName().toString() : path.getFileName().toString()).append("\n");
+    private void buildTree(Path base, Path path, StringBuilder sb, String indent, boolean isLast) throws IOException {
+        // Print current folder/file
+        String name = path.equals(base) ? path.getFileName() != null ? path.getFileName().toString() : path.toString() : path.getFileName().toString();
+        if (!path.equals(base)) {
+            sb.append(indent)
+                    .append(isLast ? "└── " : "├── ")
+                    .append(name)
+                    .append(Files.isDirectory(path) ? "/" : "")
+                    .append("\n");
+        } else {
+            sb.append(name).append("\n"); // root folder
+        }
+
         if (!Files.isDirectory(path)) return;
 
-        // Sort children for deterministic order
-        List<Path> children = Files.list(path).sorted(Comparator.comparing(Path::getFileName)).collect(Collectors.toList());
+        List<Path> children = Files.list(path)
+                .sorted(Comparator.comparing(p -> p.getFileName().toString().toLowerCase()))
+                .toList();
+
         for (int i = 0; i < children.size(); i++) {
             Path child = children.get(i);
             boolean last = (i == children.size() - 1);
-            sb.append(indent).append(last ? "└── " : "├── ").append(child.getFileName().toString()).append(Files.isDirectory(child) ? "/" : "").append("\n");
-            if (Files.isDirectory(child)) {
-                buildTree(base, child, sb, indent + (last ? "    " : "│   "));
-            }
+            buildTree(base, child, sb, indent + (path.equals(base) ? "" : (isLast ? "    " : "│   ")), last);
         }
     }
 
