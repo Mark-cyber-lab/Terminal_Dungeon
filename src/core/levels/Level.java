@@ -35,7 +35,7 @@ public abstract class Level {
         sandbox.updateRootDir(prev -> prev + basePath);
         onBeforeInit();
         for (int stageNumber = player.getStats().getStage() - 1;
-             stageNumber < ((3 * player.getStats().getLevel()));
+             stageNumber < ((2 * player.getStats().getLevel()));
              stageNumber++) {
 
             int finalStageNumber = stageNumber + 1;

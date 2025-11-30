@@ -1,8 +1,8 @@
-# Level 1, Stage 3.
+# Level 2, Stage 3.
 # Squire
-# Goal / Interaction: Find the lost letter
-# Objects: Lost letter hidden in an unexpected location
-# Commands / Mechanics: ls, cd, tree, cat
+# Goal / Interaction: Read scrolls about Goblins & Hidden Keys
+# Objects: scroll.txt, key.txt
+# Commands / Mechanics: cat scroll.txt, mv key ./door/
 
 # Directories and files from previous stages
 DIR: level_1/

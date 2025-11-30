@@ -1,5 +1,5 @@
 # Level 2, Stage 4.
 # Apprentice Knight
-# Goal / Interaction: Learn about scrolls, and then read scroll about Goblins
-# Objects: scroll.txt
-# Commands / Mechanics: cat scroll.txt → learn rm basics
+# Goal / Interaction: Read scrolls about Doors & Orbs and deliver items
+# Objects: scroll.txt, orb_of_vision
+# Commands / Mechanics: cat scroll.txt, passive buffs trigger
