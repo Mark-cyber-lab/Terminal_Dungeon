@@ -11,7 +11,7 @@ import utilities.DebugLogger;
 
 public class Level1_Squire extends Level {
 
-    private static final String basePath = "";
+    private static final String basePath = "/level_1";
 
     public Level1_Squire(Sandbox sandbox, Player player) {
         super(1, player, sandbox, basePath);

@@ -65,6 +65,7 @@ public class Sandbox {
 
     public void updateRootDir(String path) {
         rootPath = path;
+        DebugLogger.log("SANDBOX","Sandbox update root at: " + path);
         executor.setCurrentDirectory(rootPath);
     }
 

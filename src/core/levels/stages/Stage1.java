@@ -17,8 +17,6 @@ public class Stage1 extends Stage {
 
     @Override
     public void play() {
-        level.sandbox.getExecutor().executeCommand("cd", "level_1");
-
         // Level 1: Introduction sequence
         CLIUtils.typewriter("The cold wind sweeps through the stone hall as torches ignite one by one.", 30);
         CLIUtils.typewriter("An armored figure steps forward — the Old Knight.", 30);

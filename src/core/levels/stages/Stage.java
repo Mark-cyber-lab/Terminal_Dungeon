@@ -29,9 +29,23 @@ public abstract class Stage {
         CLIUtils.repeat('━');
     }
 
-    public void execute () {
+    @FunctionalInterface
+    public interface BeforeSetupCallback {
+        void run();
+    }
+
+    @FunctionalInterface
+    public interface AfterSetupCallback {
+        void run();
+    }
+
+
+    public void execute(BeforeSetupCallback before, AfterSetupCallback after) {
         CLIUtils.clearScreen();
+        before.run();
         setupEnvironment();
+        after.run();
+
         try {
             printStageHeader();
             play();

@@ -32,21 +32,26 @@ public abstract class Level {
     }
 
     public void execute() {
-        sandbox.updateRootDir(prev -> prev + basePath);
         onBeforeInit();
-        for (int stageNumber = player.getStats().getStage() - 1;
-             stageNumber < ((2 * player.getStats().getLevel()));
-             stageNumber++) {
+        int currentStage = player.getStats().getStage(); // start from current stage
+        int lastStageNumber = stages.stream()
+                .mapToInt(Stage::getStageNumber)
+                .max()
+                .orElse(currentStage);
 
-            int finalStageNumber = stageNumber + 1;
+        for (int stageNumber = currentStage; stageNumber <= lastStageNumber; stageNumber++) {
+            int finalStageNumber = stageNumber; // now matches stage.getStageNumber()
+
             stages.stream()
-                    .filter(stage -> {
-                        return stage.getStageNumber() == finalStageNumber;
-                    })
+                    .filter(stage -> stage.getStageNumber() == finalStageNumber)
                     .findFirst()
                     .ifPresent(stage -> {
+                        stage.execute(
+                                () -> {}, // Before setup lambda
+                                () -> sandbox.updateRootDir(prev -> prev + basePath) // After setup lambda
+                        );
+                        // Update player stage to next stage
                         player.getStats().setStage(finalStageNumber + 1);
-                        stage.execute();
                     });
         }
         onLevelComplete();
