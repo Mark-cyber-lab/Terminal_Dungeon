@@ -58,4 +58,4 @@ END
 # type "A warm glow fills the archives as you read the letter:"
 # type "'Dear Squire, curiosity and courage are your greatest allies. Your journey has only begun. Remember your lessons, and step forward boldly.'"
 # type "The Old Knight nods: 'Your Stage 3 training is complete. Greater adventures await…'"
-# type "\"Stage 3 complete. Prepare for what comes next.\""
+# type "\"Stage 2 complete. Prepare for what comes next.\""
