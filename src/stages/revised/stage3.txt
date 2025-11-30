@@ -1,0 +1,61 @@
+# Level 1, Stage 3.
+# Squire
+# Goal / Interaction: Find the lost letter
+# Objects: Lost letter hidden in an unexpected location
+# Commands / Mechanics: ls, cd, tree, cat
+
+# Directories and files from previous stages
+DIR: level_1/
+DIR: level_1/basic_training/
+DIR: level_1/basic_training/notes/
+DIR: level_1/courtyard/
+DIR: level_1/hall_of_movement/
+DIR: level_1/hall_of_movement/paths/
+DIR: level_1/navigation_test/
+DIR: level_1/navigation_test/archives/
+
+FILE: level_1/basic_training/welcome.txt
+FILE: level_1/basic_training/notes/steps.txt
+FILE: level_1/basic_training/notes/common_mistakes.txt
+FILE: level_1/courtyard/lesson_1.txt
+FILE: level_1/courtyard/flowers.txt
+FILE: level_1/hall_of_movement/lesson_2.txt
+FILE: level_1/hall_of_movement/paths/north.txt
+FILE: level_1/hall_of_movement/paths/south.txt
+FILE: level_1/hall_of_movement/paths/west.txt
+FILE: level_1/hall_of_movement/paths/east.txt
+FILE: level_1/navigation_test/challenge.txt
+FILE: level_1/navigation_test/tablet_inscriptions.txt
+FILE: level_1/navigation_test/archives/log_001.txt
+FILE: level_1/navigation_test/archives/log_002.txt
+FILE: level_1/navigation_test/archives/log_003.txt
+FILE: level_1/navigation_test/archives/dear_squire.txt
+Dear Squire,
+
+Curiosity and courage are your greatest allies. The paths you walk may twist and turn, but every lesson you have learned in the training halls will guide you true.
+
+Remember the importance of knowing where you stand, observing carefully, and moving with purpose. The dungeon may test your resolve, but those who pay attention and act with wisdom will always find their way.
+
+Step forward boldly, and let your wits light the shadows ahead. Greater challenges await, but I have faith in your journey.
+
+— The Old Knight
+END
+
+# Game Flow
+# type "The dungeon is quiet, yet the air hums with hidden secrets."
+# type "The Old Knight appears, his armor creaking softly:"
+# type "'Squire… a lost letter awaits your discovery. It does not dwell in familiar paths. Your mission is to find it and read its contents.'"
+# type "'Use all you have learned: ls to observe, cd to move and tree to inspect structures. Perhaps a hallway you explored before holds a clue, or a chamber you rarely inspect. Strange paths sometimes hide the greatest truths.'"
+# type "'Remember your lessons from the training halls. Apply your knowledge and explore wisely.'"
+# type "'Pay attention to the names of files — the lost letter bears a name meant for you…'"
+# type "You begin exploring, tracing familiar halls and venturing into less obvious corners..."
+# type "Once you have located the letter, you must read it to complete your Stage 3 trial."
+# type "Use the command: cat <filename>.txt"
+# input
+# continue
+#
+# After player cats the letter (FILE: level_1/navigation_test/archives/dear_squire.txt):
+# type "A warm glow fills the archives as you read the letter:"
+# type "'Dear Squire, curiosity and courage are your greatest allies. Your journey has only begun. Remember your lessons, and step forward boldly.'"
+# type "The Old Knight nods: 'Your Stage 3 training is complete. Greater adventures await…'"
+# type "\"Stage 3 complete. Prepare for what comes next.\""

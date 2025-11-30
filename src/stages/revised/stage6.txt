@@ -1,0 +1,5 @@
+# Level 2, Stage 6.
+# Apprentice Knight
+# Goal / Interaction: Read scroll about Doors & Orbs
+# Objects: scroll.txt, orb_of_vision
+# Commands / Mechanics: cat scroll.txt, passive buffs activate

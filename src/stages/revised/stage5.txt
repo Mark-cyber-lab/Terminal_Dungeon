@@ -1,0 +1,5 @@
+# Level 2, Stage 5.
+# Apprentice Knight
+# Goal / Interaction: Read scroll about Hidden Keys
+# Objects: scroll.txt, key.txt
+# Commands / Mechanics: cat scroll.txt, mv key ./door/
