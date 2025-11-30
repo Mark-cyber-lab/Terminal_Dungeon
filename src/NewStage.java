@@ -15,7 +15,7 @@ public class NewStage {
 
     private static final String SANDBOX_ROOT = "./sandbox";
     private final PlayerStats playerStats = new PlayerStats();
-    private final Player player = new Player(playerStats);
+    private final Player player = new Player(playerStats, SANDBOX_ROOT);
     private final List<Level> levels = new ArrayList<>();
     private final Sandbox sandbox = new Sandbox(SANDBOX_ROOT);
     private boolean exitedNormally = false;

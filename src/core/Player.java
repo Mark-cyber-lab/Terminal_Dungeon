@@ -1,6 +1,7 @@
 package core;
 
 import core.levels.Level;
+import core.storage.Inventory;
 import utilities.AsciiArt;
 import utilities.CLIUtils;
 
@@ -9,8 +10,9 @@ public class Player extends Alive {
     private final PlayerStats playerStats;
     public int initialLevel = 1;
     private final int maxLevel = 7;
-    private final Inventory inventory = new Inventory();
+    private final Inventory inventory;
     private Level levelObj;
+    private final String sandboxRoot;
 
     private static final String[] RANKS = {
             "Unknown",
@@ -23,9 +25,15 @@ public class Player extends Alive {
             "Arcane Knight"
     };
 
-    public Player(PlayerStats stats) {
+    public Player(PlayerStats stats, String sandboxPath) {
         super(stats);
         this.playerStats = stats;
+        this.sandboxRoot = sandboxPath;
+        this.inventory = new Inventory("inventory", "inventory1", "./inventory", sandboxPath);
+    }
+
+    public String getSandboxRoot() {
+        return sandboxRoot;
     }
 
     public PlayerStats getStats() {
@@ -72,7 +80,9 @@ public class Player extends Alive {
         }
     }
 
-    /** --- Alive abstract hooks implementation --- */
+    /**
+     * --- Alive abstract hooks implementation ---
+     */
 
     @Override
     protected void onDamage(int amount) {

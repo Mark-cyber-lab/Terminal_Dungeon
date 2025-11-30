@@ -1,6 +1,6 @@
-package core;
+package core.items;
 
-public class InventoryItem {
+public abstract class InventoryItem {
     private final String id;
     private final String label;
 
@@ -16,4 +16,6 @@ public class InventoryItem {
     public String getLabel() {
         return label;
     }
+
+    public abstract String[] retrieve() throws Exception;
 }

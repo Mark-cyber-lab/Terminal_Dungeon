@@ -2,6 +2,7 @@ package core.levels;
 
 import core.Player;
 import core.levels.stages.Stage;
+import core.storage.Inventory;
 import engine.Sandbox;
 
 import java.util.ArrayList;
@@ -25,6 +26,14 @@ public abstract class Level {
         this.player = player;
         this.basePath = basePath;
         this.sandbox = sandbox;
+    }
+
+    public Inventory getInventory(){
+        return player.getInventory();
+    }
+
+    public String getSandboxPath(){
+        return player.getSandboxRoot();
     }
 
     public void addStage(Stage stage) {
