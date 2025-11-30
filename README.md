@@ -105,22 +105,38 @@ Embark on your journey through the **Terminal Dungeon**, a mystical realm of dir
 
 ---
 
-## 🧩 Game Elements & How They Work
+## Game Elements
 
-| Element | Description | Mechanics |
-|---------|------------|-----------|
-| 🗝️ Treasure Chest | Holds loot or scrolls | Navigate (`cd`) and list (`ls -a`) to find contents |
-| 🔐 Hidden Key | Opens blocked doors | Move key to door (`mv key ./door/`) and sometimes activate via `chmod` |
-| 👹 Goblin | Hostile enemy | Defeat using `rm` or `rm -rf` (simulated for sensitive paths) |
-| 🐲 Kobold | Tough enemy | Requires `sudo rm` simulation |
-| 🔮 Orbs | Mystical buffs | Grant passive abilities (hidden file detection, unlock commands) |
-| 🚪 Blocked Doors | Restrict access | Unlock using keys, `chmod`, or `sudo` |
-| 📜 Hidden Scrolls | Lore & guidance | Read using `cat`, deliver to wizard to unlock areas |
-| 🧙 Wizard | Deciphers scrolls | Scrolls delivered via `mv`, unlocks commands or levels |
+### 1. Characters / Entities
+
+| Element | Description | Category | Reason | How to Prove / Interact |
+|---------|------------|----------|--------|-------------------------|
+| 👹 Goblin | Hostile enemy | Enemies | Goblins are interactive adversaries that block progress | Use `rm <goblin>` or `rm -rf <goblin>` (simulated) to defeat |
+| 🐲 Kobold | Tough enemy | Enemies | Stronger variant of enemy, requires special command | Use `sudo rm <kobold>` (simulated) to defeat |
+| 🧙 Wizard | Deciphers scrolls | Ally | Provides guidance and unlocks new features when given scrolls | Deliver hidden scrolls using `mv <scroll> ./wizard/` |
 
 ---
 
-## 🏰 Stage-by-Stage Layout
+### 2. Items
+
+| Element | Description | Category | Reason | How to Prove / Interact |
+|---------|------------|----------|--------|-------------------------|
+| 🗝️ Treasure Chest | Holds loot or scrolls | Obtainable Item (contents are not read) | Can store items for later retrieval, contents hidden | Navigate with `cd <chest>` and list contents using `ls -a` |
+| 🔐 Hidden Key | Opens blocked doors | Unlockable Item | Unlocks obstacles like doors | Move key to the door using `mv <key> ./door/` or `chmod` to activate |
+| 🔮 Orbs | Mystical buffs | Obtainable Item (contents are not read) | Provides passive abilities to player | Pick up the orb; abilities automatically applied |
+| 📜 Hidden Scrolls | Lore & guidance | Retrievable Item (contents may be read) | Scrolls contain readable content and guidance | Read scroll with `cat <scroll>`; deliver to wizard to unlock commands |
+| 📝 Normal Scrolls | Regular readable scrolls | Retrievable Item (contents may be read) | Contains text only, no special powers | Read with `cat <scroll>` |
+| ✉️ Letter (Special Item) | Important message | Retrievable Item (contents may be read) | Can be read for guidance or story | Read with `cat <letter>` |
+
+---
+
+### 3. Obstacles
+
+| Element | Description | Category | Reason | How to Prove / Interact |
+|---------|------------|----------|--------|-------------------------|
+| 🚪 Blocked Doors | Restrict access | Obstacle | Blocks player movement until unlocked | Use keys (`mv`), `chmod`, or `sudo` to unlock access |
+
+---
 
 ## 🏰 Stage-by-Stage Layout (2 Stages per Level)
 
