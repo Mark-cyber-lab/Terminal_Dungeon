@@ -122,29 +122,24 @@ Embark on your journey through the **Terminal Dungeon**, a mystical realm of dir
 
 ## 🏰 Stage-by-Stage Layout
 
+## 🏰 Stage-by-Stage Layout (2 Stages per Level)
+
 | Level | Stage | Goal / Interaction | Objects | Commands / Mechanics |
 |-------|-------|-----------------|---------|--------------------|
-| 1 — Squire (Tutorial) | 1 | Learn directory navigation | None or simple directories | `cd`, `pwd` |
-|  | 2 | List files and directories | Basic files/folders | `ls`, `tree` |
-|  | 3 | Explore a mini-map / exit tutorial | None | Sandbox commands only |
-| 2 — Apprentice Knight (Messenger) | 1 | Read scroll about Goblins | `scroll.txt` | `cat scroll.txt` → learn `rm` basics |
-|  | 2 | Read scroll about Hidden Keys | `scroll.txt`, `key.txt` | `cat scroll.txt`, `mv key ./door/` |
-|  | 3 | Read scroll about Doors & Orbs | `scroll.txt`, `orb_of_vision` | `cat scroll.txt`, passive buffs activate |
-| 3 — Scout Knight | 1 | Defeat Goblins blocking path | Goblins as files | `rm filename` (simulated if sensitive) |
-|  | 2 | Clear enemy mini-directory | Multiple goblins | `rm -rf` (simulated) |
-|  | 3 | Defeat Kobold guarding treasure | Kobold | `sudo rm` simulation |
-| 4 — Warrior Knight | 1 | Unlock Blocked Door | Door directory + Hidden Key | `mv key ./door/`, `chmod` (simulated) |
-|  | 2 | Explore deeper dungeon | Orbs, loot | Collect orbs, buffs auto-trigger |
-|  | 3 | Solve permission puzzle | Multi-layer door | `chmod` + keys to progress |
-| 5 — Guardian Knight | 1 | Move treasure to safe location | Treasure Chest | `mv chest ./safe_room` |
-|  | 2 | Copy critical scroll | `lost_scroll.txt` | `cp scroll.txt ./backup` |
-|  | 3 | Combine movement & combat | Enemy + treasure | Use `mv` + `rm` together (simulated for dangerous commands) |
+| 1 — Squire (Tutorial) | 1 | Learn directory navigation commands | None or simple directories | `cd`, `pwd`, `ls`, `tree` |
+|  | 2 | Mission: Find the lost letter | Lost letter (`dear_squire.txt`) hidden in navigation_test/archives | Use all learned commands: `ls`, `cd`, `tree`, `cat` to locate and read the letter |
+| 2 — Apprentice Knight (Messenger) | 1 | Read scrolls about Goblins & Hidden Keys | `scroll.txt`, `key.txt` | `cat scroll.txt`, `mv key ./door/` |
+|  | 2 | Read scrolls about Doors & Orbs and deliver items | `scroll.txt`, `orb_of_vision` | `cat scroll.txt`, passive buffs trigger |
+| 3 — Scout Knight | 1 | Defeat goblins blocking path | Goblins as files | `rm filename` (simulated) |
+|  | 2 | Defeat stronger enemies or enemy clusters | Multiple goblins / Kobold | `rm -rf` or `sudo rm` simulation |
+| 4 — Warrior Knight | 1 | Unlock blocked doors with keys | Door directory + Hidden Key | `mv key ./door/`, `chmod` (simulated) |
+|  | 2 | Explore deeper dungeon & collect orbs | Orbs, loot | Passive buffs activate, solve permission puzzles |
+| 5 — Guardian Knight | 1 | Move treasure to safe locations | Treasure Chest | `mv chest ./safe_room` |
+|  | 2 | Copy critical scrolls & combine movement/combat | `lost_scroll.txt`, enemies | `cp scroll.txt ./backup`, `mv` + `rm` (simulated) |
 | 6 — Paladin | 1 | Restore corrupted dungeon files | Protected directories | `sudo cp /sandbox/...` (simulation) |
-|  | 2 | Unlock sealed boss room | Strong door + Key | `sudo chmod` (simulated) |
-|  | 3 | Clear large enemy block | Enemy cluster | `sudo rm -rf ./enemies` (simulated) |
+|  | 2 | Unlock sealed boss rooms or clear enemy clusters | Strong doors + enemies | `sudo chmod`, `sudo rm -rf` (simulated) |
 | 7 — Arcane Knight | 1 | Chain commands for complex puzzle | Orbs, doors | `cat scroll.txt | grep "key"` |
-|  | 2 | Combine combat & puzzles | Enemies + Doors | `rm -rf enemies & mv key ./door/` (simulated) |
-|  | 3 | Master terminal dungeon | All mechanics combined | `&`, `|` |
+|  | 2 | Combine combat & puzzle commands | Enemies + Doors | `rm -rf enemies & mv key ./door/` (simulated) |
 
 ---
 
