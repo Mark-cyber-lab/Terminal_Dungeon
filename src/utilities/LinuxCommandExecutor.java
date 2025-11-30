@@ -16,6 +16,28 @@ public class LinuxCommandExecutor {
     private Path currentDirectory;
     private final List<String> commandHistory = new ArrayList<>();
 
+    // New record to hold command execution results
+    public record CommandExecutionResult(
+            boolean success,
+            String output,
+            String error,
+            int exitCode
+    ) {
+        public CommandExecutionResult {
+            output = output != null ? output : "";
+            error = error != null ? error : "";
+        }
+
+        // Helper method to get full result as string
+        public String getFullResult() {
+            if (success) {
+                return output;
+            } else {
+                return error.isEmpty() ? "Command failed with exit code: " + exitCode : error;
+            }
+        }
+    }
+
     public LinuxCommandExecutor(String startDir) {
         this.currentDirectory = Paths.get(startDir).toAbsolutePath();
         DebugLogger.log("COMMAND_EXECUTOR","Executor starting in: " + currentDirectory);
@@ -39,63 +61,107 @@ public class LinuxCommandExecutor {
     }
 
     /**
-     * Callback setter
+     * MAIN METHOD: Execute command, display output on terminal, and return string output
      */
-    @FunctionalInterface
-    public interface UpdateCallback {
-        String onUpdate(String prevVal);
-    }
+    public String executeCommand(String... inputParts) {
+        CommandExecutionResult result = executeCommandWithResult(inputParts);
 
-    public void updateCurrentDirectory(UpdateCallback callback) {
-        String prevPath = currentDirectory.toString();
-        String newPath = callback.onUpdate(prevPath);
-        setCurrentDirectory(newPath);
-    }
+        // Display the output on terminal
+        if (!result.output().isEmpty()) {
+            System.out.println(result.output());
+        }
+        if (!result.error().isEmpty()) {
+            System.out.println(result.error());
+        }
 
-    public List<String> getCommandHistory() {
-        return Collections.unmodifiableList(commandHistory);
+        return result.getFullResult();
     }
 
     /**
-     * Execute a command just like a real shell (cd, pwd, ls, rm, etc.)
+     * Execute command and return detailed result (without displaying to terminal)
      */
-    public boolean executeCommand(String... inputParts) {
+    public CommandExecutionResult executeCommandWithResult(String... inputParts) {
         String raw = String.join(" ", inputParts);
         commandHistory.add(raw);
 
-        if (inputParts.length == 0) return false;
+        if (inputParts.length == 0) {
+            return new CommandExecutionResult(false, "", "No command provided", -1);
+        }
+
         String cmd = inputParts[0].toLowerCase();
 
         return switch (cmd) {
-            case "cd" -> internalCd(inputParts);
-            case "pwd" -> internalPwd();
-            case "history" -> internalHistory();
-            case "cat" -> internalCat(inputParts);
-            default -> externalCommand(inputParts);
+            case "cd" -> internalCdWithResult(inputParts);
+            case "pwd" -> internalPwdWithResult();
+            case "history" -> internalHistoryWithResult();
+            case "cat" -> internalCatWithResult(inputParts);
+            case "ls" -> internalLsWithResult(inputParts);
+            default -> externalCommandWithResult(inputParts);
         };
     }
 
+    /**
+     * Convenience method to execute a single command string
+     */
+    public String executeCommand(String command) {
+        return executeCommand(command.split("\\s+"));
+    }
+
+    public CommandExecutionResult executeCommandWithResult(String command) {
+        return executeCommandWithResult(command.split("\\s+"));
+    }
+
     // ============================
-    // INTERNAL COMMANDS (LOCAL)
+    // INTERNAL COMMANDS WITH STRING OUTPUT
     // ============================
 
-    private boolean internalCat(String[] parts) {
+    private CommandExecutionResult internalLsWithResult(String[] parts) {
+        try {
+            Path targetDir = currentDirectory;
+            if (parts.length > 1) {
+                targetDir = currentDirectory.resolve(parts[1]).normalize();
+            }
+
+            if (!Files.exists(targetDir) || !Files.isDirectory(targetDir)) {
+                return new CommandExecutionResult(false, "", "ls: cannot access '" + parts[1] + "': No such file or directory", -1);
+            }
+
+            StringBuilder output = new StringBuilder();
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(targetDir)) {
+                for (Path entry : stream) {
+                    String fileName = entry.getFileName().toString();
+                    if (Files.isDirectory(entry)) {
+                        output.append(fileName).append("/\n");
+                    } else {
+                        output.append(fileName).append("\n");
+                    }
+                }
+            }
+            return new CommandExecutionResult(true, output.toString().trim(), "", 0);
+
+        } catch (IOException e) {
+            return new CommandExecutionResult(false, "", "ls: cannot open directory: " + e.getMessage(), -1);
+        }
+    }
+
+    private CommandExecutionResult internalCatWithResult(String[] parts) {
         if (parts.length < 2) {
-            System.out.println("cat: missing file argument");
-            return false;
+            return new CommandExecutionResult(false, "", "cat: missing file argument", -1);
         }
 
+        StringBuilder output = new StringBuilder();
         boolean success = true;
+
         for (int i = 1; i < parts.length; i++) {
             Path filePath = currentDirectory.resolve(parts[i]).normalize();
             if (!Files.exists(filePath)) {
-                System.out.println("cat: " + parts[i] + ": No such file");
+                output.append("cat: ").append(parts[i]).append(": No such file\n");
                 success = false;
                 continue;
             }
 
             if (Files.isDirectory(filePath)) {
-                System.out.println("cat: " + parts[i] + ": Is a directory");
+                output.append("cat: ").append(parts[i]).append(": Is a directory\n");
                 success = false;
                 continue;
             }
@@ -103,81 +169,92 @@ public class LinuxCommandExecutor {
             try {
                 List<String> lines = Files.readAllLines(filePath);
                 for (String line : lines) {
-                    System.out.println(line);
+                    output.append(line).append("\n");
                 }
             } catch (IOException e) {
-                System.out.println("cat: " + parts[i] + ": Error reading file");
+                output.append("cat: ").append(parts[i]).append(": Error reading file\n");
                 success = false;
             }
         }
 
-        return success;
+        return new CommandExecutionResult(success, output.toString().trim(), "", success ? 0 : -1);
     }
 
-    private boolean internalCd(String[] parts) {
+    private CommandExecutionResult internalCdWithResult(String[] parts) {
         if (parts.length < 2) {
-            System.out.println("cd: missing argument");
-            return false;
+            return new CommandExecutionResult(false, "", "cd: missing argument", -1);
         }
 
         String target = parts[1];
-
         Path newPath = target.equals("..")
                 ? currentDirectory.getParent()
                 : currentDirectory.resolve(target).normalize();
 
         if (newPath == null || !Files.isDirectory(newPath)) {
-            System.out.println("cd: " + target + ": No such directory");
-            return false;
+            return new CommandExecutionResult(false, "", "cd: " + target + ": No such directory", -1);
         }
 
         currentDirectory = newPath;
-        System.out.println("Moved to: " + currentDirectory);
-        return true;
+        return new CommandExecutionResult(true, "Directory changed to: " + currentDirectory, "", 0);
     }
 
-    private boolean internalPwd() {
-        System.out.println(currentDirectory);
-        return true;
+    private CommandExecutionResult internalPwdWithResult() {
+        return new CommandExecutionResult(true, currentDirectory.toString(), "", 0);
     }
 
-    private boolean internalHistory() {
+    private CommandExecutionResult internalHistoryWithResult() {
+        StringBuilder output = new StringBuilder();
         for (int i = 0; i < commandHistory.size(); i++) {
-            System.out.println((i + 1) + "  " + commandHistory.get(i));
+            output.append(i + 1).append("  ").append(commandHistory.get(i)).append("\n");
         }
-        return true;
+        return new CommandExecutionResult(true, output.toString().trim(), "", 0);
     }
 
     // ============================
-    // EXTERNAL OS COMMAND EXECUTION
+    // EXTERNAL OS COMMAND EXECUTION WITH STRING OUTPUT
     // ============================
 
-    private boolean externalCommand(String[] command) {
+    private CommandExecutionResult externalCommandWithResult(String[] command) {
         Process process = null;
 
         try {
             String[] adjusted = adjustCommandForOS(command);
             ProcessBuilder builder = new ProcessBuilder(adjusted);
             builder.directory(currentDirectory.toFile());
-            builder.redirectErrorStream(true);
+            builder.redirectErrorStream(true); // Combine stdout and stderr
 
             process = builder.start();
+
+            StringBuilder output = new StringBuilder();
+
+            // Read the combined output stream and display it in real-time
             try (BufferedReader reader = new BufferedReader(
                     new InputStreamReader(process.getInputStream()))) {
                 String line;
-                while ((line = reader.readLine()) != null) System.out.println(line);
+                while ((line = reader.readLine()) != null) {
+                    output.append(line).append("\n");
+                    // Display each line in real-time as the command executes
+                    System.out.println(line);
+                }
             }
 
-            int exit = process.waitFor();
-            return exit == 0;
+            int exitCode = process.waitFor();
+            boolean success = (exitCode == 0);
 
-        } catch (IOException e) {
-            logger.severe("IO Error executing command: " + e.getMessage());
-            return false;
-        } catch (InterruptedException e) {
-            logger.warning("Command execution interrupted: " + e.getMessage());
-            Thread.currentThread().interrupt();
-            return false;
+            DebugLogger.log("COMMAND_EXECUTOR",
+                    "Command executed: " + String.join(" ", command) +
+                            " | Exit code: " + exitCode + " | Success: " + success);
+
+            return new CommandExecutionResult(success, output.toString().trim(), "", exitCode);
+
+        } catch (IOException | InterruptedException e) {
+            String errorMsg = "Command execution failed: " + e.getMessage();
+            logger.severe(errorMsg);
+            System.out.println(errorMsg); // Display error on terminal
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            return new CommandExecutionResult(false, "", errorMsg, -1);
         } finally {
             if (process != null) process.destroy();
         }
@@ -193,5 +270,30 @@ public class LinuxCommandExecutor {
             case "rm" -> new String[]{"cmd.exe", "/c", "del", "/q"};
             default -> new String[]{"cmd.exe", "/c", String.join(" ", command)};
         };
+    }
+
+    // ============================
+    // BACKWARD COMPATIBILITY METHODS
+    // (Only if you need to maintain old code)
+    // ============================
+
+    /**
+     * @deprecated Use executeCommand() instead which returns string output AND displays it
+     */
+    @Deprecated
+    public boolean executeCommandLegacy(String... inputParts) {
+        CommandExecutionResult result = executeCommandWithResult(inputParts);
+        // Print output to maintain old behavior
+        if (!result.output().isEmpty()) {
+            System.out.println(result.output());
+        }
+        if (!result.error().isEmpty()) {
+            System.out.println(result.error());
+        }
+        return result.success();
+    }
+
+    public List<String> getCommandHistory() {
+        return Collections.unmodifiableList(commandHistory);
     }
 }

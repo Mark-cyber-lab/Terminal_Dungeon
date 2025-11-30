@@ -1,5 +1,0 @@
-# Level 2, Stage 4.
-# Apprentice Knight
-# Goal / Interaction: Learn about scrolls, and then read scroll about Goblins
-# Objects: scroll.txt
-# Commands / Mechanics: cat scroll.txt → learn rm basics

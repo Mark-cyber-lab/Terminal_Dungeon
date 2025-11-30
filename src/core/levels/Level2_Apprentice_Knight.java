@@ -10,30 +10,34 @@ import java.nio.file.Paths;
 
 public class Level2_Apprentice_Knight extends Level {
 
-    private static final String configPath = "./src/stages/level2.txt";
-    private static final String basePath = "/lv2";
+    private static final String configPath = "./src/stages";
+    private static final String basePath = "./lv2";
 
     public Level2_Apprentice_Knight(Sandbox sandbox, Player player) {
-        super(1, player, sandbox, basePath);
+        super(2, player, sandbox, basePath);
     }
 
     @Override
     public void setup() {
         // level based setup, because there is nothing yet to do with stages
         sandbox.getDirGenerator().generateFromConfig(configPath, sandbox.getRootPath());
+        Stage Stage3 = new Stage3();
         Stage Stage4 = new Stage4();
 
+        addStage(Stage3);
         addStage(Stage4);
     }
 
-    private class Stage4 extends Stage {
-        Stage4() {
-            super(4, Level2_Apprentice_Knight.this);
+    private class Stage3 extends Stage {
+        private static final String stageConfigPath = "./src/stages/stage3.txt";
+
+        Stage3() {
+            super(3, Level2_Apprentice_Knight.this);
         }
 
         @Override
         public String[] getStageHeader() {
-            return new String[]{"Stage 4 — Orientation of the Young Squire"};
+            return new String[]{"Stage 3 — Secrets of the Lower Keep"};
         }
 
         @Override
@@ -42,12 +46,116 @@ public class Level2_Apprentice_Knight extends Level {
             CLIUtils.typewriter("\"To gain wisdom in this dungeon, you must first understand the scrolls.\"", 25);
             CLIUtils.typewriter("These scrolls contain knowledge of enemies, hidden keys, and secret passages.", 25);
 
-            IO.println("Type 'cat scroll.txt' to read the scroll.");
-            IO.println();
+            boolean success = false;
+            while (!success) {
+                IO.println("Type 'cat scroll.txt' to read the scroll.");
+                IO.println();
 
-            waitForStageCommand("cat scroll.txt");
+                System.out.print(">> ");
+                String input = IO.readln().trim();
+
+                IO.println("input: " + input);
+
+                if (input.equalsIgnoreCase("e") || input.equalsIgnoreCase("exit")) {
+                    break;
+                }
+
+                if (input.startsWith("cat")) {
+                    sandbox.getExecutor().executeCommand(input.split(" "));
+                    success = true;
+                } else {
+                    IO.println("The spirits whisper: \"That is not the command you were meant to use.\"");
+                    IO.println("Try using **cat** ./<file_name.txt>**");
+                    continue;
+                }
+
+                // simple success condition: pwd inside a subfolder of basePath
+                Path current = sandbox.getRootPath() != null ? Paths.get(sandbox.getRootPath()) : null;
+                if (current != null && !current.toAbsolutePath().equals(Paths.get(sandbox.getRootPath()).toAbsolutePath())) {
+                    success = true;
+                }
+            }
         }
 
+        @Override
+        public void onSuccessPlay() {
+            IO.println("Stage complete! You have learned to read through files.\n");
+            CLIUtils.waitAnyKey();
+        }
+
+        @Override
+        public void onFailedPlay(Exception exception) {
+            IO.println("Something went wrong while exploring. Try again.");
+        }
+
+        @Override
+        public void setupEnvironment() {
+            // Generate stage-specific environment from stage3.txt
+            sandbox.getDirGenerator().generateFromConfig(stageConfigPath, sandbox.getRootPath());
+        }
+    }
+
+    private class Stage4 extends Stage {
+        private static final String stageConfigPath = "./src/stages/stage4.txt";
+
+        Stage4() {
+            super(4, Level2_Apprentice_Knight.this);
+        }
+
+        @Override
+        public String[] getStageHeader() {
+            return new String[]{"Stage 4 — Orientation of the Apprentice Knight"};
+        }
+
+        @Override
+        public void play() {
+            CLIUtils.typewriter("The knight nods with approval as you finish studying the scroll.", 25);
+            CLIUtils.typewriter("\"Good. Now it's time to put that knowledge to use.\"", 25);
+            CLIUtils.typewriter("He gestures toward the dim corridor ahead, urging you forward.", 25);
+            CLIUtils.typewriter("Enter all the commands that you learned on past levels.", 25);
+            CLIUtils.typewriter("Goal: Go to the next_stage/portal to move on the next stage", 25);
+            String commandResult;
+
+
+            boolean success = false;
+            while (!success) {
+                System.out.print(">> ");
+                String input = IO.readln().trim();
+                IO.println("stage4 input: " + input);
+
+                if (input.equalsIgnoreCase("e") || input.equalsIgnoreCase("exit")) {
+                    break;
+                }
+
+                if (input.startsWith("cat") || input.startsWith("cd") || input.startsWith("ls") || input.startsWith("pwd")) {
+                    commandResult = sandbox.getExecutor().executeCommand(input.split(" "));
+                    IO.println("command result: " + commandResult);
+                    if (input.startsWith("cd")){
+                        String[] splittedResult = commandResult.split("\\\\");
+                        int stringLength = splittedResult.length;
+
+                        IO.println("cd result: " + stringLength);
+
+                        if (stringLength > 0) {
+                            IO.println("cd result2: " + splittedResult[stringLength - 1]);
+                            if (splittedResult[stringLength - 1].equalsIgnoreCase("portal")) {
+                                success = true;
+                            }
+                        }
+                    }
+                } else {
+                    IO.println("The spirits whisper: \"That is not the command you were meant to use.\"");
+                    IO.println("Try using **cat** ./<file_name.txt>**");
+                    continue;
+                }
+
+                // simple success condition: pwd inside a subfolder of basePath
+                Path current = sandbox.getRootPath() != null ? Paths.get(sandbox.getRootPath()) : null;
+                if (current != null && !current.toAbsolutePath().equals(Paths.get(sandbox.getRootPath()).toAbsolutePath())) {
+                    success = true;
+                }
+            }
+        }
 
         @Override
         public void onSuccessPlay() {
@@ -63,7 +171,8 @@ public class Level2_Apprentice_Knight extends Level {
 
         @Override
         public void setupEnvironment() {
-            // No environments to set for this stage
+            // Generate stage-specific environment from stage4.txt
+            sandbox.getDirGenerator().generateFromConfig(stageConfigPath, sandbox.getRootPath());
         }
     }
 
@@ -95,7 +204,7 @@ public class Level2_Apprentice_Knight extends Level {
 
     @Override
     public String getDescription() {
-        return "Level 1 — Squire (Navigation Training)";
+        return "Level 2 — Apprentice Knight (Scroll Reading)";
     }
 
     @Override
@@ -110,13 +219,13 @@ public class Level2_Apprentice_Knight extends Level {
 
     @Override
     public void onBeforeInit() {
-        IO.println("\n🏅 You are now a Squire — the lowest but bravest rank of Terminal Knights.");
-        IO.println("Your training begins...\n");
+        IO.println("\nYou are now an Apprentice Knight — a learner of secrets and a seeker of deeper mastery.");
+        IO.println("Your adventure begins...\n");
     }
 
     @Override
     public void onLevelComplete() {
-        IO.println("🎉 You have mastered the fundamentals, young Squire!");
-        IO.println("You feel a surge of confidence as you prepare for Level 2...\n");
+        IO.println("🎉 You have mastered the fundamentals, you Apprentice Knight!");
+        IO.println("You feel a surge of confidence as you prepare for Level 3...\n");
     }
 }
