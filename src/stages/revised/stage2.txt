@@ -1,75 +1,61 @@
 # Level 1, Stage 2.
 # Squire
-# Goal / Interaction: List files and explore paths
-# Commands / Mechanics: ls, tree
-# Theme: Discovering deeper knowledge hidden in the training halls
+# Goal / Interaction: Find the lost letter
+# Objects: Lost letter hidden in an unexpected location
+# Commands / Mechanics: ls, cd, tree, cat
 
+# Directories and files from previous stages
+DIR: level_1/
+DIR: level_1/basic_training/
 DIR: level_1/basic_training/notes/
-FILE: level_1/basic_training/notes/steps.txt
-A written record of every squire’s first steps.
-
-FILE: level_1/basic_training/notes/common_mistakes.txt
-Warnings written by past trainees.
-
-FILE: level_1/courtyard/flowers.txt
-A list of rare blooms growing in the courtyard.
-
-HIDDEN_FILE: level_1/courtyard/.ancient_seed
-A seed radiating a faint magical warmth.
-
+DIR: level_1/courtyard/
+DIR: level_1/hall_of_movement/
 DIR: level_1/hall_of_movement/paths/
+DIR: level_1/navigation_test/
+DIR: level_1/navigation_test/archives/
+
+FILE: level_1/basic_training/welcome.txt
+FILE: level_1/basic_training/notes/steps.txt
+FILE: level_1/basic_training/notes/common_mistakes.txt
+FILE: level_1/courtyard/lesson_1.txt
+FILE: level_1/courtyard/flowers.txt
+FILE: level_1/hall_of_movement/lesson_2.txt
 FILE: level_1/hall_of_movement/paths/north.txt
 FILE: level_1/hall_of_movement/paths/south.txt
 FILE: level_1/hall_of_movement/paths/west.txt
 FILE: level_1/hall_of_movement/paths/east.txt
-Directional stones used for movement training.
-
+FILE: level_1/navigation_test/challenge.txt
 FILE: level_1/navigation_test/tablet_inscriptions.txt
-Cryptic notes left by squires who passed the trial.
-
-DIR: level_1/navigation_test/archives/
 FILE: level_1/navigation_test/archives/log_001.txt
 FILE: level_1/navigation_test/archives/log_002.txt
 FILE: level_1/navigation_test/archives/log_003.txt
+FILE: level_1/navigation_test/archives/dear_squire.txt
+Dear Squire,
 
-# Game Guide
-# type "The stone tablet dims, accepting your presence. A quiet study lit by blue flames stretches before you."
-# type "A voice echoes softly: 'Welcome, squire. Here you will learn to observe the world around you.'"
-# type "Use 'ls' to list the files and directories in this chamber."
+Curiosity and courage are your greatest allies. The paths you walk may twist and turn, but every lesson you have learned in the training halls will guide you true.
+
+Remember the importance of knowing where you stand, observing carefully, and moving with purpose. The dungeon may test your resolve, but those who pay attention and act with wisdom will always find their way.
+
+Step forward boldly, and let your wits light the shadows ahead. Greater challenges await, but I have faith in your journey.
+
+— The Old Knight
+END
+
+# Game Flow
+# type "The dungeon is quiet, yet the air hums with hidden secrets."
+# type "The Old Knight appears, his armor creaking softly:"
+# type "'Squire… a lost letter awaits your discovery. It does not dwell in familiar paths. Your mission is to find it and read its contents.'"
+# type "'Use all you have learned: ls to observe, cd to move and tree to inspect structures. Perhaps a hallway you explored before holds a clue, or a chamber you rarely inspect. Strange paths sometimes hide the greatest truths.'"
+# type "'Remember your lessons from the training halls. Apply your knowledge and explore wisely.'"
+# type "'Pay attention to the names of files — the lost letter bears a name meant for you…'"
+# type "You begin exploring, tracing familiar halls and venturing into less obvious corners..."
+# type "Once you have located the letter, you must read it to complete your Stage 3 trial."
+# type "Use the command: cat <filename>.txt"
 # input
 # continue
 #
-# type "Good. Now, let's explore the Hall of Movement paths."
-# type "Enter the directory: cd hall_of_movement/paths"
-# input (only accept: cd hall_of_movement/paths)
-# continue
-#
-# type "Lanterns flicker on the stone walls. Four directional stones await your inspection."
-# type "Use 'ls' to see the directional files."
-# input
-# continue
-#
-# type "Each file represents a path you must know. Check each carefully."
-# type "For an overview of the structure, you may also use: tree"
-# input
-# continue
-#
-# type "Have you examined north.txt, south.txt, west.txt, and east.txt?"
-# type "Once done, return to the Hall of Movement: cd .."
-# input (only accept: cd ..)
-# continue
-#
-# type "Well done. You have explored all directional paths."
-# type "Return to the central hall: cd .."
-# input (only accept: cd ..)
-# continue
-#
-# type "The blue flames dance higher, as if acknowledging your progress."
-# type "You have observed all that can be seen in these chambers."
-# type "When ready, speak the words: it's done"
-# input (only accept: it's done)
-# continue
-#
-# type "A warm glow fills the study. The voice whispers:"
-# type "'Excellent, squire. You have learned to list and explore your surroundings.'"
-# type "'Yet the dungeon stretches far beyond these halls — mysteries and secrets await those who look further.'"
+# After player cats the letter (FILE: level_1/navigation_test/archives/dear_squire.txt):
+# type "A warm glow fills the archives as you read the letter:"
+# type "'Dear Squire, curiosity and courage are your greatest allies. Your journey has only begun. Remember your lessons, and step forward boldly.'"
+# type "The Old Knight nods: 'Your Stage 3 training is complete. Greater adventures await…'"
+# type "\"Stage 2 complete. Prepare for what comes next.\""

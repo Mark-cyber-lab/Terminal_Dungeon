@@ -1,129 +1,124 @@
 # Level 1, Stage 1.
 # Squire
-# Goal / Interaction: Learn directory navigation (pwd, ls, cd)
-# Theme: Guided exploration through ancient training halls
+# Goal / Interaction: Learn directory navigation commands
+# Theme: Guided exploration through training halls
+# Commands / Mechanics: pwd, ls, cd, tree
 
 DIR: level_1/
 DIR: level_1/basic_training/
+DIR: level_1/basic_training/notes/
 DIR: level_1/courtyard/
 DIR: level_1/hall_of_movement/
+DIR: level_1/hall_of_movement/paths/
 LOCKED_DIR: level_1/navigation_test/
 
 FILE: level_1/basic_training/welcome.txt
 Squire Level 1: Learn basic movement
-Commands: pwd, ls, cd
+Commands: pwd, ls, cd, tree
+
+FILE: level_1/basic_training/notes/steps.txt
+A written record of every squire’s first steps.
+
+FILE: level_1/basic_training/notes/common_mistakes.txt
+Warnings written by past trainees.
 
 FILE: level_1/courtyard/lesson_1.txt
 Use 'ls' to see what's around you
-Explore your surroundings
+
+FILE: level_1/courtyard/flowers.txt
+A list of rare blooms growing in the courtyard.
 
 FILE: level_1/hall_of_movement/lesson_2.txt
 Use 'cd' to move between rooms
-Practice navigation
 
-HIDDEN_FILE: level_1/courtyard/.hidden_path.secr
-A secret for those who look closely
+FILE: level_1/hall_of_movement/paths/north.txt
+FILE: level_1/hall_of_movement/paths/south.txt
+FILE: level_1/hall_of_movement/paths/west.txt
+FILE: level_1/hall_of_movement/paths/east.txt
+Directional stones used for movement training.
 
 FILE: level_1/navigation_test/challenge.txt
-Prove you can navigate basic areas
-
+Prove your mastery of movement
 
 # Game Flow
-# type "A cold wind sweeps through the stone hall as torches ignite one by one."
+# type "The cold wind sweeps through the stone hall as torches ignite one by one."
 # type "An armored figure steps forward — the Old Knight."
 # type "\"Squire... you awaken in the Dungeon of Paths. Every warrior who survived began here.\""
-# type "\"But before you lift blade or spell, you must first command the dungeon itself.\""
-# type "\"Tell me where you stand. Speak the words:  pwd\""
+# type "\"Before you lift blade or spell, you must first command the dungeon itself.\""
+# type "\"Speak the words: pwd to sense your current location.\""
 # input
 # continue
 #
 # After 'pwd':
-# type "The knight nods slowly."
-# type "\"Good. A warrior who knows his ground cannot be easily lost.\""
-# type "\"Now, open your eyes to the world around you. Reveal the nearby chambers.\""
-# type "\"Use:  ls\""
+# type "The knight nods: 'Good. A warrior who knows his ground cannot be lost.'"
+# type "\"Now, observe the surrounding chambers: ls\""
 # input
 # continue
 #
 # After 'ls':
-# type "The torchlight flickers, revealing four paths carved into the ancient stone."
-# type "\"These halls are your training grounds. You will walk them one at a time — under my command only.\""
-# type "\"First, enter the Chamber of Beginnings: basic_training.\""
-# type "\"Go now:  cd basic_training\""
-# input (only accept cd basic_training)
+# type "Four paths reveal themselves: basic_training, courtyard, hall_of_movement, and a locked door."
+# type "\"Your first task: enter the Chamber of Beginnings: cd basic_training\""
+# input (only accept: cd basic_training)
 # continue
 #
 # Inside basic_training/:
-# type "Dust stirs as you step inside. Old banners hang torn but proud."
-# type "\"This chamber taught generations of squires before you.\""
-# type "\"You have stepped well. Now return to the central hall.\""
-# type "Return using:  cd .."
+# type "Dust stirs as you enter. Old banners sway gently."
+# type "\"List the notes here: ls\""
 # input
 # continue
 #
-# Back at level_1/:
-# type "The knight gestures toward a sunlit archway."
-# type "\"Next, the Courtyard of Awareness. A place where young warriors sharpen their senses.\""
-# type "\"Enter it now:  cd courtyard\""
+# type "See the steps and common mistakes? Explore the structure using: tree"
 # input
+# continue
+#
+# type "\"Return to the central hall: cd ..\""
+# input (only accept: cd ..)
+# continue
+#
+# Back at level_1/:
+# type "The knight gestures toward the Courtyard of Awareness."
+# type "\"Enter it now: cd courtyard\""
+# input (only accept: cd courtyard)
 # continue
 #
 # Inside courtyard/:
-# type "The courtyard opens wide — birds scatter, leaves rustle, ancient stones glow faintly."
-# type "\"Good. Now look carefully and sense the objects around you.\""
-# type "\"Use:  ls\""
+# type "Birds scatter as you step inside. Look around: ls"
 # input
 # continue
 #
-# After 'ls':
-# type "\"You see only what lies in plain sight.\""
-# type "\"But the Dungeon of Paths hides many secrets from untrained eyes...\""
-#
-# Optional hint:
-# type "\"If you dare to look deeper, whisper these words: ls -a\""
-#
-# type "\"Your lesson here is complete. Return to the main hall.\""
-# type "Use: cd .."
+# type "Check the courtyard structure visually with: tree"
 # input
+# continue
+#
+# type "\"Return to the central hall: cd ..\""
+# input (only accept: cd ..)
 # continue
 #
 # Back at level_1/:
-# type "The knight leads you toward a corridor ringing with echoes."
-# type "\"Now — the Hall of Movement. Only those who understand direction may walk the deeper paths.\""
-# type "\"Enter:  cd hall_of_movement\""
-# input
+# type "Now — the Hall of Movement. Enter: cd hall_of_movement\""
+# input (only accept: cd hall_of_movement)
 # continue
 #
 # Inside hall_of_movement/:
-# type "Lanterns sway as you enter. The walls shift as if watching your every step."
-# type "\"Movement is your lifeline. Learn it well, squire.\""
-# type "\"Return once more to the central hall.\""
-# type "Use: cd .."
+# type "Lanterns sway. The paths stretch before you. Inspect: ls paths"
 # input
+# continue
+#
+# type "Understand each path's direction with: tree paths"
+# input
+# continue
+#
+# type "\"Return to the central hall: cd ..\""
+# input (only accept: cd ..)
 # continue
 #
 # Back at level_1/:
-# type "A deep rumble shakes the chamber..."
-# type "The knight steps aside as a massive stone door unlocks itself."
-# type "\"You have walked the halls with discipline. The Trial of Navigation calls to you now.\""
-# type "\"Enter only when ready: cd navigation_test\""
-# input
-# continue
-#
-# Inside navigation_test/:
-# type "Runes blaze across the floor as you enter."
-# type "A stone tablet rises, its voice echoing in your mind:"
-# type "'Prove your mastery of movement, squire... or be lost forever.'"
-#
-# After exploring all halls:
-# type "The runes dim. The chamber grows quiet."
-# type "The Old Knight appears at your side, his armor gleaming faintly in the darkness."
-# type "\"You have done well, young squire. You have walked every hall with patience and discipline.\""
-# type "\"Your first trial is complete… but the Dungeon of Paths stretches far deeper than these simple chambers.\""
-# type "\"There is much more to explore — secrets, foes, and mysteries waiting in the dark.\""
-# type "\"When you are ready, speak the words:  it's done\""
+# type "A deep rumble shakes the chamber as the Navigation Test door glows faintly."
+# type "\"You have done well, squire. You have explored the training halls with patience.\""
+# type "\"Much remains hidden, but your first lesson in navigation is complete.\""
+# type "\"When ready, speak the words: it's done\""
 # input (only accept: it's done)
 # continue
 #
-# type "The torches flare brightly, as if acknowledging your progress."
-# type "\"Your journey continues, squire. Greater challenges await in the next stage…\""
+# type "The torches flare brightly, acknowledging your progress."
+# type "\"Stage 1 complete. Prepare for Stage 2, where missions will put your skills to the test.\""

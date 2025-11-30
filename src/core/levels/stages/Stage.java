@@ -1,5 +1,6 @@
-package core.levels;
+package core.levels.stages;
 
+import core.levels.Level;
 import utilities.CLIUtils;
 
 public abstract class Stage {
@@ -28,9 +29,23 @@ public abstract class Stage {
         CLIUtils.repeat('━');
     }
 
-    public void execute () {
+    @FunctionalInterface
+    public interface BeforeSetupCallback {
+        void run();
+    }
+
+    @FunctionalInterface
+    public interface AfterSetupCallback {
+        void run();
+    }
+
+
+    public void execute(BeforeSetupCallback before, AfterSetupCallback after) {
         CLIUtils.clearScreen();
+        before.run();
         setupEnvironment();
+        after.run();
+
         try {
             printStageHeader();
             play();

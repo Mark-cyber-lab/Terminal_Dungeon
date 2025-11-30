@@ -1,10 +1,10 @@
 package core.levels;
 
 import core.Player;
+import core.levels.stages.Stage;
 import engine.Sandbox;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * Abstract base class for all Levels in Terminal Dungeon.
@@ -15,7 +15,7 @@ public abstract class Level {
     /**
      * Level number, e.g., 1, 2, 3
      */
-    protected final Sandbox sandbox;
+    public final Sandbox sandbox;
     protected Player player;
     protected final ArrayList<Stage> stages = new ArrayList<>();
     protected final String basePath;
@@ -32,21 +32,33 @@ public abstract class Level {
     }
 
     public void execute() {
-        sandbox.updateRootDir(prev -> prev + basePath);
         onBeforeInit();
-        for (int stageNumber = player.getStats().getStage() - 1;
-             stageNumber < ((3 * player.getStats().getLevel()));
-             stageNumber++) {
+        int currentStage = player.getStats().getStage(); // player's current stage
+        int stagesPerLevel = 2; // 2 stages per level
+        int currentLevel = player.getStats().getLevel();
 
-            int finalStageNumber = stageNumber + 1;
+        // Determine first and last stage number of this level
+        int firstStageOfLevel = (currentLevel - 1) * stagesPerLevel + 1;
+        int lastStageOfLevel = currentLevel * stagesPerLevel;
+
+        // Ensure we start from the player's current stage if already in the middle of level
+        int startStage = Math.max(currentStage, firstStageOfLevel);
+
+        for (int stageNumber = startStage; stageNumber <= lastStageOfLevel; stageNumber++) {
+            int finalStageNumber = stageNumber;
+
             stages.stream()
-                    .filter(stage -> {
-                        return stage.getStageNumber() == finalStageNumber;
-                    })
+                    .filter(stage -> stage.getStageNumber() == finalStageNumber)
                     .findFirst()
                     .ifPresent(stage -> {
+                        stage.execute(
+                                () -> {
+                                }, // Before setup lambda
+                                () -> sandbox.updateRootDir(basePath) // After setup lambda
+                        );
+
+                        // Update player stage to next stage
                         player.getStats().setStage(finalStageNumber + 1);
-                        stage.execute();
                     });
         }
         onLevelComplete();

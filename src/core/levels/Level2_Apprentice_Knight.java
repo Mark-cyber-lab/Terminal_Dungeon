@@ -1,9 +1,11 @@
 package core.levels;
 
 import core.Player;
+import core.levels.stages.Stage;
 import engine.Sandbox;
 import utilities.AsciiArt;
 import utilities.CLIUtils;
+import utilities.CommandResult;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -114,14 +116,12 @@ public class Level2_Apprentice_Knight extends Level {
             CLIUtils.typewriter("He gestures toward the dim corridor ahead, urging you forward.", 25);
             CLIUtils.typewriter("Enter all the commands that you learned on past levels.", 25);
             CLIUtils.typewriter("Goal: Go to the next_stage/portal to move on the next stage", 25);
-            String commandResult;
-
+            CommandResult commandResult;
 
             boolean success = false;
             while (!success) {
                 System.out.print(">> ");
                 String input = IO.readln().trim();
-                IO.println("stage4 input: " + input);
 
                 if (input.equalsIgnoreCase("e") || input.equalsIgnoreCase("exit")) {
                     break;
@@ -129,19 +129,15 @@ public class Level2_Apprentice_Knight extends Level {
 
                 if (input.startsWith("cat") || input.startsWith("cd") || input.startsWith("ls") || input.startsWith("pwd")) {
                     commandResult = sandbox.getExecutor().executeCommand(input.split(" "));
-                    IO.println("command result: " + commandResult);
                     if (input.startsWith("cd")){
-                        String[] splittedResult = commandResult.split("\\\\");
-                        int stringLength = splittedResult.length;
+                         String[] splittedResult = commandResult.path().split("\\\\");
+                         int stringLength = splittedResult.length;
 
-                        IO.println("cd result: " + stringLength);
-
-                        if (stringLength > 0) {
-                            IO.println("cd result2: " + splittedResult[stringLength - 1]);
-                            if (splittedResult[stringLength - 1].equalsIgnoreCase("portal")) {
-                                success = true;
-                            }
-                        }
+                         if (stringLength > 0) {
+                             if (splittedResult[stringLength - 1].equalsIgnoreCase("portal")) {
+                                 success = true;
+                             }
+                         }
                     }
                 } else {
                     IO.println("The spirits whisper: \"That is not the command you were meant to use.\"");
@@ -176,12 +172,12 @@ public class Level2_Apprentice_Knight extends Level {
         }
     }
 
-    /**
+    /*
      * Waits for the correct command for this stage.
      * Any other input will be rejected with a message.
      * Logs the player's command memory.
      */
-    private void waitForStageCommand(String expectedCommand) {
+    private CommandResult waitForStageCommand(String expectedCommand) {
         String input;
         while (true) {
             System.out.print(">> ");
@@ -196,9 +192,7 @@ public class Level2_Apprentice_Knight extends Level {
                 continue;
             }
 
-            sandbox.getExecutor().executeCommand(input.split(" "));
-
-            break;
+            return sandbox.getExecutor().executeCommand(input.split(" "));
         }
     }
 

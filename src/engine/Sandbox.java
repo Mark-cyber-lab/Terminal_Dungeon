@@ -1,9 +1,6 @@
 package engine;
 
-import utilities.CommandValidator;
-import utilities.DebugLogger;
-import utilities.LinuxCommandExecutor;
-import utilities.DirGenerator;
+import utilities.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -145,6 +142,14 @@ public class Sandbox {
                         throw new RuntimeException("Failed to delete: " + p, e);
                     }
                 });
+    }
+
+    public void flush () throws IOException {
+        File backupDir = new File(initialRootPath + "_backup");
+        if (!backupDir.exists()) return; // nothing to restore
+
+        File rootDir = new File(initialRootPath);
+        if (rootDir.exists()) deleteDirectoryRecursively(rootDir.toPath());
     }
 
     public void loadBackup() throws IOException {
