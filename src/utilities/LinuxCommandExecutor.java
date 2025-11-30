@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * A sandbox-aware command executor that implements internal versions of common shell commands
  * (cd, pwd, ls, tree, cat, history, rm, touch, mkdir) and forwards unknown commands to the OS.
- *
+ * <p>
  * All commands return a CommandResult rather than printing directly — this keeps logic testable
  * and allows the game engine to decide what to display.
  */
@@ -69,7 +69,7 @@ public class LinuxCommandExecutor {
 
         this.currentDirectory = normalized;
 
-        DebugLogger.log("SANDBOX","Sandbox update root at: " + currentDirectory);
+        DebugLogger.log("SANDBOX", "Sandbox update root at: " + currentDirectory);
         return new CommandResult("setCd", true,
                 "Directory set to: " + currentDirectory,
                 currentDirectory.toString(), null, 0);
@@ -189,6 +189,7 @@ public class LinuxCommandExecutor {
 
     private CommandResult internalCd(String[] parts) {
         if (parts.length < 2) {
+            IO.println("cd: missing argument"); // simulated stderr
             return new CommandResult("cd", false, "cd: missing argument", currentDirectory.toString(), null, 1);
         }
 
@@ -205,25 +206,30 @@ public class LinuxCommandExecutor {
         }
 
         if (candidate == null) {
+            IO.println("cd: invalid path " + currentDirectory.toString()); // simulated stderr
             return new CommandResult("cd", false, "cd: invalid path", currentDirectory.toString(), target, 1);
         }
 
         // Sandbox: do not allow escape above rootDirectory
         if (!candidate.startsWith(rootDirectory)) {
+            IO.println("cd: permission denied - cannot escape sandbox"); // simulated stderr
             return new CommandResult("cd", false, "cd: permission denied - cannot escape sandbox", currentDirectory.toString(), candidate.toString(), 1);
         }
 
         if (!Files.exists(candidate) || !Files.isDirectory(candidate)) {
+            IO.println("cd: " + target + ": No such directory"); // simulated stderr
             return new CommandResult("cd", false, "cd: " + target + ": No such directory", currentDirectory.toString(), candidate.toString(), 1);
         }
 
         currentDirectory = candidate;
 
+        // Success can remain just in the CommandResult
         return new CommandResult("cd", true, "Moved to: " + currentDirectory, currentDirectory.toString(), target, 0);
     }
 
     private CommandResult internalCat(String[] parts) {
         if (parts.length < 2) {
+            IO.println("cat: missing file argument"); // simulated stderr
             return new CommandResult("cat", false, "cat: missing file argument", currentDirectory.toString(), null, 1);
         }
 
@@ -238,19 +244,25 @@ public class LinuxCommandExecutor {
 
             // Sandbox: ensure filePath is inside root
             if (!filePath.startsWith(rootDirectory)) {
-                output.append("cat: ").append(arg).append(": Permission denied\n");
+                String msg = "cat: " + arg + ": Permission denied";
+                IO.println(msg); // simulated stderr
+                output.append(msg).append("\n");
                 success = false;
                 continue;
             }
 
             if (!Files.exists(filePath)) {
-                output.append("cat: ").append(arg).append(": No such file\n");
+                String msg = "cat: " + arg + ": No such file";
+                IO.println(msg); // simulated stderr
+                output.append(msg).append("\n");
                 success = false;
                 continue;
             }
 
             if (Files.isDirectory(filePath)) {
-                output.append("cat: ").append(arg).append(": Is a directory\n");
+                String msg = "cat: " + arg + ": Is a directory";
+                IO.println(msg); // simulated stderr
+                output.append(msg).append("\n");
                 success = false;
                 continue;
             }
@@ -258,11 +270,13 @@ public class LinuxCommandExecutor {
             try {
                 List<String> lines = Files.readAllLines(filePath);
                 for (String line : lines) {
+                    IO.println(line); // normal stdout
                     output.append(line).append("\n");
-                    IO.println(line);
                 }
             } catch (IOException e) {
-                output.append("cat: ").append(arg).append(": Error reading file\n");
+                String msg = "cat: " + arg + ": Error reading file";
+                IO.println(msg); // simulated stderr
+                output.append(msg).append("\n");
                 logger.warning("Error reading file " + filePath + " : " + e.getMessage());
                 success = false;
             }
@@ -281,17 +295,19 @@ public class LinuxCommandExecutor {
 
         // Sandbox check
         if (!target.startsWith(rootDirectory)) {
-            IO.println("ls: permission denied");
+            String msg = "ls: permission denied";
+            IO.println(msg); // simulated stderr
             return new CommandResult("ls", false,
-                    "ls: permission denied",
+                    msg,
                     currentDirectory.toString(), target.toString(), 1);
         }
 
         // Existence check
         if (!Files.exists(target)) {
-            IO.println("ls: no such file or directory: " + target.getFileName());
+            String msg = "ls: no such file or directory: " + target.getFileName();
+            IO.println(msg); // simulated stderr
             return new CommandResult("ls", false,
-                    "ls: no such file or directory: " + target,
+                    msg,
                     currentDirectory.toString(), target.toString(), 1);
         }
 
@@ -305,44 +321,28 @@ public class LinuxCommandExecutor {
                                 : path.getFileName().toString())
                         .collect(Collectors.toList());
 
-                String output = String.join("\n", names);
-
-                // Print results using IO.println
+                // Print each line using IO.println
                 for (String line : names) {
                     IO.println(line);
                 }
 
-                return new CommandResult(
-                        "ls",
-                        true,
-                        output,
-                        currentDirectory.toString(),
-                        target.toString(),
-                        0
-                );
+                String output = String.join("\n", names);
+                return new CommandResult("ls", true, output, currentDirectory.toString(), target.toString(), 0);
 
             } catch (IOException e) {
+                String msg = "ls: error listing directory";
+                IO.println(msg); // simulated stderr
                 logger.warning("ls error: " + e.getMessage());
-                IO.println("ls: error listing directory");
                 return new CommandResult("ls", false,
                         "ls: error listing " + target,
-                        currentDirectory.toString(),
-                        target.toString(), 1);
+                        currentDirectory.toString(), target.toString(), 1);
             }
         }
 
         // If it's a file, output only the filename
         String fileName = target.getFileName().toString();
-        IO.println(fileName);
-
-        return new CommandResult(
-                "ls",
-                true,
-                fileName,
-                currentDirectory.toString(),
-                target.toString(),
-                0
-        );
+        IO.println(fileName); // normal stdout
+        return new CommandResult("ls", true, fileName, currentDirectory.toString(), target.toString(), 0);
     }
 
     private CommandResult internalTree(String[] parts) {
@@ -355,16 +355,18 @@ public class LinuxCommandExecutor {
 
         // Sandbox restriction
         if (!target.startsWith(rootDirectory)) {
-            IO.println("tree: permission denied");
+            String msg = "tree: permission denied";
+            IO.println(msg); // simulated stderr
             return new CommandResult("tree", false,
-                    "tree: permission denied",
+                    msg,
                     currentDirectory.toString(), target.toString(), 1);
         }
 
         if (!Files.exists(target)) {
-            IO.println("tree: no such file or directory: " + target.getFileName());
+            String msg = "tree: no such file or directory: " + target.getFileName();
+            IO.println(msg); // simulated stderr
             return new CommandResult("tree", false,
-                    "tree: no such file or directory: " + target,
+                    msg,
                     currentDirectory.toString(), target.toString(), 1);
         }
 
@@ -374,7 +376,7 @@ public class LinuxCommandExecutor {
             // Build full tree text
             buildTree(target, target, sb, "", false);
 
-            // Print each line using IO.println
+            // Print each line using IO.println (stdout)
             for (String line : sb.toString().split("\n")) {
                 IO.println(line);
             }
@@ -389,8 +391,9 @@ public class LinuxCommandExecutor {
             );
 
         } catch (IOException e) {
+            String msg = "tree: error reading directory";
+            IO.println(msg); // simulated stderr
             logger.warning("tree error: " + e.getMessage());
-            IO.println("tree: error reading directory");
             return new CommandResult("tree", false,
                     "tree: error reading " + target,
                     currentDirectory.toString(),
@@ -427,7 +430,9 @@ public class LinuxCommandExecutor {
 
     private CommandResult internalRm(String[] parts) {
         if (parts.length < 2) {
-            return new CommandResult("rm", false, "rm: missing operand", currentDirectory.toString(), null, 1);
+            String msg = "rm: missing operand";
+            IO.println(msg); // simulated stderr
+            return new CommandResult("rm", false, msg, currentDirectory.toString(), null, 1);
         }
 
         boolean recursive = false;
@@ -445,19 +450,25 @@ public class LinuxCommandExecutor {
         for (String t : targets) {
             Path targetPath = currentDirectory.resolve(t).normalize();
             if (!targetPath.startsWith(rootDirectory)) {
-                output.append("rm: ").append(t).append(": Permission denied\n");
+                String msg = "rm: " + t + ": Permission denied";
+                IO.println(msg); // simulated stderr
+                output.append(msg).append("\n");
                 success = false;
                 continue;
             }
             if (!Files.exists(targetPath)) {
-                output.append("rm: ").append(t).append(": No such file or directory\n");
+                String msg = "rm: " + t + ": No such file or directory";
+                IO.println(msg); // simulated stderr
+                output.append(msg).append("\n");
                 success = false;
                 continue;
             }
             try {
                 if (Files.isDirectory(targetPath)) {
                     if (!recursive) {
-                        output.append("rm: ").append(t).append(": Is a directory (use -r to remove)\n");
+                        String msg = "rm: " + t + ": Is a directory (use -r to remove)";
+                        IO.println(msg); // simulated stderr
+                        output.append(msg).append("\n");
                         success = false;
                     } else {
                         // recursive delete
@@ -466,27 +477,42 @@ public class LinuxCommandExecutor {
                                 .forEach(p -> {
                                     try {
                                         Files.deleteIfExists(p);
-                                    } catch (IOException ignored) { /* suppression - collect error later */ }
+                                    } catch (IOException ignored) { /* suppress individual errors */ }
                                 });
-                        output.append("Removed directory: ").append(t).append("\n");
+                        String msg = "Removed directory: " + t;
+                        IO.println(msg); // stdout
+                        output.append(msg).append("\n");
                     }
                 } else {
                     Files.deleteIfExists(targetPath);
-                    output.append("Removed file: ").append(t).append("\n");
+                    String msg = "Removed file: " + t;
+                    IO.println(msg); // stdout
+                    output.append(msg).append("\n");
                 }
             } catch (IOException e) {
-                output.append("rm: ").append(t).append(": error deleting\n");
+                String msg = "rm: " + t + ": error deleting";
+                IO.println(msg); // simulated stderr
+                output.append(msg).append("\n");
                 logger.warning("rm error: " + e.getMessage());
                 success = false;
             }
         }
 
-        return new CommandResult("rm", success, output.toString().trim(), currentDirectory.toString(), String.join(",", targets), success ? 0 : 1);
+        return new CommandResult(
+                "rm",
+                success,
+                output.toString().trim(),
+                currentDirectory.toString(),
+                String.join(",", targets),
+                success ? 0 : 1
+        );
     }
 
     private CommandResult internalTouch(String[] parts) {
         if (parts.length < 2) {
-            return new CommandResult("touch", false, "touch: missing file operand", currentDirectory.toString(), null, 1);
+            String msg = "touch: missing file operand";
+            IO.println(msg); // simulated stderr
+            return new CommandResult("touch", false, msg, currentDirectory.toString(), null, 1);
         }
 
         StringBuilder output = new StringBuilder();
@@ -494,31 +520,49 @@ public class LinuxCommandExecutor {
         for (int i = 1; i < parts.length; i++) {
             Path filePath = currentDirectory.resolve(parts[i]).normalize();
             if (!filePath.startsWith(rootDirectory)) {
-                output.append("touch: ").append(parts[i]).append(": Permission denied\n");
+                String msg = "touch: " + parts[i] + ": Permission denied";
+                IO.println(msg); // simulated stderr
+                output.append(msg).append("\n");
                 success = false;
                 continue;
             }
             try {
                 if (!Files.exists(filePath)) {
                     Files.createFile(filePath);
-                    output.append("Created file: ").append(parts[i]).append("\n");
+                    String msg = "Created file: " + parts[i];
+                    IO.println(msg); // stdout
+                    output.append(msg).append("\n");
                 } else {
                     // update timestamp
                     Files.setLastModifiedTime(filePath, FileTime.fromMillis(System.currentTimeMillis()));
-                    output.append("Updated timestamp: ").append(parts[i]).append("\n");
+                    String msg = "Updated timestamp: " + parts[i];
+                    IO.println(msg); // stdout
+                    output.append(msg).append("\n");
                 }
             } catch (IOException e) {
-                output.append("touch: ").append(parts[i]).append(": error\n");
+                String msg = "touch: " + parts[i] + ": error";
+                IO.println(msg); // simulated stderr
+                output.append(msg).append("\n");
                 logger.warning("touch error: " + e.getMessage());
                 success = false;
             }
         }
-        return new CommandResult("touch", success, output.toString().trim(), currentDirectory.toString(), parts.length > 1 ? parts[1] : null, success ? 0 : 1);
+
+        return new CommandResult(
+                "touch",
+                success,
+                output.toString().trim(),
+                currentDirectory.toString(),
+                parts.length > 1 ? parts[1] : null,
+                success ? 0 : 1
+        );
     }
 
     private CommandResult internalMkdir(String[] parts) {
         if (parts.length < 2) {
-            return new CommandResult("mkdir", false, "mkdir: missing operand", currentDirectory.toString(), null, 1);
+            String msg = "mkdir: missing operand";
+            IO.println(msg); // simulated stderr
+            return new CommandResult("mkdir", false, msg, currentDirectory.toString(), null, 1);
         }
 
         boolean success = true;
@@ -526,20 +570,34 @@ public class LinuxCommandExecutor {
         for (int i = 1; i < parts.length; i++) {
             Path dirPath = currentDirectory.resolve(parts[i]).normalize();
             if (!dirPath.startsWith(rootDirectory)) {
-                output.append("mkdir: ").append(parts[i]).append(": Permission denied\n");
+                String msg = "mkdir: " + parts[i] + ": Permission denied";
+                IO.println(msg); // simulated stderr
+                output.append(msg).append("\n");
                 success = false;
                 continue;
             }
             try {
                 Files.createDirectories(dirPath);
-                output.append("Created directory: ").append(parts[i]).append("\n");
+                String msg = "Created directory: " + parts[i];
+                IO.println(msg); // stdout
+                output.append(msg).append("\n");
             } catch (IOException e) {
-                output.append("mkdir: ").append(parts[i]).append(": error\n");
+                String msg = "mkdir: " + parts[i] + ": error";
+                IO.println(msg); // simulated stderr
+                output.append(msg).append("\n");
                 logger.warning("mkdir error: " + e.getMessage());
                 success = false;
             }
         }
-        return new CommandResult("mkdir", success, output.toString().trim(), currentDirectory.toString(), parts.length > 1 ? parts[1] : null, success ? 0 : 1);
+
+        return new CommandResult(
+                "mkdir",
+                success,
+                output.toString().trim(),
+                currentDirectory.toString(),
+                parts.length > 1 ? parts[1] : null,
+                success ? 0 : 1
+        );
     }
 
     // -----------------------
