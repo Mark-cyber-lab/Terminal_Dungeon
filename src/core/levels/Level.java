@@ -54,7 +54,7 @@ public abstract class Level {
                         stage.execute(
                                 () -> {
                                 }, // Before setup lambda
-                                () -> sandbox.updateRootDir(prev -> prev + basePath) // After setup lambda
+                                () -> sandbox.updateRootDir(basePath) // After setup lambda
                         );
 
                         // Update player stage to next stage

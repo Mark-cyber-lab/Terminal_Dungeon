@@ -5,6 +5,7 @@ import core.levels.stages.Stage;
 import engine.Sandbox;
 import utilities.AsciiArt;
 import utilities.CLIUtils;
+import utilities.CommandResult;
 
 public class Level2_Apprentice_Knight extends Level {
 
@@ -70,7 +71,7 @@ public class Level2_Apprentice_Knight extends Level {
      * Any other input will be rejected with a message.
      * Logs the player's command memory.
      */
-    private void waitForStageCommand(String expectedCommand) {
+    private CommandResult waitForStageCommand(String expectedCommand) {
         String input;
         while (true) {
             System.out.print(">> ");
@@ -85,9 +86,7 @@ public class Level2_Apprentice_Knight extends Level {
                 continue;
             }
 
-            sandbox.getExecutor().executeCommand(input.split(" "));
-
-            break;
+            return sandbox.getExecutor().executeCommand(input.split(" "));
         }
     }
 

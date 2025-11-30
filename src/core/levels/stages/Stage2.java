@@ -2,6 +2,9 @@ package core.levels.stages;
 
 import core.levels.Level;
 import utilities.CLIUtils;
+import utilities.CommandResult;
+
+import java.util.Objects;
 
 public class Stage2 extends Stage {
     private static final String configPath = "./src/stages/revised/stage2.txt";
@@ -34,10 +37,13 @@ public class Stage2 extends Stage {
             System.out.print(">> ");
             input = IO.readln().trim();
 
-            level.sandbox.getExecutor().executeCommand(input.split(" "));
+            CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));
 
-            // sample
-            break;
+            if(Objects.equals(result.command(), "cat") && Objects.equals(result.subject(), "dear_squire.txt")){
+                // sample
+                break;
+            }
+
         }
 
         CLIUtils.typewriter("A warm glow fills the archives as you read the letter:", 30);
