@@ -33,23 +33,30 @@ public abstract class Level {
 
     public void execute() {
         onBeforeInit();
-        int currentStage = player.getStats().getStage(); // start from current stage
-        int lastStageNumber = stages.stream()
-                .mapToInt(Stage::getStageNumber)
-                .max()
-                .orElse(currentStage);
+        int currentStage = player.getStats().getStage(); // player's current stage
+        int stagesPerLevel = 2; // 2 stages per level
+        int currentLevel = player.getStats().getLevel();
 
-        for (int stageNumber = currentStage; stageNumber <= lastStageNumber; stageNumber++) {
-            int finalStageNumber = stageNumber; // now matches stage.getStageNumber()
+        // Determine first and last stage number of this level
+        int firstStageOfLevel = (currentLevel - 1) * stagesPerLevel + 1;
+        int lastStageOfLevel = currentLevel * stagesPerLevel;
+
+        // Ensure we start from the player's current stage if already in the middle of level
+        int startStage = Math.max(currentStage, firstStageOfLevel);
+
+        for (int stageNumber = startStage; stageNumber <= lastStageOfLevel; stageNumber++) {
+            int finalStageNumber = stageNumber;
 
             stages.stream()
                     .filter(stage -> stage.getStageNumber() == finalStageNumber)
                     .findFirst()
                     .ifPresent(stage -> {
                         stage.execute(
-                                () -> {}, // Before setup lambda
+                                () -> {
+                                }, // Before setup lambda
                                 () -> sandbox.updateRootDir(prev -> prev + basePath) // After setup lambda
                         );
+
                         // Update player stage to next stage
                         player.getStats().setStage(finalStageNumber + 1);
                     });
