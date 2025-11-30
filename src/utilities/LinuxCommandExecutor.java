@@ -595,7 +595,7 @@ public class LinuxCommandExecutor {
                 success,
                 output.toString().trim(),
                 currentDirectory.toString(),
-                parts.length > 1 ? parts[1] : null,
+                parts[1],
                 success ? 0 : 1
         );
     }

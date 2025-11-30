@@ -39,7 +39,7 @@ public class Stage2 extends Stage {
 
             CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));
 
-            if(Objects.equals(result.command(), "cat") && Objects.equals(result.subject(), "dear_squire.txt")){
+            if(Objects.equals(result.command(), "cat") && result.subject().contains("dear_squire.txt")){
                 // sample
                 break;
             }
