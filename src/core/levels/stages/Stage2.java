@@ -41,7 +41,6 @@ public class Stage2 extends Stage {
         }
 
         CLIUtils.typewriter("A warm glow fills the archives as you read the letter:", 30);
-        CLIUtils.typewriter("'Dear Squire, curiosity and courage are your greatest allies. Your journey has only begun. Remember your lessons, and step forward boldly.'", 30);
         CLIUtils.typewriter("The Old Knight nods: 'Your Stage 3 training is complete. Greater adventures await…'", 30);
         CLIUtils.typewriter("\"Stage 3 complete. Prepare for what comes next.\"", 30);
 
