@@ -22,15 +22,15 @@ public class Stage2 extends Stage {
     @Override
     public void play() {
         // Stage 3: Lost Letter / Navigation Test
-//        CLIUtils.typewriter("The dungeon is quiet, yet the air hums with hidden secrets.", 30);
-//        CLIUtils.typewriter("The Old Knight appears, his armor creaking softly:", 30);
-//        CLIUtils.typewriter("'Squire… a lost letter awaits your discovery. It does not dwell in familiar paths. Your mission is to find it and read its contents.'", 30);
-//        CLIUtils.typewriter("'Use all you have learned: ls to observe, cd to move and tree to inspect structures. Perhaps a hallway you explored before holds a clue, or a chamber you rarely inspect. Strange paths sometimes hide the greatest truths.'", 30);
-//        CLIUtils.typewriter("'Remember your lessons from the training halls. Apply your knowledge and explore wisely.'", 30);
-//        CLIUtils.typewriter("'Pay attention to the names of files — the lost letter bears a name meant for you…'", 30);
-//        CLIUtils.typewriter("You begin exploring, tracing familiar halls and venturing into less obvious corners...", 30);
-//        CLIUtils.typewriter("Once you have located the letter, you must read it to complete your Stage 3 trial.", 30);
-//        CLIUtils.typewriter("Use the command: cat <filename>.txt", 30);
+        CLIUtils.typewriter("The dungeon is quiet, yet the air hums with hidden secrets.", 30);
+        CLIUtils.typewriter("The Old Knight appears, his armor creaking softly:", 30);
+        CLIUtils.typewriter("'Squire… a lost letter awaits your discovery. It does not dwell in familiar paths. Your mission is to find it and read its contents.'", 30);
+        CLIUtils.typewriter("'Use all you have learned: ls to observe, cd to move and tree to inspect structures. Perhaps a hallway you explored before holds a clue, or a chamber you rarely inspect. Strange paths sometimes hide the greatest truths.'", 30);
+        CLIUtils.typewriter("'Remember your lessons from the training halls. Apply your knowledge and explore wisely.'", 30);
+        CLIUtils.typewriter("'Pay attention to the names of files — the lost letter bears a name meant for you…'", 30);
+        CLIUtils.typewriter("You begin exploring, tracing familiar halls and venturing into less obvious corners...", 30);
+        CLIUtils.typewriter("Once you have located the letter, you must read it to complete your Stage 3 trial.", 30);
+        CLIUtils.typewriter("Use the command: cat <filename>.txt", 30);
 
         String input;
 
