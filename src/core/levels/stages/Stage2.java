@@ -8,7 +8,7 @@ import utilities.CommandResult;
 import java.util.Objects;
 
 public class Stage2 extends Stage {
-    private static final String configPath = "./src/stages/revised/stage2.txt";
+    private static final String configPath = "./src/stages/stage2.txt";
 
     public Stage2(Level level) {
         super(2, level);
