@@ -11,19 +11,19 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Sandbox {
+public class Sandbox implements Loggable {
 
     private String rootPath;
     private String initialRootPath;
     private final CommandValidator validator;
     private final DirGenerator dirGenerator;
-    private final LinuxCommandExecutor executor;
+    private final LinuxCommandExecutorWithRegistry executor;
 
     public Sandbox(String rootPath) {
         this.rootPath = rootPath;
         this.initialRootPath = rootPath;
 
-        this.executor = new LinuxCommandExecutor(rootPath);
+        this.executor = new LinuxCommandExecutorWithRegistry(rootPath);
 
         // Initialize validator with whitelist of safe commands
         Set<String> safeCommands = new HashSet<>();
@@ -46,17 +46,16 @@ public class Sandbox {
 
         if (!rootDir.exists()) {
             if (rootDir.mkdirs()) {
-                DebugLogger.log("SANDBOX","Sandbox folder created at: " + rootDir.getAbsolutePath());
+                log("Sandbox folder created at: " + rootDir.getAbsolutePath());
             } else {
-                DebugLogger.log("SANDBOX","Failed to create sandbox folder at: " + rootDir.getAbsolutePath());
+                log("Failed to create sandbox folder at: " + rootDir.getAbsolutePath());
             }
         } else {
-            DebugLogger.log("SANDBOX","Sandbox folder already exists at: " + rootDir.getAbsolutePath());
+            log("Sandbox folder already exists at: " + rootDir.getAbsolutePath());
         }
-
     }
 
-    public LinuxCommandExecutor getExecutor() {
+    public LinuxCommandExecutorWithRegistry getExecutor() {
         return executor;
     }
 
@@ -105,13 +104,13 @@ public class Sandbox {
 
         File backupDir = new File(initialRootPath + "_backup");
         if (backupDir.exists()) {
-            DebugLogger.log("Backup folder already exists, overwriting...");
+            log("Backup folder already exists, overwriting...");
             deleteDirectoryRecursively(backupDir.toPath());
         }
 
-        DebugLogger.log("Creating backup at: " + backupDir.getAbsolutePath());
+        log("Creating backup at: " + backupDir.getAbsolutePath());
         copyDirectoryRecursively(srcDir.toPath(), backupDir.toPath());
-        DebugLogger.log("Backup completed successfully!");
+        log("Backup completed successfully!");
     }
 
     private void copyDirectoryRecursively(Path src, Path dest) throws IOException {
@@ -144,7 +143,7 @@ public class Sandbox {
                 });
     }
 
-    public void flush () throws IOException {
+    public void flush() throws IOException {
         File backupDir = new File(initialRootPath + "_backup");
         if (!backupDir.exists()) return; // nothing to restore
 
@@ -160,6 +159,6 @@ public class Sandbox {
         if (rootDir.exists()) deleteDirectoryRecursively(rootDir.toPath());
 
         copyDirectoryRecursively(backupDir.toPath(), rootDir.toPath());
-        DebugLogger.log("Backup restored to: " + rootDir.getAbsolutePath());
+        log("Backup restored to: " + rootDir.getAbsolutePath());
     }
 }

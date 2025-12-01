@@ -5,13 +5,13 @@ import core.*;
 import core.levels.Level;
 import utilities.CLIUtils;
 import utilities.AsciiArt;
-import utilities.DebugLogger;
+import utilities.Loggable;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewStage {
+public class NewStage implements Loggable {
 
     private static final String SANDBOX_ROOT = "./sandbox";
     private final PlayerStats playerStats = new PlayerStats();
@@ -20,7 +20,7 @@ public class NewStage {
     private final Sandbox sandbox = new Sandbox(SANDBOX_ROOT);
     private boolean exitedNormally = false;
 
-    private void initializeLevels () {
+    private void initializeLevels() {
         levels.add(new Level1_Squire(sandbox, player));
         levels.add(new Level2_Apprentice_Knight(sandbox, player));
     }
@@ -28,9 +28,7 @@ public class NewStage {
     public void upStage() throws IOException {
 
         CLIUtils.clearScreen();
-
         CLIUtils.printCentered(AsciiArt.getTitleDungeon());
-
         CLIUtils.sleep(600);
 
         initializeLevels();
@@ -40,15 +38,15 @@ public class NewStage {
         sandbox.loadBackup();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                DebugLogger.log("Saving player configuration before exit...");
-                try {
-                    if(!exitedNormally)
-                        sandbox.backup();
-                    config.save();
-                    DebugLogger.log("Player configuration saved successfully!");
-                } catch (Exception e) {
-                    DebugLogger.log("Failed to save player configuration: " + e.getMessage());
-                }
+            log("Saving player configuration before exit...");
+            try {
+                if (!exitedNormally)
+                    sandbox.backup();
+                config.save();
+                log("Player configuration saved successfully!");
+            } catch (Exception e) {
+                log("Failed to save player configuration: " + e.getMessage());
+            }
         }));
 
         IO.println();
@@ -59,7 +57,6 @@ public class NewStage {
         CLIUtils.typewriter("\"Only those who master the Terminal may survive.\"", 30, true);
         IO.println();
         CLIUtils.waitAnyKey();
-
 
         while (playerStats.isAlive()) {
 

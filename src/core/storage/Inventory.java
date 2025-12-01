@@ -1,7 +1,7 @@
 package core.storage;
 
 import core.items.ObtainableItem;
-import utilities.DebugLogger;
+import utilities.Loggable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Inventory {
+public class Inventory implements Loggable {
 
     private final String id;
     private final String label;
@@ -39,10 +39,10 @@ public class Inventory {
         try {
             if (!Files.exists(basePath)) {
                 Files.createDirectories(basePath);
-                DebugLogger.log("Inventory", "Created base path: " + basePath);
+                log("Created base path: " + basePath);
             }
         } catch (Exception e) {
-            DebugLogger.log("Inventory", "Failed to create base path: " + basePath);
+            log("Failed to create base path: " + basePath + " | Error: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -57,17 +57,17 @@ public class Inventory {
             Storage storage = new Storage(sourceFilePath, fileName);
             ObtainableItem item = new ObtainableItem(fileName, fileName, storage);
             storeThenAddToItemList(item);
-            DebugLogger.log("Inventory", "Added item: " + fileName + " to inventory: " + label);
+            log("Added item: " + fileName + " to inventory: " + label);
             return true;
         } catch (Exception e) {
+            log("Failed to add item: " + fileName + " | Error: " + e.getMessage());
             return false;
         }
-
     }
 
     public boolean addItem(ObtainableItem item) {
         storeThenAddToItemList(item);
-        DebugLogger.log("Inventory", "Added item: " + item.getStorage().source.getFileName().toString() + " to inventory: " + label);
+        log("Added item: " + item.getStorage().source.getFileName() + " to inventory: " + label);
         return true;
     }
 
@@ -79,7 +79,7 @@ public class Inventory {
     public boolean removeItem(ObtainableItem item) {
         if (items.remove(item)) {
             item.getStorage().deleteItem();
-            DebugLogger.log("Inventory", "Removed item: " + item.getLabel() + " from inventory: " + label);
+            log("Removed item: " + item.getLabel() + " from inventory: " + label);
             return true;
         }
         return false;
@@ -99,10 +99,10 @@ public class Inventory {
 
     public List<ObtainableItem> access() {
         if (locked) {
-            DebugLogger.log("Inventory", "Storage [" + label + "] is locked! Cannot access items.");
+            log("Storage [" + label + "] is locked! Cannot access items.");
             return Collections.emptyList();
         }
-        DebugLogger.log("Inventory", "Accessing storage: " + label);
+        log("Accessing storage: " + label);
         return getItems();
     }
 

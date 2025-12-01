@@ -7,7 +7,7 @@ public record CommandResult(
         String path,
         String subject,
         int exitCode
-) {
+) implements Loggable {
 
     // Compact constructor
     public CommandResult {
@@ -16,7 +16,7 @@ public record CommandResult(
 
         // Log all details if success is false
         if (!success) {
-            DebugLogger.log("SANDBOX", "Command failed: " + this.toString());
+            log( "Command failed: " + this.toString());
         }
     }
 

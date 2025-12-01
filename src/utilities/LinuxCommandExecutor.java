@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * All commands return a CommandResult rather than printing directly — this keeps logic testable
  * and allows the game engine to decide what to display.
  */
-public class LinuxCommandExecutor {
+public class LinuxCommandExecutor implements Loggable {
 
     private static final Logger logger = Logger.getLogger(LinuxCommandExecutor.class.getName());
     private static final String OS = System.getProperty("os.name").toLowerCase();
@@ -33,7 +33,7 @@ public class LinuxCommandExecutor {
         }
         this.rootDirectory = start;
         this.currentDirectory = start;
-        DebugLogger.log("COMMAND_EXECUTOR", "Executor starting in: " + currentDirectory);
+        log( "Executor starting in: " + currentDirectory);
     }
 
     public Path getCurrentDirectory() {
@@ -69,7 +69,7 @@ public class LinuxCommandExecutor {
 
         this.currentDirectory = normalized;
 
-        DebugLogger.log("SANDBOX", "Sandbox update root at: " + currentDirectory);
+        log( "Sandbox update root at: " + currentDirectory);
         return new CommandResult("setCd", true,
                 "Directory set to: " + currentDirectory,
                 currentDirectory.toString(), null, 0);

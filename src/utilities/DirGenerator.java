@@ -5,7 +5,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.nio.charset.Charset;
 
-public class DirGenerator {
+public class DirGenerator implements Loggable {
 
     private static final Set<String> HIDDEN_EXTENSIONS = Set.of(
             ".secr"
@@ -49,7 +49,7 @@ public class DirGenerator {
             if (lineSeparator == null) lineSeparator = System.lineSeparator();
             if (encoding == null) encoding = "UTF-8";
             if (hiddenExtensions == null) hiddenExtensions = Set.of();
-            if(sandboxPath == null) sandboxPath = "";
+            if (sandboxPath == null) sandboxPath = "";
         }
 
         public static Builder builder() {
@@ -110,24 +110,24 @@ public class DirGenerator {
 
         try {
             if (configFilePath == null || configFilePath.trim().isEmpty()) {
-                DebugLogger.log("DIRGEN", "Config file path missing");
+                log("Config file path missing");
                 return new GenerationResult(false, "Config file path is required",
                         createdDirs, createdFiles, createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
             }
 
             Path path = Paths.get(configFilePath);
             if (!Files.exists(path)) {
-                DebugLogger.log("DIRGEN", "Config file not found: " + configFilePath);
+                log("Config file not found: " + configFilePath);
                 return new GenerationResult(false, "Config not found: " + configFilePath,
                         createdDirs, createdFiles, createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
             }
 
-            DebugLogger.log("DIRGEN", "Reading config from: " + path.toAbsolutePath());
+            log("Reading config from: " + path.toAbsolutePath());
 
             List<FileSystemEntry> entries = parseConfigFile(path, config);
 
             for (FileSystemEntry entry : entries) {
-                DebugLogger.log("DIRGEN", "Processing entry: " + entry.path());
+                log("Processing entry: " + entry.path());
                 processEntry(entry, config, createdDirs, createdFiles, createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
             }
 
@@ -137,13 +137,13 @@ public class DirGenerator {
                     createdHiddenFiles.size() + " hidden files, " +
                     createdLockedDirs.size() + " locked doors";
 
-            DebugLogger.log("DIRGEN", "Generation completed: " + message);
+            log("Generation completed: " + message);
 
             return new GenerationResult(errorPaths.isEmpty(), message,
                     createdDirs, createdFiles, createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
 
         } catch (Exception e) {
-            DebugLogger.log("DIRGEN", "Generation FAILED: " + e.getMessage());
+            log("Generation FAILED: " + e.getMessage());
             return new GenerationResult(false, "Generation failed: " + e.getMessage(),
                     createdDirs, createdFiles, createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
         }
@@ -161,7 +161,7 @@ public class DirGenerator {
         try {
             Path path = base.resolve(entry.path()).toAbsolutePath();
 
-            DebugLogger.log("DIRGEN", "Resolved path: " + path);
+            log("Resolved path: " + path);
 
             if (entry.isDirectory()) {
                 processDirectory(entry, path, config, createdDirs, createdLockedDirs, skippedPaths);
@@ -171,7 +171,7 @@ public class DirGenerator {
 
         } catch (Exception ex) {
             errorPaths.add(entry.path() + ": " + ex.getMessage());
-            DebugLogger.log("DIRGEN", "ERROR processing " + entry.path() + ": " + ex.getMessage());
+            log("ERROR processing " + entry.path() + ": " + ex.getMessage());
         }
     }
 
@@ -182,17 +182,16 @@ public class DirGenerator {
         if (!Files.exists(dir)) {
             Files.createDirectories(dir);
             createdDirs.add(dir.toString());
-            DebugLogger.log("DIRGEN", "Created directory: " + dir);
+            log("Created directory: " + dir);
 
-            // Create locked door if specified
             if (entry.locked() && config.createLockedDoors()) {
                 lockDirectoryWithChmod(dir);
                 createdLockedDirs.add(dir.toString());
-                DebugLogger.log("DIRGEN", "Created locked door: " + dir);
+                log("Created locked door: " + dir);
             }
         } else {
             skipped.add(dir.toString());
-            DebugLogger.log("DIRGEN", "Skipped existing directory: " + dir);
+            log("Skipped existing directory: " + dir);
         }
     }
 
@@ -200,21 +199,16 @@ public class DirGenerator {
         try {
             String os = System.getProperty("os.name").toLowerCase();
             if (!os.contains("win")) {
-                // On Unix/Linux/Mac: use chmod 000 to remove all permissions
                 Process process = new ProcessBuilder("chmod", "000", dir.toAbsolutePath().toString()).start();
                 int exitCode = process.waitFor();
-                if (exitCode == 0) {
-                    DebugLogger.log("DIRGEN", "Successfully locked directory with chmod: " + dir);
-                } else {
-                    DebugLogger.log("DIRGEN", "Failed to lock directory with chmod: " + dir);
-                }
+                log(exitCode == 0 ? "Successfully locked directory with chmod: " + dir
+                        : "Failed to lock directory with chmod: " + dir);
             } else {
-                // On Windows: use attrib +R for read-only (less effective but something)
                 new ProcessBuilder("attrib", "+R", dir.toAbsolutePath().toString()).start().waitFor();
-                DebugLogger.log("DIRGEN", "Applied read-only to directory on Windows: " + dir);
+                log("Applied read-only to directory on Windows: " + dir);
             }
         } catch (Exception e) {
-            DebugLogger.log("DIRGEN", "Could not lock directory: " + e.getMessage());
+            log("Could not lock directory: " + e.getMessage());
         }
     }
 
@@ -227,7 +221,7 @@ public class DirGenerator {
         if (parent != null && !Files.exists(parent)) {
             Files.createDirectories(parent);
             createdDirs.add(parent.toString());
-            DebugLogger.log("DIRGEN", "Created parent folder: " + parent);
+            log("Created parent folder: " + parent);
         }
 
         boolean shouldWrite = !Files.exists(file) || config.overwriteExisting();
@@ -235,7 +229,6 @@ public class DirGenerator {
         if (shouldWrite) {
             boolean hidden = entry.hidden() || shouldBeHidden(file, config);
 
-            // Determine the actual path - on Unix, prefix with . for hidden files
             Path finalPath = file;
             String os = System.getProperty("os.name").toLowerCase();
             if (hidden && !os.contains("win") && !file.getFileName().toString().startsWith(".")) {
@@ -245,23 +238,22 @@ public class DirGenerator {
             Files.write(finalPath, entry.content().getBytes(config.encoding()));
 
             if (hidden && config.createHiddenFiles()) {
-                // On Windows, hide after creation using attrib
                 if (os.contains("win")) {
                     try {
                         new ProcessBuilder("attrib", "+H", finalPath.toAbsolutePath().toString()).start().waitFor();
                     } catch (Exception e) {
-                        DebugLogger.log("DIRGEN", "Could not hide file on Windows: " + e.getMessage());
+                        log("Could not hide file on Windows: " + e.getMessage());
                     }
                 }
                 createdHidden.add(finalPath.toString());
-                DebugLogger.log("DIRGEN", "Created hidden file: " + finalPath);
+                log("Created hidden file: " + finalPath);
             } else {
                 createdFiles.add(finalPath.toString());
-                DebugLogger.log("DIRGEN", "Created file: " + finalPath);
+                log("Created file: " + finalPath);
             }
         } else {
             skipped.add(file.toString());
-            DebugLogger.log("DIRGEN", "Skipped existing file: " + file);
+            log("Skipped existing file: " + file);
         }
     }
 
@@ -293,7 +285,7 @@ public class DirGenerator {
             String line = raw.trim();
 
             if (line.isEmpty() || line.startsWith("#")) {
-                DebugLogger.log("DIRGEN", "Ignored blank/comment line " + lineNo);
+                log("Ignored blank/comment line " + lineNo);
                 continue;
             }
 
@@ -303,7 +295,7 @@ public class DirGenerator {
                 builder = null;
                 explicitHidden = false;
                 explicitLocked = true;
-                DebugLogger.log("DIRGEN", "Parsed LOCKED_DIR at line " + lineNo);
+                log("Parsed LOCKED_DIR at line " + lineNo);
             }
             else if (line.startsWith("HIDDEN_DIR:")) {
                 finish(entries, current, builder, explicitHidden, explicitLocked);
@@ -311,7 +303,7 @@ public class DirGenerator {
                 builder = null;
                 explicitHidden = true;
                 explicitLocked = false;
-                DebugLogger.log("DIRGEN", "Parsed HIDDEN_DIR at line " + lineNo);
+                log("Parsed HIDDEN_DIR at line " + lineNo);
             }
             else if (line.startsWith("DIR:")) {
                 finish(entries, current, builder, explicitHidden, explicitLocked);
@@ -319,7 +311,7 @@ public class DirGenerator {
                 builder = null;
                 explicitHidden = false;
                 explicitLocked = false;
-                DebugLogger.log("DIRGEN", "Parsed DIR at line " + lineNo);
+                log("Parsed DIR at line " + lineNo);
             }
             else if (line.startsWith("HIDDEN_FILE:")) {
                 finish(entries, current, builder, explicitHidden, explicitLocked);
@@ -327,7 +319,7 @@ public class DirGenerator {
                 builder = new StringBuilder();
                 explicitHidden = true;
                 explicitLocked = false;
-                DebugLogger.log("DIRGEN", "Parsed HIDDEN_FILE at line " + lineNo);
+                log("Parsed HIDDEN_FILE at line " + lineNo);
             }
             else if (line.startsWith("FILE:")) {
                 finish(entries, current, builder, explicitHidden, explicitLocked);
@@ -335,7 +327,7 @@ public class DirGenerator {
                 builder = new StringBuilder();
                 explicitHidden = false;
                 explicitLocked = false;
-                DebugLogger.log("DIRGEN", "Parsed FILE at line " + lineNo);
+                log("Parsed FILE at line " + lineNo);
             }
             else if (line.equals("END") || line.equals("END_FILE")) {
                 finish(entries, current, builder, explicitHidden, explicitLocked);
@@ -343,7 +335,7 @@ public class DirGenerator {
                 builder = null;
                 explicitHidden = false;
                 explicitLocked = false;
-                DebugLogger.log("DIRGEN", "Parsed END at line " + lineNo);
+                log("Parsed END at line " + lineNo);
             }
             else if (builder != null) {
                 builder.append(raw).append(config.lineSeparator());
@@ -355,19 +347,18 @@ public class DirGenerator {
                         config.hiddenExtensions().stream().anyMatch(line::endsWith);
                 boolean isLocked = line.contains("[LOCKED]");
 
-                // Remove [LOCKED] marker from path
                 String cleanPath = line.replace("[LOCKED]", "").trim();
 
                 entries.add(new FileSystemEntry(cleanPath, isDir, "", isHidden, isLocked));
                 current = null;
                 explicitHidden = false;
                 explicitLocked = false;
-                DebugLogger.log("DIRGEN", "Parsed standalone entry at line " + lineNo + ": " + cleanPath);
+                log("Parsed standalone entry at line " + lineNo + ": " + cleanPath);
             }
         }
 
         finish(entries, current, builder, explicitHidden, explicitLocked);
-        DebugLogger.log("DIRGEN", "Finished parsing config. Entries=" + entries.size());
+        log("Finished parsing config. Entries=" + entries.size());
 
         return entries;
     }
@@ -402,16 +393,16 @@ public class DirGenerator {
                 Process process = new ProcessBuilder("chmod", "755", dir.toAbsolutePath().toString()).start();
                 int exitCode = process.waitFor();
                 if (exitCode == 0) {
-                    DebugLogger.log("DIRGEN", "Successfully unlocked directory: " + dir);
+                    log("Successfully unlocked directory: " + dir);
                     return true;
                 }
             } else {
                 new ProcessBuilder("attrib", "-R", dir.toAbsolutePath().toString()).start().waitFor();
-                DebugLogger.log("DIRGEN", "Removed read-only from directory on Windows: " + dir);
+                log("Removed read-only from directory on Windows: " + dir);
                 return true;
             }
         } catch (Exception e) {
-            DebugLogger.log("DIRGEN", "Could not unlock directory: " + e.getMessage());
+            log("Could not unlock directory: " + e.getMessage());
         }
         return false;
     }

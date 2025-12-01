@@ -8,7 +8,7 @@ import java.util.Scanner;
  * screen clearing, typewriter text output, ASCII centering, and user
  * input pauses. Designed to work both in real terminals and IDE consoles.
  */
-public class CLIUtils {
+public class CLIUtils implements Loggable {
 
     private static Integer cachedTerminalWidth = null;
 
@@ -222,7 +222,7 @@ public class CLIUtils {
         if (columnsEnv != null) {
             try {
                 cachedTerminalWidth = Integer.parseInt(columnsEnv);
-                DebugLogger.log("CLIUtils", "Terminal width from COLUMNS env: " + cachedTerminalWidth);
+                Loggable.log("CLIUtils", "Terminal width from COLUMNS env: " + cachedTerminalWidth);
                 return cachedTerminalWidth;
             } catch (NumberFormatException ignored) {
             }
@@ -237,7 +237,7 @@ public class CLIUtils {
                     int cols = scanner.nextInt(); // columns
                     if (cols > 0) {
                         cachedTerminalWidth = cols;
-                        DebugLogger.log("CLIUtils", "Terminal width from stty: " + cachedTerminalWidth);
+                        Loggable.log("CLIUtils","Terminal width from stty: " + cachedTerminalWidth);
                         return cachedTerminalWidth;
                     }
                 }
@@ -247,7 +247,7 @@ public class CLIUtils {
 
         // 3. Fallback default
         cachedTerminalWidth = 125;
-        DebugLogger.log("CLIUtils", "Using fallback terminal width: " + cachedTerminalWidth);
+        Loggable.log("CLIUtils", "Using fallback terminal width: " + cachedTerminalWidth);
         return cachedTerminalWidth;
     }
 
