@@ -1,33 +1,103 @@
-DIR: level_7/
-DIR: level_7/kobold_tunnels/
-DIR: level_7/guard_post/
-DIR: level_7/permission_hall/
-LOCKED_DIR: level_7/access_master/
+# Level 4, Stage 7.
+# Warrior Knight
+# Goal / Interaction: Unlock blocked doors using hidden keys
+# Objects: Locked doors, hidden keys, scroll guides, enemies
+# Commands / Mechanics: mv key ./door/, chmod (simulated), ls, cd, cat
 
-FILE: level_7/kobold_tunnels/welcome.txt
-Warrior Knight Level 1: Learn permissions
-Command: chmod
+# Directories
+DIR: level_4/
+DIR: level_4/outer_gate/
+DIR: level_4/outer_gate/patrol/
+DIR: level_4/inner_courtyard/
+DIR: level_4/inner_courtyard/guard_room/
+DIR: level_4/inner_courtyard/training_hall/
+DIR: level_4/inner_courtyard/training_hall/secret_chamber/
+LOCKED_DIR: level_4/command_hall/
+LOCKED_DIR: level_4/access_master/
 
-FILE: level_7/guard_post/lesson_1.txt
-Some areas need permission changes
-Use chmod to access them
+# Files
+FILE: level_4/outer_gate/welcome.txt
+Warrior Knight Level 1: Learn basic permissions.
+Observe the sentries and hidden traps.
+END
 
-FILE: level_7/permission_hall/practice.txt
-Practice permission commands
-Learn to control access
+FILE: level_4/outer_gate/patrol/kobold.mob
+Kobold patrolling the outer gate.
+END
 
-FILE: level_7/kobold_tunnels/kobold.mob
-Kobold guard blocks path
+HIDDEN_FILE: level_4/outer_gate/.outer_key.secr
+Key to the inner courtyard.
+END
 
-FILE: level_7/guard_post/kobold.mob
-Kobold sentry at post
+FILE: level_4/inner_courtyard/lesson_1.txt
+To advance, you must place keys in blocked doors.
+Remember: enemies prevent you from taking keys.
+END
 
-FILE: level_7/permission_hall/goblin.mob
-Goblin in training area
+FILE: level_4/inner_courtyard/guard_room/kobold.mob
+Kobold guard at the inner courtyard.
+END
 
-HIDDEN_FILE: level_7/guard_post/.guard_key.secr
-Key for permission mastery
+FILE: level_4/inner_courtyard/training_hall/practice.txt
+Practice permission commands here.
+Use mv and chmod wisely.
+END
 
-FILE: level_7/access_master/challenge.txt
-Test your permission skills
-Access controlled areas
+FILE: level_4/inner_courtyard/training_hall/goblin.mob
+Goblin blocks a corner near hidden keys.
+END
+
+FILE: level_4/inner_courtyard/training_hall/secret_chamber/scroll.txt
+Welcome, Warrior Knight.
+Guide for this stage:
+1. Hidden keys are scattered; find them with ls and cd.
+2. Keys cannot be picked up if enemies exist in the same folder.
+3. Use mv <key> ./<door>/ to move keys.
+4. Use chmod <permissions> <door> to simulate unlocking.
+5. Check secret chambers for additional hints.
+END
+
+HIDDEN_FILE: level_4/inner_courtyard/training_hall/secret_chamber/.training_key.secr
+Key for permission mastery.
+END
+
+FILE: level_4/command_hall/challenge.txt
+Apply all keys in the correct order.
+Simulate chmod to unlock doors.
+Avoid enemies while grabbing keys.
+END
+
+FILE: level_4/access_master/final_challenge.txt
+The final challenge awaits.
+All doors unlocked? All keys placed correctly?
+Beware of traps and hidden mobs!
+END
+
+FILE: level_4/access_master/goblin.mob
+Final goblin sentinel guarding the master access.
+END
+
+# Game Flow
+# type "You step into the outer gate; sentries patrol the area."
+# type "Enemies prevent careless grabs — keys cannot be picked up if a mob is present."
+# type "Use ls to inspect folders, cd to move, tree to inspect structure."
+# type "Check patrol paths, training halls, and secret chambers for hidden keys and scrolls."
+# type "Read scroll.txt to find guides and hints."
+# type "Use mv <key_file> ./<door_directory>/ to place keys and chmod <permissions> <door> to unlock."
+# type "Advance carefully through inner courtyard to command hall."
+# input
+# continue
+#
+# After player unlocks command_hall and access_master:
+# type "Doors unlock with a click, mobs retreat, keys secured."
+# type "'Stage 7 complete. Your strategy, observation, and courage have been tested and proven.'"
+# type "\"Prepare for the next challenge, Warrior Knight.\""
+
+# Rules
+# 1. An item cannot be picked up if any enemy (.mob file) exists in the same folder.
+# 2. Use ls, cd to inspect folder structures and locate hidden files.
+# 3. Use mv <key> ./<door>/ to move keys to blocked directories.
+# 4. Use chmod <permissions> <door> to simulate unlocking doors.
+# 5. Secret chambers may contain scroll.txt guides or extra keys; explore thoroughly.
+# 6. Some enemies may be in hidden or nested folders; strategy and observation are key.
+# 7. Trees are disabled here
