@@ -26,8 +26,7 @@ import java.nio.file.Path;
  *
  * // Create enemy in a folder
  * // Register player so that it can take damage
- * Enemy goblin = new Enemy("GoblinGuard", "goblin_01", 5, Path.of("sandbox/root/guard_post/goblin.mob"))
- *                  .setPlayer(player);
+ * Enemy goblin = new Goblin("001", Path.of("./sandbox/guard_post/goblin.mob"));
  *
  * // Register enemy as blocker and listener
  * executor.addBlocker(goblin);

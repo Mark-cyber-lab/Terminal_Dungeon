@@ -6,10 +6,16 @@ import java.util.List;
 
 public class Mission {
 
-    public final List<Enemy> enemies = new ArrayList<>();
+    private final List<Enemy> enemies = new ArrayList<>();
 
-    public void addEnemy(Enemy enemy) {
+    public Mission addEnemy(Enemy enemy) {
         this.enemies.add(enemy);
+
+        return this;
+    }
+
+    public List<Enemy> getEnemies() {
+        return this.enemies;
     }
 
     public boolean isFulfilled() {

@@ -1,5 +1,6 @@
 import core.levels.Level1_Squire;
 import core.levels.Level2_Apprentice_Knight;
+import core.levels.Level4_Warrior_Knight;
 import engine.Sandbox;
 import core.*;
 import core.levels.Level;
@@ -23,6 +24,7 @@ public class NewStage implements Loggable {
     private void initializeLevels() {
         levels.add(new Level1_Squire(sandbox, player));
         levels.add(new Level2_Apprentice_Knight(sandbox, player));
+        levels.add(new Level4_Warrior_Knight(sandbox, player));
     }
 
     public void upStage() throws IOException {
