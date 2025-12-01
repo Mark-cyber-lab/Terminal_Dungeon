@@ -20,7 +20,6 @@ public class LinuxCommandExecutor implements Loggable {
 
     private static final Logger logger = Logger.getLogger(LinuxCommandExecutor.class.getName());
     private static final String OS = System.getProperty("os.name").toLowerCase();
-    private final PasswordManager passwordManager = new PasswordManager("password"); // default password
 
     // === MEMORY / STATE ===
     private Path currentDirectory;
@@ -458,15 +457,15 @@ public class LinuxCommandExecutor implements Loggable {
      */
     private boolean internalSudo(String[] inputParts) {
         // Prompt user for password silently
-        String enteredPassword = passwordManager.promptPassword("[sudo] Enter password: ");
-
-        // Verify password
-        if (!passwordManager.verifyPassword(enteredPassword)) {
-            IO.println("sudo: authentication failure");
-            return false;
-        }
-
-        IO.println("[sudo] Privilege check passed for: " + String.join(" ", inputParts));
+//        String enteredPassword = passwordManager.promptPassword("[sudo] Enter password: ");
+//
+//        // Verify password
+//        if (!passwordManager.verifyPassword(enteredPassword)) {
+//            IO.println("sudo: authentication failure");
+//            return false;
+//        }
+//
+//        IO.println("[sudo] Privilege check passed for: " + String.join(" ", inputParts));
         return true;
     }
 
