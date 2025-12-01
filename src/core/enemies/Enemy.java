@@ -1,4 +1,4 @@
-package core;
+package core.enemies;
 
 import core.listeners.Blocker;
 import core.listeners.CommandListener;
@@ -55,6 +55,12 @@ public class Enemy implements Blocker, CommandListener, Loggable {
         }
 
         // Enemy can be defeated if a special command is used
+        executeConditions(result);
+    }
+
+    protected void executeConditions (CommandResult result) {
+        String cmd = result.command().toLowerCase();
+
         if (!hasBeenDefeated && cmd.equals("rm") && result.subject() != null) {
             if (result.subject().equalsIgnoreCase(name)) {
                 clear();
