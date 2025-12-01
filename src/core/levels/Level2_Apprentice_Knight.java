@@ -59,16 +59,17 @@ public class Level2_Apprentice_Knight extends Level {
 
                 if (input.equalsIgnoreCase("e") || input.equalsIgnoreCase("exit")) {
                     break;
+                } else if (input.equals("Done")) {
+                    success = true;
                 }
 
                 if (input.startsWith("cat")) {
                     sandbox.getExecutor().executeCommand(input.split(" "));
                     if(!correct) {
-                        CLIUtils.typewriter("Correct. now explore the all the corridors of dungeon", 25);
-                        CLIUtils.typewriter("you might uncover some secrets of the world.", 25);
+                        CLIUtils.typewriter("Correct." + "\nNow explore all the corridors of dungeon and find", 25);
+                        CLIUtils.typewriter("the key that contains the magic word to move on next stage.", 25);
                         correct = true;
                     }
-                    CLIUtils.typewriter("Type \"Done\" if you want to move on to the next stage.", 25);
                 } else {
                     IO.println("The spirits whisper: \"That is not the command you were meant to use.\"");
                     IO.println("Try using **cat** ./<file_name.txt>**");

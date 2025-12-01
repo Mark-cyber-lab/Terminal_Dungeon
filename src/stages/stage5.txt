@@ -1,30 +1,38 @@
-DIR: level_5/
-DIR: level_5/combat_training/
-DIR: level_5/goblin_caves/
-DIR: level_5/arena/
-LOCKED_DIR: level_5/combat_master/
+DIR: combat_training/
+DIR: goblin_caves/
+DIR: arena/
+DIR: combat_master/
+DIR: combat_master/next_stage/portal
 
-FILE: level_5/combat_training/welcome.txt
+FILE: combat_training/welcome.txt
 Scout Knight Level 1: Learn combat
 Command: rm
 
-FILE: level_5/goblin_caves/lesson_1.txt
+FILE: goblin_caves/lesson_1.txt
 Use 'rm enemy.mob' to defeat foes
 Start with weak goblins
 
-FILE: level_5/arena/practice.txt
+FILE: arena/practice.txt
 Practice combat techniques
 Face single enemies
 
-FILE: level_5/goblin_caves/goblin.mob
+FILE: goblin_caves/goblin.mob
 A weak goblin stands guard
 
-FILE: level_5/arena/goblin.mob
+FILE: arena/goblin.mob
 Training goblin for practice
 
-HIDDEN_FILE: level_5/combat_training/.training_key.secr
-Key earned through basic combat
+FILE: combat_training/combat.txt
+You can defeat multiple enemies by
+chaining the command for example:
+rm goblin.mob zombie.mob
 
-FILE: level_5/combat_master/challenge.txt
-Test your basic combat skills
-Defeat the training master
+FILE: combat_training/goblin.mob
+Training goblin for practice
+
+FILE: combat_training/zombie.mob
+Training zombie for practice
+
+FILE: combat_master/key.txt
+Test your basic combat skills. Defeat the training master
+GO to the next corridor to continue...

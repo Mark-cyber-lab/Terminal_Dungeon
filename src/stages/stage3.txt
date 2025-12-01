@@ -100,15 +100,6 @@ Start your search where battles end and peace begins
 FILE: exploration_hall/northern_archive/restricted_section/prophecy_clue.txt
 He who masters both movement and stillness shall speak the word
 
-HIDDEN_FILE: exploration_hall/.explorer_key.secr
-Key for those who master exploration
-
-HIDDEN_FILE: exploration_hall/eastern_wing/.secret_passage.secr
-Leads to hidden archives
-
-HIDDEN_FILE: exploration_hall/western_wing/observatory/.telescope.secr
-Reveals hidden paths in maze
-
 FILE: pathfinding_maze/challenge.txt
 Navigate this complex maze
 Use all navigation commands
@@ -173,9 +164,11 @@ Where paths become sentient
 And directories shift like sand
 
 FILE: mastery_chamber/next_stage/forbidden_library/preview.txt
-Next Stage: Forbidden Library
-Ancient knowledge awaits
+Next Stage: Ancient knowledge awaits
 But beware the living texts
+
+FILE: mastery_chamber/next_stage/forbidden_library/key.txt
+Type "Done" to move to the next stage
 
 FILE: mastery_chamber/meditation_room/reflections.txt
 You have learned well, Apprentice Knight

@@ -1,37 +1,39 @@
-DIR: level_6/
-DIR: level_6/advanced_combat/
-DIR: level_6/warrior_hall/
-DIR: level_6/group_battle/
-LOCKED_DIR: level_6/combat_champion/
+DIR: advanced_combat/
+DIR: warrior_hall/
+DIR: group_battle/
+DIR: combat_champion/
+DIR: combat_champion/next_stage/portal
 
-FILE: level_6/advanced_combat/welcome.txt
+FILE: advanced_combat/welcome.txt
 Scout Knight Level 2: Master combat
 Face multiple enemies
 
-FILE: level_6/warrior_hall/lesson_1.txt
+FILE: warrior_hall/lesson_1.txt
 Fight stronger goblins
 Some enemies are tougher
 
-FILE: level_6/group_battle/challenge.txt
+FILE: group_battle/challenge.txt
 Face groups of enemies
 Learn to handle multiple threats
 
-FILE: level_6/advanced_combat/goblin.mob
+FILE: advanced_combat/goblin.mob
 Stronger goblin warrior
 
-FILE: level_6/warrior_hall/goblin.mob
+FILE: warrior_hall/kobold.mob
 Experienced goblin fighter
-FILE: level_6/warrior_hall/goblin.mob
+
+FILE: warrior_hall/zombie.mob
 Another warrior goblin
 
-FILE: level_6/group_battle/goblin.mob
-Goblin squad member
-FILE: level_6/group_battle/goblin.mob
+FILE: group_battle/ghoul.mob
 Goblin squad member
 
-HIDDEN_FILE: level_6/warrior_hall/.warrior_key.secr
-Key earned through advanced combat
+FILE: group_battle/ogre.mob
+Goblin squad member
 
-FILE: level_6/combat_champion/test.txt
-Final combat challenge
-Face the combat champion
+FILE: /warrior_hall/next_stage/key.txt
+move onto the next corridor to go to next stage
+
+FILE: combat_champion/vampire.mob
+Boss mob for this level
+
