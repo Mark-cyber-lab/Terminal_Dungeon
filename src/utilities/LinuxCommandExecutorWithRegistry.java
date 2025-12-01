@@ -23,16 +23,33 @@ public class LinuxCommandExecutorWithRegistry extends LinuxCommandExecutor {
         registry.unregisterListener(listener);
     }
 
-    public void addBlocker(Blocker blocker) {
+    public LinuxCommandExecutorWithRegistry addBlocker(Blocker blocker) {
         registry.registerBlocker(blocker);
         // Optionally, auto-register as listener if it reacts to commands
         if (blocker instanceof CommandListener) {
             addCommandListener((CommandListener) blocker);
         }
+
+        return this;
     }
+
+    public LinuxCommandExecutorWithRegistry addBlocker(Blocker[] blockers) {
+        for (Blocker blocker : blockers) {
+            addBlocker(blocker);
+        }
+
+        return this;
+    }
+
 
     public void removeBlocker(Blocker blocker) {
         registry.unregisterBlocker(blocker);
+    }
+
+    public void removeBlocker(Blocker[] blockers) {
+        for (Blocker blocker : blockers) {
+            removeBlocker(blocker);
+        }
     }
 
     @Override
