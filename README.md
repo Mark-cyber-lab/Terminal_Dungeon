@@ -115,6 +115,24 @@ Embark on your journey through the **Terminal Dungeon**, a mystical realm of dir
 | 🐲 Kobold | Tough enemy | Enemies | Stronger variant of enemy, requires special command | Use `sudo rm <kobold>` (simulated) to defeat |
 | 🧙 Wizard | Deciphers scrolls | Ally | Provides guidance and unlocks new features when given scrolls | Deliver hidden scrolls using `mv <scroll> ./wizard/` |
 
+#### Enemy Damage Rules:
+
+- You take damage if you are in the same folder with an enemy and type a wrong command.
+
+- After deleting one enemy, the remaining enemies in the folder automatically deduct their damage from your health.
+
+- Damage values (base HP = 100):
+
+  - Goblins = 5 per unit
+
+  - Kobolds = 10 per unit
+
+#### Notes:
+
+- Players can handle multiple .mob files simultaneously.
+
+- Each enemy type has a different damage value and acts independently in the same folder.
+
 ---
 
 ### 2. Items

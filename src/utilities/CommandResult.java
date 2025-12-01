@@ -1,5 +1,7 @@
 package utilities;
 
+import java.nio.file.Path;
+
 public record CommandResult(
         String command,
         boolean success,
@@ -30,5 +32,11 @@ public record CommandResult(
                 ", subject='" + subject + '\'' +
                 ", output='" + output + '\'' +
                 '}';
+    }
+
+    public Path getFileFullPath () {
+        return  (subject == null || subject.isBlank())
+                ? null
+                : Path.of(path).resolve(subject).normalize();
     }
 }

@@ -41,6 +41,7 @@ public class ListenerRegistry implements Loggable {
     public List<Blocker> activeBlockersInFolder(Path folder) {
         List<Blocker> active = new ArrayList<>();
         for (Blocker b : blockers) {
+            IO.println("Active blockers: " + b.getFilePath());
             if (!b.isCleared() && b.blocks(folder)) {
                 active.add(b);
             }
@@ -48,4 +49,33 @@ public class ListenerRegistry implements Loggable {
         log("Found " + active.size() + " active blockers in folder: " + folder);
         return active;
     }
+
+    public List<Blocker> activeBlockersInFolder(Path folder, Path exceptPath) {
+        Path absFolder = folder.toAbsolutePath().normalize();
+        Path absExcept = exceptPath != null ? exceptPath.toAbsolutePath().normalize() : null;
+
+        List<Blocker> active = new ArrayList<>();
+
+        for (Blocker b : blockers) {
+
+            Path blockerPath = b.getFilePath().toAbsolutePath().normalize();
+
+            // Debug
+//            IO.println("Except: " + absExcept);
+//            IO.println("Checking blocker: " + blockerPath);
+
+            if (blockerPath.equals(absExcept)) {
+                log("Skipped (exceptPath matched): " + blockerPath);
+                continue;
+            }
+
+            if (!b.isCleared() && b.blocks(absFolder)) {
+                active.add(b);
+            }
+        }
+
+        log("Found " + active.size() + " active blockers in folder: " + absFolder);
+        return active;
+    }
+
 }

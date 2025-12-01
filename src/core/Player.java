@@ -1,5 +1,6 @@
 package core;
 
+import core.enemies.Enemy;
 import core.levels.Level;
 import core.storage.Inventory;
 import utilities.AsciiArt;

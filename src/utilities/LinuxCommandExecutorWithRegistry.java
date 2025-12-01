@@ -38,19 +38,23 @@ public class LinuxCommandExecutorWithRegistry extends LinuxCommandExecutor {
     @Override
     public CommandResult executeCommand(String... inputParts) {
         CommandResult result = super.executeCommand(inputParts);
+        Path exceptPath = result.getFileFullPath();
 
         // Notify all listeners
         registry.notifyListeners(result);
 
+//        IO.println("Successfully executed command");
         // Check for active blockers in current folder
         Path currentDir = getCurrentDirectory();
-        List<Blocker> activeBlockers = registry.activeBlockersInFolder(currentDir);
+        List<Blocker> activeBlockers =
+                registry.activeBlockersInFolder(currentDir, exceptPath);
         if (!activeBlockers.isEmpty()) {
-            System.out.println("[Game Rule] Action blocked by:");
+            log("[Game Rule] Action blocked by:");
             for (Blocker b : activeBlockers) {
-                System.out.println(" - " + b.getName());
+                log("                - " + b.getName());
             }
         }
+
 
         return result;
     }

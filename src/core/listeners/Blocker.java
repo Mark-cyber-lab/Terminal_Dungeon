@@ -7,4 +7,5 @@ public interface Blocker {
     boolean blocks(Path folder);
     boolean isCleared();
     void clear();
+    Path getFilePath();
 }
