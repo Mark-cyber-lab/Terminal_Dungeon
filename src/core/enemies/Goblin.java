@@ -13,6 +13,9 @@ import java.nio.file.Path;
  * </p>
  * <p><b>Example usage:</b></p>
  * <pre>
+ *  // if you are in side the Level or Stage class
+ *  level.sandbox.getExecutor().addBlocker(goblin);\
+ *
  * LinuxCommandExecutorWithRegistry executor =
  *         new LinuxCommandExecutorWithRegistry("sandbox/root");
  *
