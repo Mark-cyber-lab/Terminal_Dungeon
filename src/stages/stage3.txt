@@ -1,8 +1,3 @@
-# Level 2, Stage 3.
-# Apprentice Knight - Advanced Navigation
-# Goal / Interaction: Master directory navigation (pwd, ls, cd, cat)
-# Theme: Complex exploration through advanced training grounds
-
 DIR: advanced_training/
 DIR: advanced_training/combat_prep/
 DIR: advanced_training/strategy_room/
@@ -77,6 +72,33 @@ Where commands have power
 FILE: exploration_hall/northern_archive/restricted_section/prophecy.txt
 One who masters navigation
 Shall unlock the next_stage
+
+FILE: mastery_chamber/meditation_room/final_test.txt
+Please type "Done" to move onto the next area
+
+FILE: advanced_training/strategy_room/hint.txt
+The final meditation reveals completion
+
+FILE: exploration_hall/eastern_wing/clue.txt
+Where warriors find peace, the word awaits
+
+FILE: exploration_hall/western_wing/observatory/direction.txt
+Look to the chamber of quiet reflection
+
+FILE: pathfinding_maze/delta_sector/final_challenge/guidance.txt
+After all challenges, find stillness to continue
+
+FILE: mastery_chamber/forbidden_library/ancient_hint.txt
+The answer lies where mind and path become one
+
+FILE: mastery_chamber/next_stage/access_hint.txt
+Before proceeding, complete your journey in the room of contemplation
+
+FILE: pathfinding_maze/alpha_sector/beginning_clue.txt
+Start your search where battles end and peace begins
+
+FILE: exploration_hall/northern_archive/restricted_section/prophecy_clue.txt
+He who masters both movement and stillness shall speak the word
 
 HIDDEN_FILE: exploration_hall/.explorer_key.secr
 Key for those who master exploration
@@ -166,97 +188,3 @@ Now you must master the art of navigation in complex environments.
 Use pwd to know your location, ls to see what surrounds you,
 cd to move between chambers, and cat to read the ancient texts.
 Prove yourself worthy of advancement.
-
-
-# Game Flow
-# type "The stone doors grind open, revealing a vast network of interconnected chambers."
-# type "The Old Knight stands at the threshold, his armor reflecting the torchlight."
-# type "\"Welcome to the Advanced Training Grounds, Apprentice Knight. Here, paths twist and secrets hide in plain sight.\""
-# type "\"First, know your starting point. Show me where you stand: pwd\""
-# input
-# continue
-#
-# After 'pwd':
-# type "\"Good. In these complex halls, losing your bearings means losing your way.\""
-# type "\"Now survey the training areas available to you. Reveal the chambers: ls\""
-# input
-# continue
-#
-# After 'ls':
-# type "Multiple paths branch out from the central hall, some leading to deeper complexities."
-# type "\"Begin with the Advanced Training chamber. Enter: cd advanced_training\""
-# input (only accept cd advanced_training)
-# continue
-#
-# Inside advanced_training/:
-# type "Ancient training dummies stand in precise formations, their surfaces worn smooth by centuries of practice."
-# type "\"Explore the sub-chambers here. Use ls to see combat_prep, strategy_room, and techniques.\""
-# type "\"Read the welcome message: cat welcome.txt\""
-# input (player should explore subdirectories and read files)
-# continue
-#
-# After exploring advanced_training:
-# type "\"The pwd command is your anchor in complex spaces. Remember this.\""
-# type "\"Now return to the central hall and continue your exploration: cd ..\""
-# input
-# continue
-#
-# Back at level_2/:
-# type "\"Next, the Exploration Hall. A vast network of wings and archives.\""
-# type "\"Enter: cd exploration_hall\""
-# input
-# continue
-#
-# Inside exploration_hall/:
-# type "The hall stretches into darkness, with multiple wings branching in different directions."
-# type "\"You must explore all wings and their sub-chambers to find the map fragments.\""
-# type "\"Look around carefully: ls\""
-# input
-# continue
-#
-# Player explores eastern_wing, western_wing, northern_archive and their subdirectories:
-# type "\"Excellent. You've gathered the map fragments and found hidden secrets.\""
-# type "\"The fragments point you toward the pathfinding_maze. Return and enter it.\""
-# input
-# continue
-#
-# Back at level_2/ then into pathfinding_maze/:
-# type "The knight points toward a labyrinthine structure glowing with faint blue light."
-# type "\"The Pathfinding Maze has four sectors with multiple corridors each.\""
-# type "\"Enter: cd pathfinding_maze\""
-# input
-# continue
-#
-# Inside pathfinding_maze/:
-# type "Corridors branch in multiple directions, each sector more complex than the last."
-# type "\"Navigate through all four sectors and their sub-corridors.\""
-# type "\"Use ls and cd to find your way through each instruction.\""
-# input (player must navigate all sectors and subdirectories)
-# continue
-#
-# After completing all maze sectors:
-# type "\"You've mastered the maze! Now to the final challenge.\""
-# type "\"Return and enter the mastery_chamber: cd ../mastery_chamber\""
-# input
-# continue
-#
-# Inside mastery_chamber/:
-# type "The air hums with ancient power. Multiple chambers await your command."
-# type "\"Explore the forbidden_library, meditation_room, and next_stage areas.\""
-# type "\"Prove you have visited all areas of Level 2.\""
-# input (player explores all subdirectories and reads files)
-# continue
-#
-# After exploring mastery_chamber completely:
-# type "The runes flare brightly, then settle into a steady glow."
-# type "The next_stage directory reveals its true purpose."
-# type "The Old Knight approaches, a rare smile visible beneath his helmet."
-# type "\"You have mastered the art of navigation in complex environments.\""
-# type "\"You have proven yourself worthy of advancement.\""
-# type "\"When ready to continue your journey, speak: it's done\""
-# input (only accept: it's done)
-# continue
-#
-# type "The chambers seem to bow in respect as the next_stage glows brighter."
-# type "\"You are no longer a mere Apprentice Knight. You are a Navigator of Paths.\""
-# type "\"The next stage awaits your command...\""
