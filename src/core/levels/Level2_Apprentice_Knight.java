@@ -51,10 +51,9 @@ public class Level2_Apprentice_Knight extends Level {
             boolean success = false;
             boolean correct = false;
             while (!success) {
-                IO.println("Type 'cat scroll.txt' to read the scroll.");
-                IO.println();
+                IO.println("Type 'cat scroll.txt' to read the scroll.\n");
+                IO.print(">> ");
 
-                System.out.print(">> ");
                 String input = IO.readln().trim();
 
                 if (input.equalsIgnoreCase("e") || input.equalsIgnoreCase("exit")) {
@@ -125,14 +124,14 @@ public class Level2_Apprentice_Knight extends Level {
 
             boolean success = false;
             while (!success) {
-                System.out.print(">> ");
+                IO.print(">> ");
                 String input = IO.readln().trim();
 
                 if (input.equalsIgnoreCase("e") || input.equalsIgnoreCase("exit")) {
                     break;
                 }
 
-                if (input.startsWith("cat") || input.startsWith("cd") || input.startsWith("ls") || input.startsWith("pwd")) {
+                if (input.startsWith("cat") || input.startsWith("cd") || input.startsWith("ls") || input.startsWith("pwd") || input.startsWith("tree")) {
                     commandResult = sandbox.getExecutor().executeCommand(input.split(" "));
                     if (input.startsWith("cd")){
                          String[] splittedResult = commandResult.path().split("\\\\");
@@ -146,7 +145,6 @@ public class Level2_Apprentice_Knight extends Level {
                     }
                 } else {
                     IO.println("The spirits whisper: \"That is not the command you were meant to use.\"");
-                    IO.println("Try using **cat** ./<file_name.txt>**");
                     continue;
                 }
 
