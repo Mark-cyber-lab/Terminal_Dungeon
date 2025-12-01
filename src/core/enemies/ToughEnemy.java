@@ -10,11 +10,11 @@ public class ToughEnemy extends  Enemy {
     }
 
     @Override
-    protected void executeConditions(CommandResult result) {
+    protected void executeConditions(CommandResult result, boolean sameFilePath) {
         String cmd = result.command().toLowerCase();
 
         if (!hasBeenDefeated() && cmd.equals("sudo rm") && result.subject() != null) {
-            if (result.subject().equalsIgnoreCase(getName())) {
+            if (sameFilePath) {
                 clear();
             }
         }
