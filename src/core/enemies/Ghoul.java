@@ -1,0 +1,12 @@
+package core.enemies;
+
+import java.nio.file.Path;
+
+public class Ghoul extends Enemy {
+    private  static final  String NAME = "ghoul";
+    private  static final  int DAMAGE = 20;
+
+    public Ghoul(String id, Path enemyPath) {
+        super(NAME, NAME + id, enemyPath, DAMAGE);
+    }
+}

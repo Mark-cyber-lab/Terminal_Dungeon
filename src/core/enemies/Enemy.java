@@ -45,46 +45,32 @@ import java.nio.file.Path;
  */
 public class Enemy implements Blocker, CommandListener, Loggable {
 
-    /**
-     * Enemy's display name.
-     */
+    //Enemy's display name.
     private final String name;
 
-    /**
-     * Unique enemy identifier.
-     */
+    //Unique enemy identifier.
     private final String id;
 
-    /**
-     * Path to the file representing the enemy in the sandbox.
-     */
+    //Path to the file representing the enemy in the sandbox.
     private final Path enemyFilePath;
 
-    /**
-     * Whether the enemy has been defeated.
-     */
+    //Whether the enemy has been defeated.
     private boolean hasBeenDefeated;
 
-    /**
-     * Cached check for file path equality on command execution.
-     */
+    //Cached check for file path equality on command execution.
     private boolean isSameFilePath;
 
-    /**
-     * Base HP assumed for player. Can be adjusted externally.
-     */
+
+    //Base HP assumed for player. Can be adjusted externally.
     private static final int BASE_HP = 100;
 
-    /**
-     * Damage dealt by this enemy type.
-     */
+    //Damage dealt by this enemy type.
     private final int damagePerUnit;
 
     private Player player;
 
-    /**
-     * Represents an enemy within the terminal dungeon environment. * <p> * Enemies act as blockers for certain directories and listen for specific commands * (like {@code rm}) to allow the player to defeat them. They can be registered * with a {@link LinuxCommandExecutorWithRegistry} as both a blocker and a command listener. * </p> * <p><b>Example usage:</b></p> * <pre> * LinuxCommandExecutorWithRegistry executor = * new LinuxCommandExecutorWithRegistry("sandbox/root"); * * // Create enemy in a folder * Enemy goblin = new Enemy("GoblinGuard", "goblin_01", Path.of("sandbox/root/guard_post/goblin.mob")); * * // Register enemy as blocker and listener * executor.addBlocker(goblin); * * // Player tries to touch a file in guarded folder * executor.setCurrentDirectory("guard_post"); * executor.executeCommand("touch", "secret.txt"); // Goblin blocks * * // Player attacks goblin * executor.executeCommand("rm", "goblin.mob"); * * // Remove listener * executor.removeCommandListener(goblin); * </pre>
-     */
+
+    //Represents an enemy within the terminal dungeon environment. * <p> * Enemies act as blockers for certain directories and listen for specific commands * (like {@code rm}) to allow the player to defeat them. They can be registered * with a {@link LinuxCommandExecutorWithRegistry} as both a blocker and a command listener. * </p> * <p><b>Example usage:</b></p> * <pre> * LinuxCommandExecutorWithRegistry executor = * new LinuxCommandExecutorWithRegistry("sandbox/root"); * * // Create enemy in a folder * Enemy goblin = new Enemy("GoblinGuard", "goblin_01", Path.of("sandbox/root/guard_post/goblin.mob")); * * // Register enemy as blocker and listener * executor.addBlocker(goblin); * * // Player tries to touch a file in guarded folder * executor.setCurrentDirectory("guard_post"); * executor.executeCommand("touch", "secret.txt"); // Goblin blocks * * // Player attacks goblin * executor.executeCommand("rm", "goblin.mob"); * * // Remove listener * executor.removeCommandListener(goblin); * </pre>
     public Enemy(String name, String id, Path enemyPath, int damagePerUnit) {
         this.name = name;
         this.id = id;
@@ -97,8 +83,6 @@ public class Enemy implements Blocker, CommandListener, Loggable {
         this.player = player;
         return this;
     }
-
-    // --- Blocker interface ---
 
     @Override
     public String getName() {
