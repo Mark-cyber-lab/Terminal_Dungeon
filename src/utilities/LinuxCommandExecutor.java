@@ -20,6 +20,7 @@ public class LinuxCommandExecutor implements Loggable {
 
     private static final Logger logger = Logger.getLogger(LinuxCommandExecutor.class.getName());
     private static final String OS = System.getProperty("os.name").toLowerCase();
+    private final PasswordManager passwordManager = new PasswordManager("password"); // default password
 
     // === MEMORY / STATE ===
     private Path currentDirectory;
@@ -136,6 +137,26 @@ public class LinuxCommandExecutor implements Loggable {
 
         String cmd = inputParts[0].toLowerCase(Locale.ROOT);
 
+        // --- Check for sudo ---
+        if (cmd.equals("sudo")) {
+            if (inputParts.length < 2) {
+                return new CommandResult("sudo", false, "sudo: missing command", currentDirectory.toString(), null, 1);
+            }
+            // Pass everything after 'sudo' to internalSudo for privilege check
+            String[] sudoCommand = Arrays.copyOfRange(inputParts, 1, inputParts.length);
+            boolean allowed = internalSudo(sudoCommand);
+            if (!allowed) {
+                String msg = "sudo: privilege check failed for command: " + String.join(" ", sudoCommand);
+                IO.println(msg);
+                return new CommandResult("sudo", false, msg, currentDirectory.toString(), String.join(" ", sudoCommand), 1);
+            }
+
+            // Remove 'sudo' and continue to normal execution below
+            inputParts = sudoCommand;
+            cmd = inputParts[0].toLowerCase(Locale.ROOT);
+        }
+
+        // Normal command handling
         return switch (cmd) {
             case "cd" -> internalCd(inputParts);
             case "pwd" -> internalPwd();
@@ -426,6 +447,27 @@ public class LinuxCommandExecutor implements Loggable {
             boolean last = (i == children.size() - 1);
             buildTree(base, child, sb, indent + (path.equals(base) ? "" : (isLast ? "    " : "│   ")), last);
         }
+    }
+
+    /**
+     * Checks if the user has privileges to execute a sudo command.
+     * Prompts for password using PasswordManager.
+     *
+     * @param inputParts the command arguments after 'sudo'
+     * @return true if password is correct and privileges are granted, false otherwise
+     */
+    private boolean internalSudo(String[] inputParts) {
+        // Prompt user for password silently
+        String enteredPassword = passwordManager.promptPassword("[sudo] Enter password: ");
+
+        // Verify password
+        if (!passwordManager.verifyPassword(enteredPassword)) {
+            IO.println("sudo: authentication failure");
+            return false;
+        }
+
+        IO.println("[sudo] Privilege check passed for: " + String.join(" ", inputParts));
+        return true;
     }
 
     private CommandResult internalRm(String[] parts) {

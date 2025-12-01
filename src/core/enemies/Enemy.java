@@ -142,7 +142,7 @@ public class Enemy implements Blocker, CommandListener, Loggable {
     protected void executeConditions(CommandResult result, boolean isSameFilePath) {
         String cmd = result.command().toLowerCase();
 
-        if (!hasBeenDefeated && cmd.equals("rm") && result.subject() != null) {
+        if (!hasBeenDefeated && cmd.startsWith("rm") && result.subject() != null) {
             if (isSameFilePath) {
                 clear();
             }
