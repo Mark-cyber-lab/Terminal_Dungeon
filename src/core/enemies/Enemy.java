@@ -119,7 +119,7 @@ public class Enemy implements Blocker, CommandListener, Loggable {
 //        IO.println("folder       = " + absoluteFolder);
 //        IO.println("enemyFolder  = " + enemyFolder);
 
-        return !hasBeenDefeated && absoluteFolder.equals(enemyFolder);
+        return !hasBeenDefeated && absoluteFolder.startsWith(enemyFolder);
     }
 
     @Override
@@ -157,6 +157,8 @@ public class Enemy implements Blocker, CommandListener, Loggable {
 //        if (!hasBeenDefeated && blocks(targetPath)) {
 //            dealDamage("Remaining enemies deal damage after command");
 //        }
+
+        // here, scan files with folder with
     }
 
     protected void executeConditions(CommandResult result, boolean isSameFilePath) {

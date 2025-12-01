@@ -41,7 +41,7 @@ public class ListenerRegistry implements Loggable {
     public List<Blocker> activeBlockersInFolder(Path folder) {
         List<Blocker> active = new ArrayList<>();
         for (Blocker b : blockers) {
-            IO.println("Active blockers: " + b.getFilePath());
+            log("Active blockers: " + b.getFilePath());
             if (!b.isCleared() && b.blocks(folder)) {
                 active.add(b);
             }
