@@ -1,8 +1,8 @@
 # Level 4, Stage 7.
 # Warrior Knight
-# Goal / Interaction: Unlock blocked doors using hidden keys
+# Goal / Interaction: Bring hidden keys to hidden doors
 # Objects: Locked doors, hidden keys, scroll guides, enemies
-# Commands / Mechanics: mv key ./door/, chmod (simulated), ls, cd, cat
+# Commands / Mechanics: mv key ./door/, ls, cd, cat
 
 # Directories
 DIR: level_4/
@@ -12,8 +12,8 @@ DIR: level_4/inner_courtyard/
 DIR: level_4/inner_courtyard/guard_room/
 DIR: level_4/inner_courtyard/training_hall/
 DIR: level_4/inner_courtyard/training_hall/secret_chamber/
-LOCKED_DIR: level_4/command_hall/
-LOCKED_DIR: level_4/access_master/
+HIDDEN_DIR: level_4/.command_hall/
+HIDDEN_DIR: level_4/.access_master/
 
 # Files
 FILE: level_4/outer_gate/scroll.txt
@@ -70,13 +70,9 @@ Guide for this stage:
 3. Move a key into its door with:
      mv <key> ./<door>/
 4. Use:
-     chmod <permissions> <door>
-   to simulate unlocking the sealed passage.
+     ls -la
+   to see the hidden doors.
 5. Some secrets are concealed behind silence and shadows. Search thoroughly.
-
-A final hint:
-A path exists here that does not show itself at first glance.
-Use `ls -a` to reveal that which prefers to stay hidden.
 END
 
 HIDDEN_FILE: level_4/inner_courtyard/training_hall/secret_chamber/.key.secr
@@ -106,12 +102,12 @@ Stand firm, Warrior Knight.
 If you overcome what lies ahead, you will command the mastery of this level.
 END
 
-FILE: level_4/command_hall/goblin.mob
+FILE: level_4/.command_hall/goblin.mob
 Goblin sentinel guarding the command.
 END
 
-// final boss. if this beats, stage cleared
-FILE: level_4/access_master/ogre.mob
+# final boss. if this beats, stage cleared
+FILE: level_4/.access_master/ogre.mob
 Final sentinel guarding the master access.
 END
 
@@ -134,7 +130,6 @@ END
 # 1. An item cannot be picked up if any enemy (.mob file) exists in the same folder.
 # 2. Use ls, cd to inspect folder structures and locate hidden files.
 # 3. Use mv <key> ./<door>/ to move keys to blocked directories.
-# 4. Use chmod <permissions> <door> to simulate unlocking doors.
-# 5. Secret chambers may contain scroll.txt guides or extra keys; explore thoroughly.
-# 6. Some enemies may be in hidden or nested folders; strategy and observation are key.
-# 7. Trees are disabled here
+# 4. Secret chambers may contain scroll.txt guides or extra keys; explore thoroughly.
+# 5. Some enemies may be in hidden or nested folders; strategy and observation are key.
+# 6. Trees are disabled here

@@ -23,7 +23,7 @@ public class Stage7 extends Stage {
 
     @Override
     public String[] getStageHeader() {
-        return new String[]{"Stage 7 — The Locked Doors"};
+        return new String[]{"Stage 7 — The Hidden Doors"};
     }
 
     @Override
@@ -72,7 +72,7 @@ public class Stage7 extends Stage {
         level.sandbox.getExecutor().executeStrict("done");
 
         CLIUtils.typewriter("The Old Knight nods: 'Your Stage 7 training is complete. Greater adventures await…'", 30);
-        CLIUtils.typewriter("\"Stage 2 complete. Prepare for what comes next.\"", 30);
+        CLIUtils.typewriter("\"Stage 7 complete. Prepare for what comes next.\"", 30);
 
     }
 

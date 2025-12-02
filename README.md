@@ -160,20 +160,18 @@ Embark on your journey through the **Terminal Dungeon**, a mystical realm of dir
 
 | Level | Stage | Goal / Interaction | Objects | Commands / Mechanics |
 |-------|-------|-----------------|---------|--------------------|
-| 1 — Squire (Tutorial) | 1 | Learn directory navigation commands | None or simple directories | `cd`, `pwd`, `ls`, `tree` |
-|  | 2 | Mission: Find the lost letter | Lost letter (`dear_squire.txt`) hidden in navigation_test/archives | Use all learned commands: `ls`, `cd`, `tree`, `cat` to locate and read the letter |
-| 2 — Apprentice Knight (Messenger) | 1 | Read scrolls about Goblins & Hidden Keys | `scroll.txt`, `key.txt` | `cat scroll.txt`, `mv key ./door/` |
-|  | 2 | Read scrolls about Doors & Orbs and deliver items | `scroll.txt`, `orb_of_vision` | `cat scroll.txt`, passive buffs trigger |
-| 3 — Scout Knight | 1 | Defeat goblins blocking path | Goblins as files | `rm filename` (simulated) |
-|  | 2 | Defeat stronger enemies or enemy clusters | Multiple goblins / Kobold | `rm -rf` or `sudo rm` simulation |
-| 4 — Warrior Knight | 1 | Unlock blocked doors with keys | Door directory + Hidden Key | `mv key ./door/`, `chmod` (simulated) |
-|  | 2 | Explore deeper dungeon & collect orbs | Orbs, loot | Passive buffs activate, solve permission puzzles |
-| 5 — Guardian Knight | 1 | Move treasure to safe locations | Treasure Chest | `mv chest ./safe_room` |
-|  | 2 | Copy critical scrolls & combine movement/combat | `lost_scroll.txt`, enemies | `cp scroll.txt ./backup`, `mv` + `rm` (simulated) |
-| 6 — Paladin | 1 | Restore corrupted dungeon files | Protected directories | `sudo cp /sandbox/...` (simulation) |
-|  | 2 | Unlock sealed boss rooms or clear enemy clusters | Strong doors + enemies | `sudo chmod`, `sudo rm -rf` (simulated) |
-| 7 — Arcane Knight | 1 | Chain commands for complex puzzle | Orbs, doors | `cat scroll.txt | grep "key"` |
-|  | 2 | Combine combat & puzzle commands | Enemies + Doors | `rm -rf enemies & mv key ./door/` (simulated) |
+| 1 — Squire (Tutorial) | 1 | Learn directory navigation commands | Simple directories | `cd`, `pwd`, `ls`, `tree` |
+|  | 2 | Find the lost letter | `dear_squire.txt` hidden in `navigation_test/archives` | `ls`, `cd`, `tree`, `cat` |
+| 2 — Apprentice Knight (Messenger) | 1 | Read scrolls about Goblins & Hidden Keys | `scroll.txt`, `key.txt` | `cat`, `mv` |
+|  | 2 | Deliver items and understand simple mechanics | `scroll.txt`, `orb_of_vision` | `cat` |
+| 3 — Scout Knight | 1 | Defeat goblins blocking the path | Goblin files | `rm` |
+|  | 2 | Defeat stronger enemy clusters | Multiple goblins / Kobold directories | `rm -rf`, simulated `sudo rm` |
+| 4 — Warrior Knight | 1 | Unlock blocked doors with keys | Door directory + Hidden Key | `mv` |
+|  | 2 | Organize the Archive Chamber | `orb_fragment_*` files scattered in wrong folders | `mv`, `mkdir`, `ls` |
+| 5 — Arcane Knight (Advanced Puzzles) | 1 | Rebuild the Deep Dungeon Map | 6–12 `map_piece_*` files scattered inside 4–7 nested folders (real + fake pieces) | `mv`, `mkdir`, `ls` |
+|  | 2 | Advanced Dungeon Cache Cleanup | `.tmp`, `.cache`, `.garbage` files mixed with scrolls/artifacts | `rm`, `rm -rf` (some junk looks important, some important looks like junk) |
+| 6 — Grandmaster Knight (Final Boss Prep & Battle) | 1 | Restore the Grand Archive | `pillar_*`, `core_*`, `seal_fragment_*` inside deep, confusing subfolders | `mkdir`, `mv`, `ls` (some files must be renamed before placement) |
+|  | 2 | Purge the Eldritch Overlord | Real: `overlord_core.dat`, `overlord_phase2.bin`; Fake: `core_backup.dat`, `overlord_fake.bin`, `phase2_hint.txt` | `rm`, `rm -rf` (must delete multiple files in order; wrong deletion spawns extra files) |
 
 ---
 
