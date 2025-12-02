@@ -20,16 +20,16 @@ FILE: advanced_combat/goblin.mob
 Stronger goblin warrior
 
 FILE: warrior_hall/kobold.mob
-Experienced goblin fighter
+Experienced Kobold fighter
 
 FILE: warrior_hall/zombie.mob
 Another warrior goblin
 
 FILE: group_battle/ghoul.mob
-Goblin squad member
+Ghoul squad member
 
 FILE: group_battle/ogre.mob
-Goblin squad member
+Pgre squad member
 
 FILE: /warrior_hall/next_stage/key.txt
 move onto the next corridor to go to next stage
