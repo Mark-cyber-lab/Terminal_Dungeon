@@ -5,6 +5,7 @@ import core.listeners.CommandListener;
 import core.listeners.ListenerRegistry;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LinuxCommandExecutorWithRegistry extends LinuxCommandExecutor {
@@ -60,19 +61,27 @@ public class LinuxCommandExecutorWithRegistry extends LinuxCommandExecutor {
         // Notify all listeners
         registry.notifyListeners(result);
 
-//        IO.println("Successfully executed command");
-        // Check for active blockers in current folder
         Path currentDir = getCurrentDirectory();
-        List<Blocker> activeBlockers =
-                registry.activeBlockersInFolder(currentDir, exceptPath);
-        if (!activeBlockers.isEmpty()) {
-            log("[Game Rule] Action blocked by:");
-            for (Blocker b : activeBlockers) {
-                log("                - " + b.getName());
+        List<Path> affectedPaths;
+        if (result.affectedPaths() != null && !result.affectedPaths().isEmpty()) {
+            affectedPaths = result.affectedPaths();
+        } else {
+            affectedPaths = new ArrayList<>();
+            Path fullPath = result.getFileFullPath();
+            if (fullPath != null) {
+                affectedPaths.add(fullPath);
             }
         }
 
-
+        for (Path p : affectedPaths) {
+            List<Blocker> activeBlockers = registry.activeBlockersInFolder(currentDir, p);
+            if (!activeBlockers.isEmpty()) {
+                log("[Game Rule] Action blocked on: " + p);
+                for (Blocker b : activeBlockers) {
+                    log("                - " + b.getName());
+                }
+            }
+        }
         return result;
     }
 

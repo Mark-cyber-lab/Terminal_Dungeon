@@ -502,6 +502,7 @@ public class LinuxCommandExecutor implements Loggable {
 
         boolean recursive = false;
         List<String> targets = new ArrayList<>();
+        List<Path> removedPaths = new ArrayList<>();
         for (int i = 1; i < parts.length; i++) {
             if ("-r".equals(parts[i]) || "-R".equals(parts[i])) {
                 recursive = true;
@@ -530,30 +531,21 @@ public class LinuxCommandExecutor implements Loggable {
             }
             try {
                 if (Files.isDirectory(targetPath)) {
-                    if (!recursive) {
-                        String msg = "rm: " + t + ": Is a directory (use -r to remove)";
-                        IO.println(msg); // simulated stderr
-                        output.append(msg).append("\n");
-                        success = false;
-                    } else {
-                        // recursive delete
+                    if (recursive) {
                         Files.walk(targetPath)
                                 .sorted(Comparator.reverseOrder())
                                 .forEach(p -> {
                                     try {
                                         Files.deleteIfExists(p);
-                                    } catch (IOException ignored) { /* suppress individual errors */ }
+                                        removedPaths.add(p); // track each removed path
+                                    } catch (IOException ignored) {}
                                 });
-                        String msg = "Removed directory: " + t;
-                        IO.println(msg); // stdout
-                        output.append(msg).append("\n");
                     }
                 } else {
                     Files.deleteIfExists(targetPath);
-                    String msg = "Removed file: " + t;
-                    IO.println(msg); // stdout
-                    output.append(msg).append("\n");
+                    removedPaths.add(targetPath);
                 }
+
             } catch (IOException e) {
                 String msg = "rm: " + t + ": error deleting";
                 IO.println(msg); // simulated stderr
@@ -569,7 +561,8 @@ public class LinuxCommandExecutor implements Loggable {
                 output.toString().trim(),
                 currentDirectory.toString(),
                 String.join(",", targets),
-                success ? 0 : 1
+                success ? 0 : 1,
+                removedPaths
         );
     }
 

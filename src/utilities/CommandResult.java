@@ -1,42 +1,45 @@
 package utilities;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
-public record CommandResult(
-        String command,
-        boolean success,
-        String output,
-        String path,
-        String subject,
-        int exitCode
-) implements Loggable {
+/**
+ * @param affectedPaths nullable
+ */
+public record CommandResult(String command, boolean success, String output, String path, String subject, int exitCode,
+                            List<Path> affectedPaths) implements Loggable {
 
-    // Compact constructor
-    public CommandResult {
-        output = (output == null) ? "" : output;
-        path = (path == null) ? "" : path;
+    // Constructor
+    public CommandResult(String command, boolean success, String output, String path, String subject, int exitCode, List<Path> affectedPaths) {
+        this.command = command;
+        this.success = success;
+        this.output = (output == null) ? "" : output;
+        this.path = (path == null) ? "" : path;
+        this.subject = subject;
+        this.exitCode = exitCode;
+        this.affectedPaths = affectedPaths; // can be null
 
-        // Log all details if success is false
         if (!success) {
-            log( "Command failed: " + this.toString());
+            log("Command failed: " + this.toString());
         }
+    }
+
+    public CommandResult(String command, boolean success, String output, String path, String subject, int exitCode) {
+        this(command, success, (output == null) ? "" : output, (path == null) ? "" : path, subject, exitCode, new ArrayList<Path>()); // can be null
+
+        if (!success) {
+            log("Command failed: " + this.toString());
+        }
+    }
+
+    // Utility
+    public Path getFileFullPath() {
+        return (subject == null || subject.isBlank()) ? null : Path.of(path).resolve(subject).normalize();
     }
 
     @Override
     public String toString() {
-        return "CommandResult{" +
-                "command='" + command + '\'' +
-                ", success=" + success +
-                ", exitCode=" + exitCode +
-                ", path='" + path + '\'' +
-                ", subject='" + subject + '\'' +
-                ", output='" + output + '\'' +
-                '}';
-    }
-
-    public Path getFileFullPath () {
-        return  (subject == null || subject.isBlank())
-                ? null
-                : Path.of(path).resolve(subject).normalize();
+        return "CommandResult{" + "command='" + command + '\'' + ", success=" + success + ", exitCode=" + exitCode + ", path='" + path + '\'' + ", subject='" + subject + '\'' + ", output='" + output + '\'' + ", affectedPaths=" + affectedPaths + '}';
     }
 }
