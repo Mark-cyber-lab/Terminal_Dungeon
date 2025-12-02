@@ -496,13 +496,14 @@ public class LinuxCommandExecutor implements Loggable {
     private CommandResult internalRm(String[] parts) {
         if (parts.length < 2) {
             String msg = "rm: missing operand";
-            IO.println(msg); // simulated stderr
+            IO.println(msg);
             return new CommandResult("rm", false, msg, currentDirectory.toString(), null, 1);
         }
 
         boolean recursive = false;
         List<String> targets = new ArrayList<>();
         List<Path> removedPaths = new ArrayList<>();
+
         for (int i = 1; i < parts.length; i++) {
             if ("-r".equals(parts[i]) || "-R".equals(parts[i])) {
                 recursive = true;
@@ -511,33 +512,56 @@ public class LinuxCommandExecutor implements Loggable {
             }
         }
 
+        // Keep a copy of the "subject" string for CommandResult
+        String subjectForResult = String.join(",", targets);
+
+        // Expand '*' internally to all files in the directory
+        List<Path> pathsToDelete = new ArrayList<>();
+        for (String t : targets) {
+            if ("*".equals(t)) {
+                try {
+                    Files.list(currentDirectory).forEach(pathsToDelete::add);
+                } catch (IOException e) {
+                    IO.println("rm: error listing directory for *");
+                }
+            } else {
+                pathsToDelete.add(currentDirectory.resolve(t).normalize());
+            }
+        }
+
         StringBuilder output = new StringBuilder();
         boolean success = true;
-        for (String t : targets) {
-            Path targetPath = currentDirectory.resolve(t).normalize();
+
+        for (Path targetPath : pathsToDelete) {
             if (!targetPath.startsWith(rootDirectory)) {
-                String msg = "rm: " + t + ": Permission denied";
-                IO.println(msg); // simulated stderr
+                String msg = "rm: " + targetPath.getFileName() + ": Permission denied";
+                IO.println(msg);
                 output.append(msg).append("\n");
                 success = false;
                 continue;
             }
             if (!Files.exists(targetPath)) {
-                String msg = "rm: " + t + ": No such file or directory";
-                IO.println(msg); // simulated stderr
+                String msg = "rm: " + targetPath.getFileName() + ": No such file or directory";
+                IO.println(msg);
                 output.append(msg).append("\n");
                 success = false;
                 continue;
             }
+
             try {
                 if (Files.isDirectory(targetPath)) {
-                    if (recursive) {
+                    if (!recursive) {
+                        String msg = "rm: " + targetPath.getFileName() + ": Is a directory (use -r to remove)";
+                        IO.println(msg);
+                        output.append(msg).append("\n");
+                        success = false;
+                    } else {
                         Files.walk(targetPath)
                                 .sorted(Comparator.reverseOrder())
                                 .forEach(p -> {
                                     try {
                                         Files.deleteIfExists(p);
-                                        removedPaths.add(p); // track each removed path
+                                        removedPaths.add(p);
                                     } catch (IOException ignored) {}
                                 });
                     }
@@ -545,14 +569,18 @@ public class LinuxCommandExecutor implements Loggable {
                     Files.deleteIfExists(targetPath);
                     removedPaths.add(targetPath);
                 }
-
             } catch (IOException e) {
-                String msg = "rm: " + t + ": error deleting";
-                IO.println(msg); // simulated stderr
+                String msg = "rm: " + targetPath.getFileName() + ": error deleting";
+                IO.println(msg);
                 output.append(msg).append("\n");
                 logger.warning("rm error: " + e.getMessage());
                 success = false;
             }
+        }
+
+        // If the only target was '*', replace subject with current directory for CommandResult
+        if (targets.size() == 1 && "*".equals(targets.get(0))) {
+            subjectForResult = currentDirectory.toString();
         }
 
         return new CommandResult(
@@ -560,7 +588,7 @@ public class LinuxCommandExecutor implements Loggable {
                 success,
                 output.toString().trim(),
                 currentDirectory.toString(),
-                String.join(",", targets),
+                subjectForResult,
                 success ? 0 : 1,
                 removedPaths
         );
