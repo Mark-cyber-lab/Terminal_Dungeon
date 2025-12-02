@@ -34,5 +34,5 @@ FILE: combat_training/zombie.mob
 Training zombie for practice
 
 FILE: combat_master/key.txt
-Test your basic combat skills. Defeat the training master
-GO to the next corridor to continue...
+Test your basic combat skills.
+Type "Move Forward" to continue to next stage

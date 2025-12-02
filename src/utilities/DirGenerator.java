@@ -126,9 +126,69 @@ public class DirGenerator implements Loggable {
 
             List<FileSystemEntry> entries = parseConfigFile(path, config);
 
+            // First, collect all entries that should be created
+            List<FileSystemEntry> lockedDirsToProcess = new ArrayList<>();
+            Map<String, List<FileSystemEntry>> contentsOfLockedDirs = new HashMap<>();
+
+            // Identify locked directories and their contents
             for (FileSystemEntry entry : entries) {
-                log("Processing entry: " + entry.path());
-                processEntry(entry, config, createdDirs, createdFiles, createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
+                if (entry.isDirectory() && entry.locked()) {
+                    lockedDirsToProcess.add(entry);
+                    contentsOfLockedDirs.put(entry.path(), new ArrayList<>());
+                }
+            }
+
+            // Collect contents for each locked directory
+            for (FileSystemEntry entry : entries) {
+                for (String lockedDirPath : contentsOfLockedDirs.keySet()) {
+                    if (entry.path().startsWith(lockedDirPath + "/") && !entry.path().equals(lockedDirPath)) {
+                        contentsOfLockedDirs.get(lockedDirPath).add(entry);
+                    }
+                }
+            }
+
+            // Process non-locked entries first
+            for (FileSystemEntry entry : entries) {
+                boolean isInLockedDir = false;
+                for (String lockedDirPath : contentsOfLockedDirs.keySet()) {
+                    if (entry.path().startsWith(lockedDirPath + "/") || entry.path().equals(lockedDirPath)) {
+                        isInLockedDir = true;
+                        break;
+                    }
+                }
+
+                if (!isInLockedDir) {
+                    log("Processing entry (non-locked): " + entry.path());
+                    processEntry(entry, config, createdDirs, createdFiles, createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
+                }
+            }
+
+            // Process locked directories and their contents
+            for (FileSystemEntry lockedDirEntry : lockedDirsToProcess) {
+                String lockedDirPath = lockedDirEntry.path();
+                List<FileSystemEntry> contents = contentsOfLockedDirs.get(lockedDirPath);
+
+                log("Processing locked directory: " + lockedDirPath + " with " + contents.size() + " contents");
+
+                // Create the directory (but don't lock it yet)
+                processEntryWithoutLocking(lockedDirEntry, config, createdDirs, createdFiles, createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
+
+                // Create all files inside the directory
+                for (FileSystemEntry contentEntry : contents) {
+                    log("Creating content in locked dir: " + contentEntry.path());
+                    processEntry(contentEntry, config, createdDirs, createdFiles, createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
+                }
+
+                // Now lock the directory
+                Path base = config.sandboxPath().isBlank()
+                        ? Paths.get(".")
+                        : Paths.get(config.sandboxPath());
+                Path fullPath = base.resolve(lockedDirPath).toAbsolutePath();
+
+                if (lockDirectoryWithChmod(fullPath)) {
+                    createdLockedDirs.add(fullPath.toString());
+                    log("Successfully locked directory: " + fullPath);
+                }
             }
 
             String message = "Generated " +
@@ -164,7 +224,7 @@ public class DirGenerator implements Loggable {
             log("Resolved path: " + path);
 
             if (entry.isDirectory()) {
-                processDirectory(entry, path, config, createdDirs, createdLockedDirs, skippedPaths);
+                processDirectory(entry, path, config, createdDirs, createdLockedDirs, skippedPaths, createdHiddenFiles);
             } else {
                 processFile(entry, path, config, createdDirs, createdFiles, createdHiddenFiles, skippedPaths);
             }
@@ -175,40 +235,156 @@ public class DirGenerator implements Loggable {
         }
     }
 
-    private void processDirectory(FileSystemEntry entry, Path dir, GenerationConfig config,
-                                  List<String> createdDirs, List<String> createdLockedDirs,
-                                  List<String> skipped) throws IOException {
+    private void processEntryWithoutLocking(FileSystemEntry entry, GenerationConfig config,
+                                            List<String> createdDirs, List<String> createdFiles,
+                                            List<String> createdHiddenFiles, List<String> createdLockedDirs,
+                                            List<String> skippedPaths, List<String> errorPaths) {
 
-        if (!Files.exists(dir)) {
-            Files.createDirectories(dir);
-            createdDirs.add(dir.toString());
-            log("Created directory: " + dir);
+        Path base = config.sandboxPath().isBlank()
+                ? Paths.get(".")
+                : Paths.get(config.sandboxPath());
 
-            if (entry.locked() && config.createLockedDoors()) {
-                lockDirectoryWithChmod(dir);
-                createdLockedDirs.add(dir.toString());
-                log("Created locked door: " + dir);
+        try {
+            Path path = base.resolve(entry.path()).toAbsolutePath();
+
+            log("Resolved path (without locking): " + path);
+
+            if (entry.isDirectory()) {
+                processDirectoryWithoutLocking(entry, path, config, createdDirs, skippedPaths, createdHiddenFiles);
+            } else {
+                processFile(entry, path, config, createdDirs, createdFiles, createdHiddenFiles, skippedPaths);
             }
-        } else {
-            skipped.add(dir.toString());
-            log("Skipped existing directory: " + dir);
+
+        } catch (Exception ex) {
+            errorPaths.add(entry.path() + ": " + ex.getMessage());
+            log("ERROR processing " + entry.path() + " (without locking): " + ex.getMessage());
         }
     }
 
-    private void lockDirectoryWithChmod(Path dir) {
+    private void processDirectory(FileSystemEntry entry, Path dir, GenerationConfig config,
+                                  List<String> createdDirs, List<String> createdLockedDirs,
+                                  List<String> skipped, List<String> createdHiddenDirs) throws IOException {
+
+        Path finalPath = dir;
+        String os = System.getProperty("os.name").toLowerCase();
+
+        // Handle hidden directories on Linux/Unix
+        if (entry.hidden() && config.createHiddenFiles()) {
+            if (!os.contains("win") && !dir.getFileName().toString().startsWith(".")) {
+                finalPath = dir.resolveSibling("." + dir.getFileName());
+                createdHiddenDirs.add(finalPath.toString());
+                log("Creating hidden directory (added dot prefix): " + finalPath);
+            } else if (os.contains("win")) {
+                // On Windows, we'll create it normally first, then hide it
+                createdHiddenDirs.add(dir.toString());
+            }
+        }
+
+        if (!Files.exists(finalPath)) {
+            Files.createDirectories(finalPath);
+            createdDirs.add(finalPath.toString());
+            log("Created directory: " + finalPath);
+
+            // Hide directory on Windows after creation
+            if (entry.hidden() && config.createHiddenFiles() && os.contains("win")) {
+                try {
+                    new ProcessBuilder("attrib", "+H", finalPath.toAbsolutePath().toString()).start().waitFor();
+                    log("Hidden directory on Windows: " + finalPath);
+                } catch (Exception e) {
+                    log("Could not hide directory on Windows: " + e.getMessage());
+                }
+            }
+
+            if (entry.locked() && config.createLockedDoors()) {
+                lockDirectoryWithChmod(finalPath);
+                createdLockedDirs.add(finalPath.toString());
+                log("Created locked door: " + finalPath);
+            }
+        } else {
+            skipped.add(finalPath.toString());
+            log("Skipped existing directory: " + finalPath);
+        }
+    }
+
+    private void processDirectoryWithoutLocking(FileSystemEntry entry, Path dir, GenerationConfig config,
+                                                List<String> createdDirs, List<String> skipped,
+                                                List<String> createdHiddenDirs) throws IOException {
+
+        Path finalPath = dir;
+        String os = System.getProperty("os.name").toLowerCase();
+
+        // Handle hidden directories on Linux/Unix
+        if (entry.hidden() && config.createHiddenFiles()) {
+            if (!os.contains("win") && !dir.getFileName().toString().startsWith(".")) {
+                finalPath = dir.resolveSibling("." + dir.getFileName());
+                createdHiddenDirs.add(finalPath.toString());
+                log("Creating hidden directory without locking (added dot prefix): " + finalPath);
+            } else if (os.contains("win")) {
+                // On Windows, we'll create it normally first, then hide it
+                createdHiddenDirs.add(dir.toString());
+            }
+        }
+
+        if (!Files.exists(finalPath)) {
+            Files.createDirectories(finalPath);
+            createdDirs.add(finalPath.toString());
+            log("Created directory (without locking): " + finalPath);
+
+            // Hide directory on Windows after creation
+            if (entry.hidden() && config.createHiddenFiles() && os.contains("win")) {
+                try {
+                    new ProcessBuilder("attrib", "+H", finalPath.toAbsolutePath().toString()).start().waitFor();
+                    log("Hidden directory on Windows: " + finalPath);
+                } catch (Exception e) {
+                    log("Could not hide directory on Windows: " + e.getMessage());
+                }
+            }
+        } else {
+            skipped.add(finalPath.toString());
+            log("Skipped existing directory: " + finalPath);
+        }
+    }
+
+    private boolean lockDirectoryWithChmod(Path dir) {
         try {
             String os = System.getProperty("os.name").toLowerCase();
             if (!os.contains("win")) {
-                Process process = new ProcessBuilder("chmod", "000", dir.toAbsolutePath().toString()).start();
+                // Use chmod 700 instead of 000 for testing purposes
+                // 000 would prevent even the owner from accessing
+                // 700 allows owner access but prevents others
+                Process process = new ProcessBuilder("chmod", "700", dir.toAbsolutePath().toString()).start();
+
+                // Read the error stream to see if there are any issues
+                BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                StringBuilder errorOutput = new StringBuilder();
+                String line;
+                while ((line = errorReader.readLine()) != null) {
+                    errorOutput.append(line).append("\n");
+                }
+
                 int exitCode = process.waitFor();
-                log(exitCode == 0 ? "Successfully locked directory with chmod: " + dir
-                        : "Failed to lock directory with chmod: " + dir);
+
+                if (exitCode == 0) {
+                    log("Successfully locked directory with chmod 700: " + dir);
+                    return true;
+                } else {
+                    log("Failed to lock directory with chmod. Error: " + errorOutput.toString());
+                    return false;
+                }
             } else {
-                new ProcessBuilder("attrib", "+R", dir.toAbsolutePath().toString()).start().waitFor();
-                log("Applied read-only to directory on Windows: " + dir);
+                Process process = new ProcessBuilder("attrib", "+R", dir.toAbsolutePath().toString()).start();
+                int exitCode = process.waitFor();
+                if (exitCode == 0) {
+                    log("Applied read-only to directory on Windows: " + dir);
+                    return true;
+                } else {
+                    log("Failed to lock directory on Windows: " + dir);
+                    return false;
+                }
             }
         } catch (Exception e) {
             log("Could not lock directory: " + e.getMessage());
+            return false;
         }
     }
 
@@ -231,7 +407,7 @@ public class DirGenerator implements Loggable {
 
             Path finalPath = file;
             String os = System.getProperty("os.name").toLowerCase();
-            if (hidden && !os.contains("win") && !file.getFileName().toString().startsWith(".")) {
+            if (hidden && config.createHiddenFiles() && !os.contains("win") && !file.getFileName().toString().startsWith(".")) {
                 finalPath = file.resolveSibling("." + file.getFileName());
             }
 
@@ -405,5 +581,18 @@ public class DirGenerator implements Loggable {
             log("Could not unlock directory: " + e.getMessage());
         }
         return false;
+    }
+
+    // Helper method to check if a directory is accessible
+    public boolean isDirectoryAccessible(Path dir) {
+        try {
+            // Try to list the directory contents
+            Files.list(dir).limit(1).close();
+            return true;
+        } catch (AccessDeniedException e) {
+            return false;
+        } catch (IOException e) {
+            return false;
+        }
     }
 }

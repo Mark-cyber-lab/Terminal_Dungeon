@@ -10,7 +10,7 @@ DIR: level_1/basic_training/notes/
 DIR: level_1/courtyard/
 DIR: level_1/hall_of_movement/
 DIR: level_1/hall_of_movement/paths/
-LOCKED_DIR: level_1/navigation_test/
+HIDDEN_DIR: level_1/navigation_test/
 
 FILE: level_1/basic_training/welcome.txt
 Squire Level 1: Learn basic movement
