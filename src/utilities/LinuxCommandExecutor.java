@@ -307,124 +307,146 @@ public class LinuxCommandExecutor implements Loggable {
 
     private CommandResult internalLs(String[] parts) {
         Path target = currentDirectory;
+        boolean showAll;      // -a
+        boolean longFormat;    // -l
 
-        // Optional argument: ls [path]
-        if (parts.length >= 2) {
-            target = currentDirectory.resolve(parts[1]).normalize();
+        // Parse options
+        int argIndex = 1;
+        if (parts.length >= 2 && parts[1].startsWith("-")) {
+            String opts = parts[1];
+            showAll = opts.contains("a");
+            longFormat = opts.contains("l");
+            argIndex = 2; // next argument may be the path
+        } else {
+            longFormat = false;
+            showAll = false;
+        }
+
+        // Optional argument: ls [options] [path]
+        if (parts.length > argIndex) {
+            target = currentDirectory.resolve(parts[argIndex]).normalize();
         }
 
         // Sandbox check
         if (!target.startsWith(rootDirectory)) {
             String msg = "ls: permission denied";
-            IO.println(msg); // simulated stderr
-            return new CommandResult("ls", false,
-                    msg,
-                    currentDirectory.toString(), target.toString(), 1);
+            IO.println(msg);
+            return new CommandResult("ls", false, msg, currentDirectory.toString(), target.toString(), 1);
         }
 
         // Existence check
         if (!Files.exists(target)) {
             String msg = "ls: no such file or directory: " + target.getFileName();
-            IO.println(msg); // simulated stderr
-            return new CommandResult("ls", false,
-                    msg,
-                    currentDirectory.toString(), target.toString(), 1);
+            IO.println(msg);
+            return new CommandResult("ls", false, msg, currentDirectory.toString(), target.toString(), 1);
         }
 
-        // If it's a directory, list contents
-        if (Files.isDirectory(target)) {
-            try {
-                List<String> names = Files.list(target)
+        try {
+            List<String> names;
+            if (Files.isDirectory(target)) {
+                names = Files.list(target)
                         .sorted(Comparator.comparing(p -> p.getFileName().toString().toLowerCase()))
-                        .map(path -> Files.isDirectory(path)
-                                ? path.getFileName().toString() + "/"
-                                : path.getFileName().toString())
+                        .filter(p -> showAll || !p.getFileName().toString().startsWith("."))
+                        .map(p -> {
+                            if (longFormat) {
+                                try {
+                                    String type = Files.isDirectory(p) ? "d" : "-";
+                                    long size = Files.size(p);
+                                    return String.format("%s %10d %s", type, size, p.getFileName());
+                                } catch (IOException e) {
+                                    return p.getFileName().toString();
+                                }
+                            } else {
+                                return Files.isDirectory(p) ? p.getFileName().toString() + "/" : p.getFileName().toString();
+                            }
+                        })
                         .collect(Collectors.toList());
 
-                // Print each line using IO.println
                 for (String line : names) {
                     IO.println(line);
                 }
 
                 String output = String.join("\n", names);
                 return new CommandResult("ls", true, output, currentDirectory.toString(), target.toString(), 0);
-
-            } catch (IOException e) {
-                String msg = "ls: error listing directory";
-                IO.println(msg); // simulated stderr
-                logger.warning("ls error: " + e.getMessage());
-                return new CommandResult("ls", false,
-                        "ls: error listing " + target,
-                        currentDirectory.toString(), target.toString(), 1);
             }
-        }
 
-        // If it's a file, output only the filename
-        String fileName = target.getFileName().toString();
-        IO.println(fileName); // normal stdout
-        return new CommandResult("ls", true, fileName, currentDirectory.toString(), target.toString(), 0);
+            // It's a file
+            String fileName = target.getFileName().toString();
+            if (longFormat) {
+                long size = Files.size(target);
+                String type = "-";
+                fileName = String.format("%s %10d %s", type, size, fileName);
+            }
+            IO.println(fileName);
+            return new CommandResult("ls", true, fileName, currentDirectory.toString(), target.toString(), 0);
+
+        } catch (IOException e) {
+            String msg = "ls: error listing directory";
+            IO.println(msg);
+            logger.warning("ls error: " + e.getMessage());
+            return new CommandResult("ls", false, msg, currentDirectory.toString(), target.toString(), 1);
+        }
     }
 
     private CommandResult internalTree(String[] parts) {
         Path target = currentDirectory;
+        boolean showAll = false; // corresponds to -a option
 
-        // Handle optional argument: `tree foldername`
-        if (parts.length >= 2) {
-            target = currentDirectory.resolve(parts[1]).normalize();
+        // Handle optional argument: `tree [options] [foldername]`
+        int argIndex = 1;
+        if (parts.length >= 2 && parts[1].startsWith("-")) {
+            String opts = parts[1];
+            showAll = opts.contains("a");
+            argIndex = 2; // next argument may be the folder
+        }
+
+        if (parts.length > argIndex) {
+            target = currentDirectory.resolve(parts[argIndex]).normalize();
         }
 
         // Sandbox restriction
         if (!target.startsWith(rootDirectory)) {
             String msg = "tree: permission denied";
-            IO.println(msg); // simulated stderr
-            return new CommandResult("tree", false,
-                    msg,
-                    currentDirectory.toString(), target.toString(), 1);
+            IO.println(msg);
+            return new CommandResult("tree", false, msg, currentDirectory.toString(), target.toString(), 1);
         }
 
+        // Existence check
         if (!Files.exists(target)) {
             String msg = "tree: no such file or directory: " + target.getFileName();
-            IO.println(msg); // simulated stderr
-            return new CommandResult("tree", false,
-                    msg,
-                    currentDirectory.toString(), target.toString(), 1);
+            IO.println(msg);
+            return new CommandResult("tree", false, msg, currentDirectory.toString(), target.toString(), 1);
         }
 
         StringBuilder sb = new StringBuilder();
-
         try {
-            // Build full tree text
-            buildTree(target, target, sb, "", false);
+            // Build tree text
+            buildTree(target, target, sb, "", false, showAll); // pass showAll flag
 
-            // Print each line using IO.println (stdout)
+            // Print each line
             for (String line : sb.toString().split("\n")) {
                 IO.println(line);
             }
 
-            return new CommandResult(
-                    "tree",
-                    true,
-                    sb.toString().trim(),
-                    currentDirectory.toString(),
-                    target.toString(),
-                    0
-            );
+            return new CommandResult("tree", true, sb.toString().trim(),
+                    currentDirectory.toString(), target.toString(), 0);
 
         } catch (IOException e) {
             String msg = "tree: error reading directory";
-            IO.println(msg); // simulated stderr
+            IO.println(msg);
             logger.warning("tree error: " + e.getMessage());
             return new CommandResult("tree", false,
                     "tree: error reading " + target,
-                    currentDirectory.toString(),
-                    target.toString(),
-                    1);
+                    currentDirectory.toString(), target.toString(), 1);
         }
     }
 
-    private void buildTree(Path base, Path path, StringBuilder sb, String indent, boolean isLast) throws IOException {
+    private void buildTree(Path base, Path path, StringBuilder sb, String indent, boolean isLast, boolean showAll) throws IOException {
         // Print current folder/file
-        String name = path.equals(base) ? path.getFileName() != null ? path.getFileName().toString() : path.toString() : path.getFileName().toString();
+        String name = path.equals(base)
+                ? path.getFileName() != null ? path.getFileName().toString() : path.toString()
+                : path.getFileName().toString();
+
         if (!path.equals(base)) {
             sb.append(indent)
                     .append(isLast ? "└── " : "├── ")
@@ -437,14 +459,16 @@ public class LinuxCommandExecutor implements Loggable {
 
         if (!Files.isDirectory(path)) return;
 
+        // List children, optionally skipping hidden files/folders
         List<Path> children = Files.list(path)
                 .sorted(Comparator.comparing(p -> p.getFileName().toString().toLowerCase()))
+                .filter(p -> showAll || !p.getFileName().toString().startsWith("."))
                 .toList();
 
         for (int i = 0; i < children.size(); i++) {
             Path child = children.get(i);
             boolean last = (i == children.size() - 1);
-            buildTree(base, child, sb, indent + (path.equals(base) ? "" : (isLast ? "    " : "│   ")), last);
+            buildTree(base, child, sb, indent + (path.equals(base) ? "" : (isLast ? "    " : "│   ")), last, showAll);
         }
     }
 
