@@ -12,6 +12,7 @@ import utilities.CLIUtils;
 import utilities.CommandResult;
 
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Stage7 extends Stage {
@@ -58,6 +59,10 @@ public class Stage7 extends Stage {
         while (true) {
             System.out.print(">> ");
             input = IO.readln().trim();
+
+            if (Arrays.asList(input.split(" ")).contains("tree")) {
+                IO.println("You are not allowed to use tree in this stage.");
+            }
 
             CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));
 
