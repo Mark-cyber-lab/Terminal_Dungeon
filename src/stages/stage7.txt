@@ -70,7 +70,7 @@ Guide for this stage:
 3. Move a key into its door with:
      mv <key> ./<door>/
 4. Use:
-     ls -la
+     ls -l
    to see the hidden doors.
 5. Some secrets are concealed behind silence and shadows. Search thoroughly.
 END
