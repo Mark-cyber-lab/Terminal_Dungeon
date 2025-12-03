@@ -94,17 +94,6 @@ Embark on your journey through the **Terminal Dungeon**, a mystical realm of dir
 
 ---
 
-### Level 7 — Arcane Knight
-- **Skills:** The Master (`&`, `|`)
-- **Description:** Wielder of complex command chains.
-- **Commands:** `&`, `|`
-
-**Execution:**
-- Sandbox-safe execution for combining commands.
-- Simulated effects for sensitive operations.
-
----
-
 ## Game Elements
 
 ### 1. Characters / Entities

@@ -1,39 +1,92 @@
-DIR: level_10/
-DIR: level_10/defense_post/
-DIR: level_10/evacuation_center/
-DIR: level_10/backup_vault/
-LOCKED_DIR: level_10/guardian_master/
+DIR: dungeon_cache/
+DIR: dungeon_cache/.tmp/
+DIR: dungeon_cache/.tmp/deep_temp/
+DIR: dungeon_cache/.tmp/trash_pit/
+DIR: dungeon_cache/.cache/
+DIR: dungeon_cache/.cache/important_vault/
+DIR: dungeon_cache/.cache/hidden_chamber/
+DIR: dungeon_cache/.garbage/
+DIR: dungeon_cache/.garbage/rotten_pile/
+DIR: dungeon_cache/.garbage/scrap_heap/
 
-FILE: level_10/defense_post/welcome.txt
-Guardian Knight Level 2: Master protection
-Advanced file management
+FILE: dungeon_cache/welcome_stage2.txt
+Advanced Dungeon Cache Cleanup
+Remove junk .tmp, .cache, .garbage files but preserve scrolls/artifacts
+Warning: Some junk looks important, some important looks like junk
+Commands: rm, rm -rf (use with caution!)
 
-FILE: level_10/evacuation_center/lesson_1.txt
-Coordinate multiple rescues
-Move people and items to safety
+FILE: dungeon_cache/.tmp/deep_temp/junk_log_1.tmp
+2024-01-15: Temporary combat data - SAFE TO DELETE
 
-FILE: level_10/backup_vault/challenge.txt
-Create comprehensive backups
-Protect against total loss
+FILE: dungeon_cache/.tmp/deep_temp/ancient_scroll.txt
+Scroll of Eternal Wisdom - DO NOT DELETE - Ancient knowledge
 
-FILE: level_10/defense_post/goblin.mob
-Raiding goblin
-FILE: level_10/defense_post/kobold.mob
-Raiding kobold
+FILE: dungeon_cache/.tmp/deep_temp/combat_cache.tmp
+Temporary battle calculations - SAFE TO DELETE
 
-FILE: level_10/evacuation_center/civilian.txt
-Person needing evacuation
-FILE: level_10/evacuation_center/important_item.txt
-Item needing relocation
+FILE: dungeon_cache/.tmp/trash_pit/old_potions.tmp
+Expired healing potions - SAFE TO DELETE
 
-FILE: level_10/backup_vault/critical_data.txt
-Data requiring backup
-FILE: level_10/backup_vault/kobold.mob
-Kobold data thief
+FILE: dungeon_cache/.tmp/trash_pit/artifact_fragment.txt
+Lost artifact piece - DO NOT DELETE - Part of royal seal
 
-HIDDEN_FILE: level_10/evacuation_center/.guardian_key.secr
-Key for guardian mastery
+FILE: dungeon_cache/.cache/important_vault/spellbook.txt
+Tome of Arcane Mastery - DO NOT DELETE - Contains level 6 spells
 
-FILE: level_10/guardian_master/test.txt
-Final protection challenge
-Become master guardian
+FILE: dungeon_cache/.cache/important_vault/system_cache.cache
+System optimization data - SAFE TO DELETE
+
+FILE: dungeon_cache/.cache/important_vault/royal_decree.txt
+King's Command - DO NOT DELETE - Required for quest
+
+FILE: dungeon_cache/.cache/hidden_chamber/user_cache.cache
+User session data - SAFE TO DELETE
+
+FILE: dungeon_cache/.cache/hidden_chamber/map_backup.cache
+Dungeon map backup - SAFE TO DELETE
+
+FILE: dungeon_cache/.cache/hidden_chamber/lost_artifact.txt
+Phoenix Feather - DO NOT DELETE - Legendary crafting material
+
+FILE: dungeon_cache/.garbage/rotten_pile/food_waste.garbage
+Spoiled rations - SAFE TO DELETE
+
+FILE: dungeon_cache/.garbage/rotten_pile/ancient_tome.txt
+Necronomicon - DO NOT DELETE - Cursed but valuable
+
+FILE: dungeon_cache/.garbage/rotten_pile/broken_gear.garbage
+Shattered shield - SAFE TO DELETE
+
+FILE: dungeon_cache/.garbage/scrap_heap/rusty_swords.garbage
+Corrupted blades - SAFE TO DELETE
+
+FILE: dungeon_cache/.garbage/scrap_heap/holy_relic.txt
+Sacred Amulet - DO NOT DELETE - Protects against evil
+
+FILE: dungeon_cache/.garbage/scrap_heap/dragon_scale.txt
+Dragon Scale - DO NOT DELETE - For legendary armor
+
+FILE: dungeon_cache/.garbage/scrap_heap/old_bones.garbage
+Skeletal remains - SAFE TO DELETE
+
+# Monster files mixed in (using your monster list)
+FILE: dungeon_cache/.tmp/trash_pit/goblin.mob
+Garbage goblin - scavenges temporary files
+
+FILE: dungeon_cache/.cache/important_vault/zombie.mob
+Cache guardian zombie - mindlessly protects everything
+
+FILE: dungeon_cache/.cache/hidden_chamber/kobold.mob
+Kobold hoarder - hides in cache chambers
+
+FILE: dungeon_cache/.garbage/rotten_pile/ghoul.mob
+Ghoul feaster - lurks in garbage piles
+
+FILE: dungeon_cache/.garbage/scrap_heap/ogre.mob
+Junk ogre - massive cleaner of scraps
+
+FILE: dungeon_cache/toughenemy.mob
+Cache warden - elite protector of the dungeon cache
+
+FILE: dungeon_cache/vampire.mob
+Cache vampire lord - final boss of cleanup stage
