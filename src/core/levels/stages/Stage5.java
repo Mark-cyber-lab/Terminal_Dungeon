@@ -51,7 +51,7 @@ public class Stage5 extends Stage {
         while (!success) {
 
             enemyCount = mission.getEnemies().size();
-            defeatedEnemiesCount = (int) mission.getEnemies().stream().filter(Enemy::hasBeenDefeated).count();
+            defeatedEnemiesCount = (int) mission.getEnemies().stream().filter(Blocker::isCleared).count();
 
             IO.println(enemyCount + " monster/s remaining.");
             IO.print(">> ");
@@ -77,9 +77,9 @@ public class Stage5 extends Stage {
                         CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));
 
                         if (result.success() && mission.isFulfilled()) {
-                            level.sandbox.getExecutor().removeBlocker((Blocker[]) mission.getEnemies().toArray());
+                            level.sandbox.getExecutor().removeBlocker(mission.getEnemies());
 
-                            defeatedEnemiesCount = (int) mission.getEnemies().stream().filter(Enemy::hasBeenDefeated).count();
+                            defeatedEnemiesCount = (int) mission.getEnemies().stream().filter(Blocker::isCleared).count();
 
                             if (defeatedEnemiesCount == 0) {
                                 CLIUtils.typewriter("Congratulations!!\nYou defeated all the enemies", 25);

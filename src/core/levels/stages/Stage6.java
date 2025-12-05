@@ -81,9 +81,9 @@ public class Stage6 extends Stage {
                         CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));
 
                         if (result.success() && mission.isFulfilled()) {
-                            level.sandbox.getExecutor().removeBlocker((Blocker[]) mission.getEnemies().toArray());
+                            level.sandbox.getExecutor().removeBlocker(mission.getEnemies());
 
-                            defeatedEnemiesCount = (int) mission.getEnemies().stream().filter(Enemy::hasBeenDefeated).count();
+                            defeatedEnemiesCount = (int) mission.getEnemies().stream().filter(Blocker::isCleared).count();
 
                             if (defeatedEnemiesCount == 0) {
                                 CLIUtils.typewriter("Congratulations!!\nYou defeated all the enemies", 25);

@@ -42,12 +42,26 @@ public class LinuxCommandExecutorWithRegistry extends LinuxCommandExecutor {
         return this;
     }
 
+    public LinuxCommandExecutorWithRegistry addBlocker(List<Blocker> blockers) {
+        for (Blocker blocker : blockers) {
+            addBlocker(blocker);
+        }
+
+        return this;
+    }
+
 
     public void removeBlocker(Blocker blocker) {
         registry.unregisterBlocker(blocker);
     }
 
     public void removeBlocker(Blocker[] blockers) {
+        for (Blocker blocker : blockers) {
+            removeBlocker(blocker);
+        }
+    }
+
+    public void removeBlocker(List<Blocker> blockers) {
         for (Blocker blocker : blockers) {
             removeBlocker(blocker);
         }

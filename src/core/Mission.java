@@ -2,13 +2,15 @@ package core;
 
 import core.enemies.Enemy;
 import core.doors.HiddenDoor;
+import core.listeners.Blocker;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Mission {
 
-    private final List<Enemy> enemies = new ArrayList<>();
-    private final List<HiddenDoor> hiddenDoors = new ArrayList<>();
+    private final List<Blocker> enemies = new ArrayList<>();
+    private final List<Blocker> hiddenDoors = new ArrayList<>();
 
     public Mission addEnemy(Enemy enemy) {
         this.enemies.add(enemy);
@@ -20,21 +22,21 @@ public class Mission {
         return this;
     }
 
-    public List<Enemy> getEnemies() {
+    public List<Blocker> getEnemies() {
         return this.enemies;
     }
 
-    public List<HiddenDoor> getHiddenDoors() {
+    public List<Blocker> getHiddenDoors() {
         return this.hiddenDoors;
     }
 
     public boolean isFulfilled() {
 
         boolean enemiesCleared = enemies.isEmpty() ||
-                enemies.stream().allMatch(Enemy::hasBeenDefeated);
+                enemies.stream().allMatch(Blocker::isCleared);
 
         boolean doorsCleared = hiddenDoors.isEmpty() ||
-                hiddenDoors.stream().allMatch(HiddenDoor::hasBeenUnlocked);
+                hiddenDoors.stream().allMatch(Blocker::isCleared);
 
         return enemiesCleared && doorsCleared;
     }

@@ -105,7 +105,7 @@ public class HiddenDoor implements Blocker, CommandListener, Loggable {
 
         // Wrong command while locked → damage
         if (!hasBeenUnlocked &&
-                (!result.success() || (!cmd.equals("rm") && blocks(targetPath.getParent())))) {
+                (!result.success() || (!cmd.equals("ls") && blocks(targetPath.getParent())))) {
 
             dealDamage("Wrong command executed near hidden door");
         }

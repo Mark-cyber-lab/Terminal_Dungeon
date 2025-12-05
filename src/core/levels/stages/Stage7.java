@@ -21,7 +21,7 @@ public class Stage7 extends Stage {
     private static final String configPath = "./src/stages/stage7.txt";
 
     public Stage7(Level level) {
-        super(2, level);
+        super(7, level);
     }
 
     @Override
@@ -56,8 +56,8 @@ public class Stage7 extends Stage {
                 .addHiddenDoor(accessMAsterDoor);
 
 
-        level.sandbox.getExecutor().addBlocker((Blocker[]) mission.getEnemies().toArray());
-        level.sandbox.getExecutor().addBlocker((Blocker[]) mission.getHiddenDoors().toArray());
+        level.sandbox.getExecutor().addBlocker(mission.getEnemies());
+        level.sandbox.getExecutor().addBlocker(mission.getHiddenDoors());
 
         CLIUtils.typewriter("You step into the outer gate; sentries patrol the area.", 30);
         CLIUtils.typewriter("Enemies prevent careless grabs — keys cannot be picked up if a mob is present.", 30);
@@ -79,7 +79,8 @@ public class Stage7 extends Stage {
             CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));
 
             if (result.success() && mission.isFulfilled()) {
-                level.sandbox.getExecutor().removeBlocker((Blocker[]) mission.getEnemies().toArray());
+                level.sandbox.getExecutor().removeBlocker(mission.getEnemies());
+                level.sandbox.getExecutor().removeBlocker(mission.getHiddenDoors());
                 break;
             }
 
