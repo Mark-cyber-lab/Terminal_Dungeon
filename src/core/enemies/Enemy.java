@@ -99,11 +99,15 @@ public class Enemy implements Blocker, CommandListener, Loggable {
         Path enemyFolder = enemyFilePath.getParent().toAbsolutePath().normalize();
 
 //        IO.println("enemyfilePath= " + enemyFilePath);
-//        IO.println("folder       = " + absoluteFolder);
+//        IO.println("absoluteFolder       = " + absoluteFolder);
 //        IO.println("enemyFolder  = " + enemyFolder);
 
-        return !hasBeenDefeated && absoluteFolder.startsWith(enemyFolder);
+        boolean isBlocked = !hasBeenDefeated && absoluteFolder.startsWith(enemyFolder);
+//        IO.println("is blocked " + isBlocked);
+
+        return isBlocked;
     }
+
 
     @Override
     public boolean isCleared() {
@@ -113,7 +117,7 @@ public class Enemy implements Blocker, CommandListener, Loggable {
     @Override
     public void clear() {
         hasBeenDefeated = true;
-        log("[Enemy defeated] " + name + " at: " + enemyFilePath.toAbsolutePath());
+        IO.println("[Enemy defeated] " + name + " at: " + enemyFilePath.toAbsolutePath().normalize());
     }
 
     // --- CommandListener interface ---
@@ -123,13 +127,15 @@ public class Enemy implements Blocker, CommandListener, Loggable {
         String cmd = result.command().toLowerCase();
 
         Path targetPath = result.getFileFullPath();
-        assert targetPath != null;
+
+        if(targetPath == null) return;
+
         isSameFilePath = targetPath.toAbsolutePath().equals(enemyFilePath.toAbsolutePath().normalize());
 
 //        IO.println("11 target " + " at: " + targetPath.toAbsolutePath());
 //        IO.println("11 enemy" + enemyFilePath.normalize().toAbsolutePath());
         // Wrong command while in same folder triggers damage
-        if (!hasBeenDefeated && (!result.success() || (!cmd.equals("rm") && blocks(targetPath.getParent())))) {
+        if (!hasBeenDefeated && (!result.success() && (!cmd.equals("rm") && blocks(targetPath.getParent())))) {
             dealDamage("Wrong command executed in folder with enemy");
         }
 
@@ -157,7 +163,7 @@ public class Enemy implements Blocker, CommandListener, Loggable {
     // --- Damage logic ---
 
     private void dealDamage(String reason) {
-        log("[Enemy damage] " + name + " deals " + damagePerUnit + " HP damage. Reason: " + reason);
+        IO.println("[Enemy damage] " + name + " deals " + damagePerUnit + " HP damage. Reason: " + reason);
         if (player == null)
             log("Player instance not found. Cannot take damage to player");
         else

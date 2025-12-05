@@ -43,8 +43,8 @@ public class Stage7 extends Stage {
         HiddenKey commandHallKey = new HiddenKey(".key.secr", "COMMAND_HALL_KEY", null);
         HiddenKey accessMasterKey = new HiddenKey(".key.secr", "ACCESS_MASTER_KEY", null);
 
-        HiddenDoor commandHallDoor = new HiddenDoor("command_hall", "command_hall", Path.of("./sandbox/level_4/command_hall")).unlocksBy(commandHallKey).setPlayer(level.player);
-        HiddenDoor accessMAsterDoor = new HiddenDoor("access_master", "access_master", Path.of("./sandbox/level_4/access_master")).unlocksBy(accessMasterKey).setPlayer(level.player);
+        HiddenDoor commandHallDoor = new HiddenDoor("command_hall", "command_hall", Path.of("./sandbox/level_4/.command_hall")).unlocksBy(commandHallKey).setPlayer(level.player);
+        HiddenDoor accessMAsterDoor = new HiddenDoor("access_master", "access_master", Path.of("./sandbox/level_4/.access_master")).unlocksBy(accessMasterKey).setPlayer(level.player);
 
         mission
                 .addEnemy(outerPatrolGoblin)
@@ -76,13 +76,17 @@ public class Stage7 extends Stage {
                 IO.println("You are not allowed to use tree in this stage.");
             }
 
-            CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));
-
-            if (result.success() && mission.isFulfilled()) {
-                level.sandbox.getExecutor().removeBlocker(mission.getEnemies());
-                level.sandbox.getExecutor().removeBlocker(mission.getHiddenDoors());
-                break;
+            try {
+                CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));
+                if (result.success() && mission.isFulfilled()) {
+                    level.sandbox.getExecutor().removeBlocker(mission.getEnemies());
+                    level.sandbox.getExecutor().removeBlocker(mission.getHiddenDoors());
+                    break;
+                }
+            }catch (Exception e) {
+                e.printStackTrace();
             }
+
 
         }
 

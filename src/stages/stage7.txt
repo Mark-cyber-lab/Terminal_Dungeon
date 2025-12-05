@@ -79,7 +79,7 @@ HIDDEN_FILE: level_4/inner_courtyard/training_hall/secret_chamber/.key.secr
 COMMAND_HALL_KEY
 END
 
-FILE: level_4/command_hall/scroll.txt
+FILE: level_4/.command_hall/scroll.txt
 The Command Hall stands guarded.
 
 Defeat the sentinel first. Only then will the hall reveal its secrets.
@@ -89,7 +89,7 @@ Paths to the final place remain concealed.
 A warrior who observes carefully will find the way forward.
 END
 
-FILE: level_4/access_master/scroll.txt
+FILE: level_4/.access_master/scroll.txt
 The final challenge of this stage awaits you.
 
 Have the doors been unlocked?
