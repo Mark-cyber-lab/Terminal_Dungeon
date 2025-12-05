@@ -17,7 +17,7 @@ public abstract class Level {
      * Level number, e.g., 1, 2, 3
      */
     public final Sandbox sandbox;
-    protected Player player;
+    public Player player;
     protected final ArrayList<Stage> stages = new ArrayList<>();
     protected final String basePath;
 

@@ -1,6 +1,8 @@
 package core.levels.stages;
 
 import core.Mission;
+import core.doors.HiddenDoor;
+import core.doors.HiddenKey;
 import core.enemies.Enemy;
 import core.enemies.Goblin;
 import core.enemies.Kobold;
@@ -32,20 +34,30 @@ public class Stage7 extends Stage {
 
         Mission mission = new Mission();
 
-        Goblin outerPatrolGoblin = new Goblin("outer_gate_patrol", Path.of("./sandbox/level_4/outer_gate/patrol/goblin.mob"));
-        Goblin trainingHallGoblin = new Goblin("training_hall", Path.of("./sandbox/level_4/inner_courtyard/training_hall/goblin.mob"));
-        Goblin commandHallGoblin = new Goblin("command_hall", Path.of("./sandbox/level_4/command_hall/goblin.mob"));
-        Kobold guardRoomKobold = new Kobold("guard_room", Path.of("./sandbox/level_4/inner_courtyard/guard_room/kobold.mob"));
-        Ogre ogre = new Ogre("master", Path.of("./sandbox/level_4/access_master/ogre.mob"));
+        Goblin outerPatrolGoblin = (Goblin) new Goblin("outer_gate_patrol", Path.of("./sandbox/level_4/outer_gate/patrol/goblin.mob")).setPlayer(level.player);
+        Goblin trainingHallGoblin = (Goblin) new Goblin("training_hall", Path.of("./sandbox/level_4/inner_courtyard/training_hall/goblin.mob")).setPlayer(level.player);
+        Goblin commandHallGoblin = (Goblin) new Goblin("command_hall", Path.of("./sandbox/level_4/command_hall/goblin.mob")).setPlayer(level.player);
+        Kobold guardRoomKobold = (Kobold) new Kobold("guard_room", Path.of("./sandbox/level_4/inner_courtyard/guard_room/kobold.mob")).setPlayer(level.player);
+        Ogre ogre = (Ogre) new Ogre("master", Path.of("./sandbox/level_4/access_master/ogre.mob")).setPlayer(level.player);
+
+        HiddenKey commandHallKey = new HiddenKey(".key.secr", "COMMAND_HALL_KEY", null);
+        HiddenKey accessMasterKey = new HiddenKey(".key.secr", "ACCESS_MASTER_KEY", null);
+
+        HiddenDoor commandHallDoor = new HiddenDoor("command_hall", "command_hall", Path.of("./sandbox/level_4/command_hall")).unlocksBy(commandHallKey).setPlayer(level.player);
+        HiddenDoor accessMAsterDoor = new HiddenDoor("access_master", "access_master", Path.of("./sandbox/level_4/access_master")).unlocksBy(accessMasterKey).setPlayer(level.player);
 
         mission
                 .addEnemy(outerPatrolGoblin)
                 .addEnemy(trainingHallGoblin)
                 .addEnemy(commandHallGoblin)
                 .addEnemy(guardRoomKobold)
-                .addEnemy(ogre);
+                .addEnemy(ogre)
+                .addHiddenDoor(commandHallDoor)
+                .addHiddenDoor(accessMAsterDoor);
+
 
         level.sandbox.getExecutor().addBlocker((Blocker[]) mission.getEnemies().toArray());
+        level.sandbox.getExecutor().addBlocker((Blocker[]) mission.getHiddenDoors().toArray());
 
         CLIUtils.typewriter("You step into the outer gate; sentries patrol the area.", 30);
         CLIUtils.typewriter("Enemies prevent careless grabs — keys cannot be picked up if a mob is present.", 30);
