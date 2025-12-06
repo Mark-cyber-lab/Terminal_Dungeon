@@ -15,7 +15,8 @@ FILE: arcane_knight/welcome.txt
 Arcane Knight Level 5: Advanced Puzzles
 Stage 1: Rebuild the Deep Dungeon Map
 Find the 6 real map pieces and assemble them in map_chamber
-Real pieces contain "FRAGMENT:" and are 100 bytes
+Real pieces contain "FRAGMENT:"
+Create first the target_point directory where you can move the fragments there.
 
 FILE: crumbling_corridor/goblin.mob
 Cunning goblin - guards the entrance corridor
@@ -44,8 +45,8 @@ Crypt zombie - risen from ancient graves
 FILE: echoing_caverns/ogre.mob
 Cavern ogre - blocks the passage
 
-FILE: echoing_caverns/ancient_grotto/toughenemy.mob
-Tough cave guardian - elite monster
+FILE: echoing_caverns/ancient_grotto/ogre.mob
+Tough cave ogre - an elite monster
 
 FILE: echoing_caverns/ancient_grotto/hidden_alcove/map_piece_3.txt
 FRAGMENT:3
@@ -76,10 +77,6 @@ Ancient vampire - boss of the vault
 
 FILE: spider_infested_vault/ghoul.mob
 Vault ghoul - servant to the vampire
-
-FILE: portal_to_stage2
-# This file appears after completing Stage 1
-# Leads to: Advanced Dungeon Cache Cleanup
 
 FILE: dungeon_cache/.tmp/junk1.tmp
 Temporary cache file - can be deleted
