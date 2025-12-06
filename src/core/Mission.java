@@ -3,7 +3,6 @@ package core;
 import core.enemies.Enemy;
 import core.doors.HiddenDoor;
 import core.items.Decoy;
-import core.items.Movables;
 import core.items.Shards;
 
 import java.util.ArrayList;

@@ -10,8 +10,6 @@ import utilities.CLIUtils;
 import utilities.CommandResult;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Array;
-import java.util.ArrayList;
 
 public class Stage9 extends Stage {
     private static final String configPath = "./src/stages/stage6txt";

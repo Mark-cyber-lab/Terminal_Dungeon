@@ -2,8 +2,6 @@ package core.levels;
 
 import core.Player;
 import core.levels.stages.Stage;
-import core.levels.stages.Stage1;
-import core.levels.stages.Stage2;
 import core.levels.stages.Stage7;
 import engine.Sandbox;
 import utilities.AsciiArt;
