@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Stage6 extends Stage {
-    private static final String configPath = "./src/stages/stage6txt";
+    private static final String configPath = "./src/stages/stage6.txt";
 
     public Stage6(Level level) {
         super(6, level);

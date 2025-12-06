@@ -12,7 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Stage9 extends Stage {
-    private static final String configPath = "./src/stages/stage6txt";
+    private static final String configPath = "./src/stages/stage9.txt";
 
     public Stage9(Level level) {
         super(6, level);
@@ -20,7 +20,7 @@ public class Stage9 extends Stage {
 
     @Override
     public String[] getStageHeader() {
-        return new String[]{"Stage 6 — A Dark Mysterious Aura that envelops the way"};
+        return new String[]{"Stage 9 — Collecting The Lost Fragments Of The Past"};
     }
 
     @Override
@@ -95,8 +95,9 @@ public class Stage9 extends Stage {
         CLIUtils.typewriter("It fades, leaving behind one final warning: \"Beware false fragments... and the creatures that guard them.\"", 25);
         CLIUtils.typewriter("\nGoal: Rebuild the Deep Dungeon Map by finding real map pieces scattered through nested directories.", 25);
         CLIUtils.typewriter("Tip: Real map pieces contain 'FRAGMENT:' on the first line. Fake pieces do not.", 25);
+        CLIUtils.typewriter("Destroy the decoys!!!.", 25);
         CLIUtils.typewriter("Use the skills that you've learned from the previous stages and this new skills\n Use 'mv' to move fragments, and 'mkdir' if you need to organize or create the blueprint.", 25);
-        CLIUtils.typewriter("Remember: The fragments must be assembled in the \"target_point\" directory. Once you collect thme", 25);
+        CLIUtils.typewriter("Remember: The fragments must be assembled in the \"target_point\" directory.\nOnce you collect them go to the \"target_point\" directory and type \"ls\"", 25);
         CLIUtils.typewriter("Type your command to begin exploring the dungeon...", 25);
 
         long enemyCount;
@@ -120,50 +121,17 @@ public class Stage9 extends Stage {
             if (input.equalsIgnoreCase("e") || input.equalsIgnoreCase("exit"))
                 break;
 
-            if (input.startsWith("rm")) { // this is for battling the mob files
-                String[] words = input.split(" ");
-                int wordCount = words.length;
-
-                if (wordCount == 1) {
-                    IO.println("The spirits whisper: \"That is not how you use the command.\"");
-                    continue;
-                } else {
-                    boolean passed = runCommand(input, words, wordCount);
-                    if (passed)
-                        level.sandbox.getExecutor().executeCommand(input.split(" "));
-                } // for traversing the dungeon corridor
-            } else if (input.startsWith("ls")) {
-                CommandResult result = level.sandbox.getExecutor().executeCommand("pwd");
-                String[] wordsArr = result.path().split("/");
-
-                // conditions to determine if the location is on the target point
-                if (wordsArr[wordsArr.length - 1].equals("target_point"))
-                    success = testMissionComplete(mission, input);
-                else
-                    level.sandbox.getExecutor().executeCommand(input.split(" "));
-
-            }else if (input.startsWith("cat") || input.startsWith("cd") || input.startsWith("pwd") || input.startsWith("tree"))
+            if (input.startsWith("rm")) // this is for battling the mob files
+                rmFunction(input, mission);
+            else if (input.startsWith("ls"))
+                success = lsFunction(input, mission);
+            else if (input.startsWith("cat") || input.startsWith("cd") || input.startsWith("pwd") || input.startsWith("tree"))
                 level.sandbox.getExecutor().executeCommand(input.split(" "));
-            else if (input.startsWith("mv")) { // this is for moving the items to designated area
-                String[] wordsArr = input.split(" ");
-
-                if (wordsArr.length == 2) {
-                    String[] subWordsArr = wordsArr[1].split("/");
-
-                    if (subWordsArr[subWordsArr.length - 1].equals("target_point")) {
-                        CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));
-
-                        if (!result.success())
-                            IO.println("The spirits whisper: \"There are something wrong with your action.\"");
-                    }
-                }
-            } else if (input.startsWith("mkdir")) { // this is for creating the destroyed dungeon
-                CommandResult result = level.sandbox.getExecutor().executeCommand("pwd");
-                String[] wordsArr = result.path().split("/");
-
-                if (wordsArr[wordsArr.length - 1].equals("sandbox"))
-                    level.sandbox.getExecutor().executeCommand(input.split(" "));
-            } else { // if the input command is wrong
+            else if (input.startsWith("mv")) // this is for moving the items to designated area
+                moveFunction(input, mission);
+            else if (input.startsWith("mkdir")) // this is for creating the destroyed dungeon
+                mkdirFunction(input);
+            else { // if the input command is wrong
                 IO.println("The spirits whisper: \"That is not the command you were meant to use.\"");
                 continue;
             }
@@ -202,6 +170,71 @@ public class Stage9 extends Stage {
             return true;
         }
         return false;
+    }
+
+    public void moveFunction (String input, Mission mission) {
+        String[] wordsArr = input.split(" ");
+
+        if (wordsArr.length == 2) {
+            String[] subWordsArr = wordsArr[1].split("/");
+
+            if (subWordsArr[subWordsArr.length - 1].equals("target_point")) {
+                CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));
+
+                if (!result.success())
+                    IO.println("The spirits whisper: \"There are something wrong with your action.\"");
+                else {
+                    for (Shards s : mission.getShards()) {
+                        if (input.contains(s.getName())) {
+                            s.setCorrectDir(true);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void mkdirFunction (String input) {
+        CommandResult result = level.sandbox.getExecutor().executeCommand("pwd");
+        String[] wordsArr = result.path().split("/");
+
+        if (wordsArr[wordsArr.length - 1].equals("sandbox"))
+            level.sandbox.getExecutor().executeCommand(input.split(" "));
+    }
+
+    public boolean lsFunction (String input, Mission mission) {
+        CommandResult result = level.sandbox.getExecutor().executeCommand("pwd");
+        String[] wordsArr = result.path().split("/");
+
+        // conditions to determine if the location is on the target point
+        if (wordsArr[wordsArr.length - 1].equals("target_point"))
+            return testMissionComplete(mission, input);
+        else
+            level.sandbox.getExecutor().executeCommand(input.split(" "));
+
+        return false;
+    }
+
+    public void rmFunction (String input, Mission mission) {
+        String[] words = input.split(" ");
+        int wordCount = words.length;
+
+        if (wordCount == 1)
+            IO.println("The spirits whisper: \"That is not how you use the command.\"");
+        else {
+            boolean passed = runCommand(input, words, wordCount);
+
+            if (passed) {
+                level.sandbox.getExecutor().executeCommand(input.split(" "));
+                for (Decoy d : mission.getDecoyItems()) {
+                    if (input.contains(d.getName())) {
+                        d.setDeleted(true);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     @Override

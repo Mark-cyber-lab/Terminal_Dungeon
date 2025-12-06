@@ -85,8 +85,5 @@ Ghoul feaster - lurks in garbage piles
 FILE: dungeon_cache/.garbage/scrap_heap/ogre.mob
 Junk ogre - massive cleaner of scraps
 
-FILE: dungeon_cache/toughenemy.mob
-Cache warden - elite protector of the dungeon cache
-
 FILE: dungeon_cache/vampire.mob
 Cache vampire lord - final boss of cleanup stage
