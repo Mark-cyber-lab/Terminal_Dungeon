@@ -5,6 +5,8 @@ import core.levels.stages.Stage;
 import core.storage.Inventory;
 import engine.Sandbox;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 /**
@@ -65,7 +67,10 @@ public abstract class Level {
                         stage.execute(
                                 () -> {
                                 }, // Before setup lambda
-                                () -> sandbox.updateRootDir(basePath) // After setup lambda
+                                () -> {
+//                                    IO.println("base path is " + basePath);
+                                    sandbox.updateRootDir(prev -> Paths.get(prev).resolve(basePath).normalize().toAbsolutePath().toString());
+                                } // After setup lambda
                         );
 
                         // Update player stage to next stage
