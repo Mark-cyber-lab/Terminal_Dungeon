@@ -1,37 +1,152 @@
-DIR: level_8/
-DIR: level_8/security_hall/
-DIR: level_8/restricted_zone/
-DIR: level_8/authority_chamber/
-LOCKED_DIR: level_8/security_chief/
+# Level 4, Stage 8
+# Warrior Knight
+# Goal / Interaction: Restore Order to the Fractured Archive
+# Objects: orb_fragment_* files, corrupted notes, decoy records, layered shelves, hidden compartments
+# Commands / Mechanics: mv, mkdir, ls, cat, ls -a
 
-FILE: level_8/security_hall/welcome.txt
-Warrior Knight Level 2: Master permissions
-Advanced access control
+# Directories
+DIR: level_4/
+DIR: level_4/fractured_archive/
+DIR: level_4/fractured_archive/west_wing/
+DIR: level_4/fractured_archive/west_wing/low_shelves/
+DIR: level_4/fractured_archive/west_wing/upper_shelves/
+DIR: level_4/fractured_archive/east_wing/
+DIR: level_4/fractured_archive/east_wing/high_shelves/
+DIR: level_4/fractured_archive/east_wing/middle_shelves/
+DIR: level_4/fractured_archive/central_hub/
+DIR: level_4/storage_bay/
+HIDDEN_DIR: level_4/fractured_archive/.misaligned_stacks/
+HIDDEN_DIR: level_4/fractured_archive/east_wing/.quiet_rack/
 
-FILE: level_8/restricted_zone/lesson_1.txt
-Work with complex permissions
-Some areas have multiple locks
+# Files
+FILE: level_4/fractured_archive/scroll.txt
+Warrior Knight,
 
-FILE: level_8/authority_chamber/challenge.txt
-Solve permission puzzles
-Combine combat and access control
+The Fractured Archive trembles under the weight of its own disarray.
+Orb fragments drift and hide, some faint, some dim, some silent.
+Among toppled parchment and dusted shelves, decoys and corrupted notes lie in wait.
 
-FILE: level_8/security_hall/kobold.mob
-Security kobold guard
+Each fragment hums or pulses in its own way.
+Some whispers are soft, almost imperceptible.
+Some vibrate urgently, demanding attention.
+Some remain silent, watching from the shadows.
 
-FILE: level_8/restricted_zone/kobold.mob
-Elite kobold sentry
-FILE: level_8/restricted_zone/goblin.mob
-Goblin infiltrator
+To restore order, you must listen as well as look.
+Use 'cat' to uncover the fragments’ voices,
+and let their hum guide you to the place they truly belong.
 
-FILE: level_8/authority_chamber/kobold.mob
-Authority kobold
-FILE: level_8/authority_chamber/kobold.mob
-Authority kobold
+Beware the guardians among the shelves.
+They block careless hands and eyes that wander too quickly.
 
-HIDDEN_FILE: level_8/restricted_zone/.security_key.secr
-Key for security mastery
+Only the patient and observant may align the fragments and stabilize the Archive.
 
-FILE: level_8/security_chief/test.txt
-Final permission challenge
-Become security master
+— Keeper Arvian
+END
+
+FILE: level_4/fractured_archive/west_wing/low_shelves/orb_fragment_w1.frg
+A blue shard flickering with faint energy.
+(cat reveals a faint hum: ~~~~)
+END
+
+FILE: level_4/fractured_archive/west_wing/upper_shelves/orb_fragment_w2.frg
+A fragment resting among toppled parchment rolls, vibrating softly.
+(cat reveals a weak pulse: ~~~)
+END
+
+FILE: level_4/fractured_archive/east_wing/middle_shelves/orb_fragment_e1.frg
+A dim fragment, hard to reach.
+(cat reveals a muted hum: ~~)
+END
+
+HIDDEN_FILE: level_4/fractured_archive/.misaligned_stacks/.orb_fragment_f1.frg
+A lost fragment vibrating with irregular pulses.
+(cat reveals strong vibrations: ~~~~~~)
+END
+
+HIDDEN_FILE: level_4/fractured_archive/east_wing/.quiet_rack/.orb_fragment_e2.frg
+A silent fragment hidden behind thick dust.
+(cat reveals silence: - )
+END
+
+FILE: level_4/fractured_archive/central_hub/corrupted_note.txt
+WARNING: FILE STATE INVALID ###
+?? ??? ///
+Fragment misdir—ERROR—refer—##STOP##
+END
+
+FILE: level_4/storage_bay/misplaced_record_fake.txt
+This record pretends to be a fragment… but clearly is not.
+END
+
+FILE: level_4/fractured_archive/east_wing/hint.txt
+Warrior Knight,
+
+Not all that glows is meant to move.
+Some hum softly, some vibrate with urgency,
+and some are silent as forgotten memories.
+
+Match the sound to its place:
+
+- The faintest hum hides low in the west.
+- Strong pulses lurk where shadows gather.
+- Dim murmurs linger in the east’s middle racks.
+- Silence rests in the high shelves or the quiet corners.
+
+Use your eyes and ears—'cat' will reveal the truth.
+Beware decoys; only real fragments obey the Archive’s call.
+
+— Keeper Arvian
+END
+
+FILE: level_4/fractured_archive/central_hub/fake_fragment.tmp
+A fake orb fragment meant to confuse the unwary.
+END
+
+# Additional Enemies (Mobs Added)
+FILE: level_4/fractured_archive/west_wing/low_shelves/dustling.mob
+A Dustling lurks between the shelves, shifting like sand.
+END
+
+FILE: level_4/fractured_archive/west_wing/upper_shelves/tome_guard.mob
+A Tome Guard watches over misplaced scrolls.
+END
+
+FILE: level_4/fractured_archive/east_wing/high_shelves/shelf_sprite.mob
+A Shelf Sprite flutters restlessly atop the upper racks.
+END
+
+FILE: level_4/fractured_archive/central_hub/echo_shade.mob
+An Echo Shade drifts silently in the center chamber.
+END
+
+FILE: level_4/fractured_archive/.misaligned_stacks/archive_wraith.mob
+A hidden Archive Wraith binds the fractured memories together.
+END
+
+FILE: level_4/fractured_archive/east_wing/.quiet_rack/silent_keeper.mob
+The Silent Keeper watches you from the shadows.
+END
+
+# Game Flow
+# type "You step into the Fractured Archive. Shelves tremble and fragments hum irregularly."
+# type "Some fragments are real. Some are distractions. Guardians lurk quietly, blocking hasty hands."
+# type "Use ls, ls -a, cd, and cat to explore shelves and visualize fragment hums or vibrations."
+# type "Avoid decoy files and corrupted notes. Only real orb fragments can be moved."
+# type "Organize every real fragment into its correct shelf according to their hums."
+# input
+# continue
+#
+# After all real fragments are restored and mobs defeated:
+# type "A stabilizing resonance echoes through the archive."
+# type "'Stage 8 complete. The fractured memories align once more.'"
+# type "\"Your precision strengthens the archive, Warrior Knight.\""
+
+# Rules
+# 1. Only orb_fragment_*.frg files are valid targets.
+# 2. Fake or decoy files must be ignored.
+# 3. Use ls -a to find fragments in hidden compartments.
+# 4. Use cat <file> to observe fragment hum, vibration, or silence.
+# 5. mkdir may be required to create missing shelves for proper placement.
+# 6. Use mv <file> ./<directory>/ to organize fragments correctly.
+# 7. Corrupted notes are misleading and should not be moved.
+# 8. Fragments cannot be moved while a mob (.mob file) exists in the same folder.

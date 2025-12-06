@@ -2,6 +2,8 @@ package core;
 
 import core.enemies.Enemy;
 import core.doors.HiddenDoor;
+import core.listeners.Blocker;
+
 import core.items.Decoy;
 import core.items.Shards;
 
@@ -10,12 +12,18 @@ import java.util.List;
 
 public class Mission {
 
-    private final List<Enemy> enemies = new ArrayList<>();
-    private final List<HiddenDoor> hiddenDoors = new ArrayList<>();
+    private final List<Blocker> enemies = new ArrayList<>();
+    private final List<Blocker> hiddenDoors = new ArrayList<>();
+    private final Player player;
+
+    public Mission(Player player) {
+        this.player = player;
+    }
     private final List<Decoy> decoys = new ArrayList<>();
     private final List<Shards> shards = new ArrayList<>();
 
     public Mission addEnemy(Enemy enemy) {
+        enemy.setPlayer(player);
         this.enemies.add(enemy);
         return this;
     }
@@ -31,21 +39,20 @@ public class Mission {
     }
 
     public Mission addHiddenDoor(HiddenDoor door) {
+        door.setPlayer(player);
         this.hiddenDoors.add(door);
         return this;
     }
 
-    public List<Enemy> getEnemies() {
+    public List<Blocker> getEnemies() {
         return this.enemies;
     }
+
+    public List<Blocker> getHiddenDoors() {return this.hiddenDoors;}
 
     public  List<Decoy> getDecoyItems() {return this.decoys;}
 
     public List<Shards>  getShards() {return this.shards;}
-
-    public List<HiddenDoor> getHiddenDoors() {
-        return this.hiddenDoors;
-    }
 
     public boolean shardCompleted() {
         return shards.isEmpty() ||
@@ -60,10 +67,10 @@ public class Mission {
     public boolean isFulfilled() {
 
         boolean enemiesCleared = enemies.isEmpty() ||
-                enemies.stream().allMatch(Enemy::hasBeenDefeated);
+                enemies.stream().allMatch(Blocker::isCleared);
 
         boolean doorsCleared = hiddenDoors.isEmpty() ||
-                hiddenDoors.stream().allMatch(HiddenDoor::hasBeenUnlocked);
+                hiddenDoors.stream().allMatch(Blocker::isCleared);
 
         boolean deletedDecoys = decoys.isEmpty() ||
                 decoys.stream().allMatch(Decoy::isDeleted);
@@ -72,5 +79,19 @@ public class Mission {
                 shards.stream().allMatch(Shards::isCorrectDir);
 
         return enemiesCleared && doorsCleared && deletedDecoys && movedShards;
+    }
+
+    public void initialize(){
+        player.getLevelObj().sandbox.getExecutor().addBlocker(enemies);
+        player.getLevelObj().sandbox.getExecutor().addBlocker(hiddenDoors);
+    }
+
+    public void cleanUp() {
+        if(!isFulfilled()) return;
+
+        player.getLevelObj().sandbox.getExecutor().removeBlocker(enemies);
+        player.getLevelObj().sandbox.getExecutor().removeBlocker(hiddenDoors);
+        enemies.clear();
+        hiddenDoors.clear();
     }
 }

@@ -25,7 +25,7 @@ public class Stage9 extends Stage {
 
     @Override
     public void play() {
-        Mission mission = new Mission();
+        Mission mission = new Mission(level.player);
 
         Goblin corridorGoblin = new Goblin("corridor_goblin", Path.of("./sandbox/crumbling_corridor/goblin.mob"));
         Goblin hiddenGoblin = new Goblin("goblin_trap_setter", Path.of("./sandbox/echoing_caverns/ancient_grotto/hidden_alcove/goblin.mob"));
@@ -106,7 +106,7 @@ public class Stage9 extends Stage {
         boolean success = false;
         while (!success) {
 
-            enemyCount = mission.getEnemies().stream().filter(enemy -> !enemy.hasBeenDefeated()).count();
+            enemyCount = mission.getEnemies().stream().filter(enemy -> !enemy.isCleared()).count();
             shardsNotCompleted = mission.getShards().stream().filter(shard -> !shard.isCorrectDir()).count();
             decoyNotDeleted = mission.getDecoyItems().stream().filter(decoy -> !decoy.isDeleted()).count();
 
@@ -189,7 +189,7 @@ public class Stage9 extends Stage {
     }
 
     public boolean testMissionComplete(Mission mission, String input) {
-        long enemyCount = mission.getEnemies().stream().filter(enemy -> !enemy.hasBeenDefeated()).count();
+        long enemyCount = mission.getEnemies().stream().filter(enemy -> !enemy.isCleared()).count();
         if (!mission.decoyCompleted())
             IO.println("The spirits whisper: \"There are still decoys left to be deleted.\"");
         else if(!mission.shardCompleted())

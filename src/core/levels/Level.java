@@ -50,12 +50,14 @@ public abstract class Level {
         int firstStageOfLevel = (currentLevel - 1) * stagesPerLevel + 1;
         int lastStageOfLevel = currentLevel * stagesPerLevel;
 
+//        IO.println("Current Stage: " + currentStage);
+//        IO.println("Current Level: " + currentLevel);
         // Ensure we start from the player's current stage if already in the middle of level
         int startStage = Math.max(currentStage, firstStageOfLevel);
-
+//        IO.println("Current Stage: " + startStage);
         for (int stageNumber = startStage; stageNumber <= lastStageOfLevel; stageNumber++) {
             int finalStageNumber = stageNumber;
-
+//            IO.println("Final Stage: " + finalStageNumber);
             stages.stream()
                     .filter(stage -> stage.getStageNumber() == finalStageNumber)
                     .findFirst()

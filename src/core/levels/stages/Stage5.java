@@ -23,7 +23,7 @@ public class Stage5 extends Stage {
 
     @Override
     public void play() {
-        Mission mission = new Mission();
+        Mission mission = new Mission(level.player);
 
         Goblin ordinaryGoblin = new Goblin("goblin_caves", Path.of("./sandbox/goblin_caves/goblin.mob"));
         Goblin wariorGoblin = new Goblin("arena", Path.of("./sandbox/arena/goblin.mob"));
@@ -36,7 +36,7 @@ public class Stage5 extends Stage {
                 .addEnemy(strongGoblin)
                 .addEnemy(strongZombie);
 
-        level.sandbox.getExecutor().addBlocker((Blocker[]) mission.getEnemies().toArray());
+        mission.initialize();
 
         CLIUtils.typewriter("From the darkness ahead, a low growl echoes, suggesting you are not alone.", 25);
         CLIUtils.typewriter("The knight's words ring in your ears: \"Use the knowledge you've gained, adventurer.\"", 25);
@@ -51,7 +51,7 @@ public class Stage5 extends Stage {
         while (!success) {
 
             enemyCount = mission.getEnemies().size();
-            defeatedEnemiesCount = (int) mission.getEnemies().stream().filter(Enemy::hasBeenDefeated).count();
+            defeatedEnemiesCount = (int) mission.getEnemies().stream().filter(Blocker::isCleared).count();
 
             IO.println(enemyCount + " monster/s remaining.");
             IO.print(">> ");
@@ -77,11 +77,10 @@ public class Stage5 extends Stage {
                         CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));
 
                         if (result.success() && mission.isFulfilled()) {
-                            level.sandbox.getExecutor().removeBlocker((Blocker[]) mission.getEnemies().toArray());
-
-                            defeatedEnemiesCount = (int) mission.getEnemies().stream().filter(Enemy::hasBeenDefeated).count();
+                            defeatedEnemiesCount = (int) mission.getEnemies().stream().filter(Blocker::isCleared).count();
 
                             if (defeatedEnemiesCount == 0) {
+                                mission.cleanUp();
                                 CLIUtils.typewriter("Congratulations!!\nYou defeated all the enemies", 25);
                                 CLIUtils.typewriter("Teleporting you to the next stage\n...", 25);
                                 success = true;

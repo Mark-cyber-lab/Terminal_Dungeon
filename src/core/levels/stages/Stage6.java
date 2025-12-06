@@ -23,7 +23,7 @@ public class Stage6 extends Stage {
 
     @Override
     public void play() {
-        Mission mission = new Mission();
+        Mission mission = new Mission(level.player);
 
         Goblin ordinaryGoblin = new Goblin("hunter_goblin", Path.of("./sandbox/advanced_combat/goblin.mob"));
         Kobold wariorKobold = new Kobold("warior_kobold", Path.of("./sandbox/warrior_hall/kobold.mob"));
@@ -40,7 +40,7 @@ public class Stage6 extends Stage {
                 .addEnemy(ogreGeneral)
                 .addEnemy(vampireBoss);
 
-        level.sandbox.getExecutor().addBlocker((Blocker[]) mission.getEnemies().toArray());
+        mission.initialize();
 
         CLIUtils.typewriter("\nThe corridor narrows and the air grows cold. The scent of aged earth and old blood fills your nostrils.", 25);
         CLIUtils.typewriter("Before you stands a tall, pale figure with eyes that glow crimson in the gloom—a vampire noble.", 25);
@@ -81,11 +81,10 @@ public class Stage6 extends Stage {
                         CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));
 
                         if (result.success() && mission.isFulfilled()) {
-                            level.sandbox.getExecutor().removeBlocker((Blocker[]) mission.getEnemies().toArray());
-
-                            defeatedEnemiesCount = (int) mission.getEnemies().stream().filter(Enemy::hasBeenDefeated).count();
+                            defeatedEnemiesCount = (int) mission.getEnemies().stream().filter(Blocker::isCleared).count();
 
                             if (defeatedEnemiesCount == 0) {
+                                mission.cleanUp();
                                 CLIUtils.typewriter("Congratulations!!\nYou defeated all the enemies", 25);
                                 CLIUtils.typewriter("Teleporting you to the next stage\n...", 25);
                                 success = true;
