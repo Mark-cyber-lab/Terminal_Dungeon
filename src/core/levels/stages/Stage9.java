@@ -191,7 +191,7 @@ public class Stage9 extends Stage {
     }
 
     public boolean testMissionComplete(Mission mission, String input) {
-        int enemyCount = mission.getEnemies().stream().filter(enemy -> !enemy.hasBeenDefeated()).count();
+        long enemyCount = mission.getEnemies().stream().filter(enemy -> !enemy.hasBeenDefeated()).count();
         if (!mission.decoyCompleted())
             IO.println("The spirits whisper: \"There are still decoys left to be deleted.\"");
         else if(!mission.shardCompleted())
