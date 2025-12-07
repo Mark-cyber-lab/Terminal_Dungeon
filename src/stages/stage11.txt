@@ -1,33 +1,101 @@
-DIR: level_11/
-DIR: level_11/holy_sanctum/
-DIR: level_11/divine_hall/
-DIR: level_11/restoration_room/
-LOCKED_DIR: level_11/divine_judge/
+DIR: holy_sanctum/
+DIR: divine_hall/
+DIR: restoration_room/
+HIDDEN_DIR: .divine_judge/
 
-FILE: level_11/holy_sanctum/welcome.txt
-Paladin Level 1: Learn divine authority
-Command: sudo
+FILE: holy_sanctum/welcome.txt
+"Paladin Level 11: Grand Archive Restoration
+Learn divine authority to repair corrupted archives
+Command: sudo"
 
-FILE: level_11/divine_hall/lesson_1.txt
-Use sudo for powerful actions
-Restore corrupted areas
+FILE: divine_hall/lesson_1.txt
+"Use sudo for powerful restoration actions
+Corrupted archives require elevated privileges to fix
+Some files are locked by the Grandmaster Knight's curse"
 
-FILE: level_11/restoration_room/practice.txt
-Fix damaged dungeon sections
+HIDDEN_FILE: restoration_room/labyrinth/maze/center/.key.secr
+DIVINE_JUDGE
+END
+
+FILE: restoration_room/practice.txt
+"Fix damaged archive sections
 Some repairs need elevated access
+Remember: With great power comes great responsibility"
 
-FILE: level_11/holy_sanctum/corrupted_goblin.mob
-Goblin touched by darkness
+# === CORRUPTED ARCHIVE FILES (NEED RESTORATION) ===
+FILE: holy_sanctum/broken_pillar_01.txt
+"ARCHIVE CORRUPTED: Pillar of History - Segment 1
+[Status: Fragmented]
+Restoration command: sudo mv broken_pillar_01.txt pillar_01.txt"
 
-FILE: level_11/divine_hall/corrupted_kobold.mob
-Kobold with dark powers
+FILE: divine_hall/corrupted_core_A.dat
+"ARCHIVE CORRUPTED: Core Memory Bank - Alpha
+[Status: Data Scrambled]
+Restoration command: sudo mv corrupted_core_A.dat core_A.dat"
 
-FILE: level_11/restoration_room/damaged_scroll.txt
-Document needing restoration
+FILE: restoration_room/fragment_seal_1.piece
+"ARCHIVE CORRUPTED: Great Seal - Fragment 1
+[Status: Magical Signature Faded]
+Restoration command: sudo mv fragment_seal_1.piece seal_fragment_1.piece"
 
-HIDDEN_FILE: level_11/divine_hall/.holy_key.secr
-Key blessed with divine power
+# === DEEPLY NESTED CORRUPTED FILES ===
+DIR: holy_sanctum/forgotten_vault/
+FILE: holy_sanctum/forgotten_vault/pillar_broken_02.txt
+"ARCHIVE CORRUPTED: Pillar of History - Segment 2
+[Status: Lost in Vault]
+Path is deep but restoration is needed"
 
-FILE: level_11/divine_judge/challenge.txt
-Test your sudo authority
-Wield power responsibly
+DIR: divine_hall/ancient_catacombs/
+DIR: divine_hall/ancient_catacombs/deep_crypt/
+FILE: divine_hall/ancient_catacombs/deep_crypt/core_corrupted_B.dat
+"ARCHIVE CORRUPTED: Core Memory Bank - Beta
+[Status: Buried Deep]
+Navigate the catacombs to find me"
+
+DIR: restoration_room/labyrinth/
+DIR: restoration_room/labyrinth/maze/
+DIR: restoration_room/labyrinth/maze/center/
+FILE: restoration_room/labyrinth/maze/center/seal_fragment_2.piece
+"ARCHIVE CORRUPTED: Great Seal - Fragment 2
+[Status: Hidden in Labyrinth]
+Some paths are confusing but necessary"
+
+# === MIXED STATE FILES ===
+FILE: holy_sanctum/pillar_03.txt
+"Pillar of History - Segment 3
+[Status: INTACT but MISPLACED]
+This file doesn't need renaming, but needs proper placement"
+
+FILE: divine_hall/core_C.dat
+"Core Memory Bank - Gamma
+[Status: INTACT but MISPLACED]
+Already correctly named, waiting for proper filing"
+
+# === RESTORATION TARGETS (EMPTY INITIALLY) ===
+DIR: restoration_room/archive_pillars/
+DIR: restoration_room/archive_cores/
+DIR: restoration_room/archive_seals/
+
+FILE: restoration_room/instructions.txt
+"GRAND ARCHIVE RESTORATION PROTOCOL:
+1. Navigate the deep, confusing subfolders
+2. Rename corrupted files to proper names:
+   - broken_pillar_* → pillar_*.txt
+   - corrupted_core_* → core_*.dat
+   - fragment_seal_* → seal_fragment_*.piece
+3. Move ALL files to proper archive sections:
+   - pillar files → archive_pillars/
+   - core files → archive_cores/
+   - seal fragments → archive_seals/
+4. Some files need sudo authority to modify
+5. Some are already named correctly but misplaced"
+
+# === DIVINE JUDGE CHALLENGE ===
+FILE: divine_judge/challenge.txt
+"FINAL TEST: Grandmaster Knight's Corruption
+Wield sudo authority responsibly to restore the archive
+Complete all restorations to unlock the next level"
+
+HIDDEN_FILE: divine_hall/.holy_key.secr
+"Divine Restoration Key: archive_unlock_2024
+Some doors require both permission and knowledge"
