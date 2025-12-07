@@ -35,4 +35,4 @@ Training zombie for practice
 
 FILE: combat_master/key.txt
 Test your basic combat skills.
-Type "Move Forward" to continue to next stage
+Type "done" to continue to next stage

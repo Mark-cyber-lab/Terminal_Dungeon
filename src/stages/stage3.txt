@@ -168,7 +168,7 @@ Next Stage: Ancient knowledge awaits
 But beware the living texts
 
 FILE: mastery_chamber/next_stage/forbidden_library/key.txt
-Type "Done" to move to the next stage
+Type "done" to move to the next stage
 cd ..
 FILE: mastery_chamber/meditation_room/reflections.txt
 You have learned well, Apprentice Knight

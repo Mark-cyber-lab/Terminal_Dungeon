@@ -1,9 +1,9 @@
-package core.levels.stages;
+package v2.levels.stages;
 
-import core.items.Letter;
-import core.levels.Level;
 import utilities.CLIUtils;
-import utilities.CommandResult;
+import v2.CommandResult;
+import v2.items.Letter;
+import v2.levels.Level;
 
 import java.util.Objects;
 
@@ -38,12 +38,12 @@ public class Stage2 extends Stage {
             System.out.print(">> ");
             input = IO.readln().trim();
 
-            CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));
+            CommandResult result = level.sandbox.getExecutor().execute(input);
 
-            if(result.success() && Objects.equals(result.command(), "cat") && result.subject().contains("dear_squire.txt")){
+            if (result.isSuccess() && "cat".equals(result.getContext().command) && result.getContext().read.toString().endsWith("dear_squire.txt")) {
                 // obtain letter
                 Letter letter = new Letter("dear_squire", result);
-                level.getInventory().addItem(letter);
+                level.sandbox.getInventory().addItem(letter);
                 break;
             }
 
@@ -55,7 +55,7 @@ public class Stage2 extends Stage {
         CLIUtils.typewriter("The Old Knight nods: 'Your Stage 2 training is complete. Greater adventures await…'", 30);
         CLIUtils.typewriter("\"Stage 2 complete. Prepare for what comes next.\"", 30);
 
-        level.sandbox.getExecutor().setCurrentDirectory("../");
+        level.sandbox.getExecutor().execute("cd ..");
 
     }
 
@@ -73,6 +73,12 @@ public class Stage2 extends Stage {
 
     @Override
     public void setupEnvironment() {
-        level.sandbox.getDirGenerator().generateFromConfig(configPath, level.sandbox.getRootPath());
+        level.sandbox.getDirGenerator().generateFromConfig(configPath, level.sandbox.getSandBoxPath().toString());
+        level.sandbox.getGranter().grant("pwd");
+        level.sandbox.getGranter().grant("ls");
+        level.sandbox.getGranter().grant("cd");
+        level.sandbox.getGranter().grant("tree");
+        level.sandbox.getGranter().grant("done");
+        level.sandbox.getGranter().grant("cat");
     }
 }

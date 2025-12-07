@@ -10,7 +10,7 @@ package core;
 public abstract class Alive {
     private final AliveStats stats;
 
-    Alive(AliveStats stats) {
+    protected Alive(AliveStats stats) {
         this.stats = stats;
     }
 

@@ -1,12 +1,11 @@
-package core.levels;
+package v2.levels;
 
-import core.Player;
-import core.levels.stages.Stage;
 import core.storage.Inventory;
-import engine.Sandbox;
+import v2.Player;
+import v2.levels.stages.Stage;
+import v2.Sandbox;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 /**
@@ -28,10 +27,6 @@ public abstract class Level {
         this.player = player;
         this.basePath = basePath;
         this.sandbox = sandbox;
-    }
-
-    public Inventory getInventory() {
-        return player.getInventory();
     }
 
     public String getSandboxPath() {
@@ -69,7 +64,7 @@ public abstract class Level {
                                 }, // Before setup lambda
                                 () -> {
 //                                    IO.println("base path is " + basePath);
-                                    sandbox.updateRootDir(prev -> Paths.get(prev).resolve(basePath).normalize().toAbsolutePath().toString());
+                                    sandbox.getExecutor().execute("cd "+ Path.of(basePath));
                                 } // After setup lambda
                         );
 
@@ -78,7 +73,7 @@ public abstract class Level {
                     });
         }
         onLevelComplete();
-        if (!basePath.isEmpty()) sandbox.updateRootDir(prev -> prev + "/../");
+        if (!basePath.isEmpty()) sandbox.getExecutor().execute("cd "+ sandbox.getSandBoxPath().toAbsolutePath().normalize());
     }
 
     public abstract String getDescription();

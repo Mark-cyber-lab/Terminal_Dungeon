@@ -80,6 +80,7 @@ public class LinuxCommandExecutor implements Loggable {
      */
     public CommandResult setCurrentDirectory(String pathStr) {
         Path candidate = currentDirectory.resolve(pathStr).normalize();
+        IO.println("curr dir" + currentDirectory);
         return setCurrentDirectory(candidate);
     }
 
@@ -178,6 +179,10 @@ public class LinuxCommandExecutor implements Loggable {
         while (true) {
             System.out.print(">> ");
             String input = IO.readln().trim();
+            if(input.equals("done")) {
+                return new CommandResult("", true, "Done", currentDirectory.toString(), null, 1);
+            }
+
             if (input.equals(expectedCommand)) {
                 String[] parts = input.split("\\s+");
                 return executeCommand(parts);
@@ -497,13 +502,14 @@ public class LinuxCommandExecutor implements Loggable {
         if (parts.length < 2) {
             String msg = "rm: missing operand";
             IO.println(msg);
-            return new CommandResult("rm", false, msg, currentDirectory.toString(), null, 1);
+            return new CommandResult("rm", false, msg, currentDirectory.toString(), null, 1, new ArrayList<>());
         }
 
         boolean recursive = false;
         List<String> targets = new ArrayList<>();
         List<Path> removedPaths = new ArrayList<>();
 
+        // Parse flags and targets
         for (int i = 1; i < parts.length; i++) {
             if ("-r".equals(parts[i]) || "-R".equals(parts[i])) {
                 recursive = true;
@@ -512,20 +518,22 @@ public class LinuxCommandExecutor implements Loggable {
             }
         }
 
-        // Keep a copy of the "subject" string for CommandResult
         String subjectForResult = String.join(",", targets);
-
-        // Expand '*' internally to all files in the directory
         List<Path> pathsToDelete = new ArrayList<>();
+
+        // Expand globs and wildcards
         for (String t : targets) {
-            if ("*".equals(t)) {
-                try {
-                    Files.list(currentDirectory).forEach(pathsToDelete::add);
-                } catch (IOException e) {
-                    IO.println("rm: error listing directory for *");
+            try {
+                if (t.contains("*") || t.contains("?") || t.contains("[")) {
+                    PathMatcher matcher = currentDirectory.getFileSystem().getPathMatcher("glob:" + t);
+                    Files.list(currentDirectory)
+                            .filter(matcher::matches)
+                            .forEach(pathsToDelete::add);
+                } else {
+                    pathsToDelete.add(currentDirectory.resolve(t).normalize());
                 }
-            } else {
-                pathsToDelete.add(currentDirectory.resolve(t).normalize());
+            } catch (IOException e) {
+                IO.println("rm: error listing directory for " + t);
             }
         }
 
@@ -561,13 +569,13 @@ public class LinuxCommandExecutor implements Loggable {
                                 .forEach(p -> {
                                     try {
                                         Files.deleteIfExists(p);
-                                        removedPaths.add(p);
+                                        removedPaths.add(p); // ✅ Track all deleted paths
                                     } catch (IOException ignored) {}
                                 });
                     }
                 } else {
                     Files.deleteIfExists(targetPath);
-                    removedPaths.add(targetPath);
+                    removedPaths.add(targetPath); // ✅ Track deleted file
                 }
             } catch (IOException e) {
                 String msg = "rm: " + targetPath.getFileName() + ": error deleting";
@@ -578,7 +586,7 @@ public class LinuxCommandExecutor implements Loggable {
             }
         }
 
-        // If the only target was '*', replace subject with current directory for CommandResult
+        // For rm * only, subject points to current directory
         if (targets.size() == 1 && "*".equals(targets.get(0))) {
             subjectForResult = currentDirectory.toString();
         }
@@ -590,7 +598,7 @@ public class LinuxCommandExecutor implements Loggable {
                 currentDirectory.toString(),
                 subjectForResult,
                 success ? 0 : 1,
-                removedPaths
+                removedPaths // ✅ Affected paths now correctly filled
         );
     }
 

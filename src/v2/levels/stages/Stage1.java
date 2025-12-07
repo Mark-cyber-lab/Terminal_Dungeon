@@ -1,7 +1,7 @@
-package core.levels.stages;
+package v2.levels.stages;
 
-import core.levels.Level;
 import utilities.CLIUtils;
+import v2.levels.Level;
 
 public class Stage1 extends Stage {
     private static final String configPath = "./src/stages/stage1.txt";
@@ -82,7 +82,7 @@ public class Stage1 extends Stage {
         CLIUtils.typewriter("\"When ready, speak the word: done\"", 30);
         level.sandbox.getExecutor().executeStrict("done");
 
-        level.sandbox.getExecutor().setCurrentDirectory("../");
+        level.sandbox.getExecutor().execute("cd ..");
     }
 
     @Override
@@ -99,6 +99,11 @@ public class Stage1 extends Stage {
 
     @Override
     public void setupEnvironment() {
-        level.sandbox.getDirGenerator().generateFromConfig(configPath, level.sandbox.getRootPath());
+        level.sandbox.getDirGenerator().generateFromConfig(configPath, level.sandbox.getSandBoxPath().toString());
+        level.sandbox.getGranter().grant("pwd");
+        level.sandbox.getGranter().grant("ls");
+        level.sandbox.getGranter().grant("cd");
+        level.sandbox.getGranter().grant("tree");
+        level.sandbox.getGranter().grant("done");
     }
 }

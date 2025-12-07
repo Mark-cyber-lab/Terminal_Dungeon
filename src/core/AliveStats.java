@@ -5,7 +5,7 @@ public class AliveStats {
     protected int health = 100;
 
     /** Maximum allowed health */
-    protected final int MAX_HEALTH = 100;
+    public final int MAX_HEALTH = 100;
 
     /** Minimum allowed health */
     protected final int MIN_HEALTH = 0;

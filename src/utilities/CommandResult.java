@@ -1,5 +1,6 @@
 package utilities;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +36,14 @@ public record CommandResult(String command, boolean success, String output, Stri
 
     // Utility
     public Path getFileFullPath() {
-        return (subject == null || subject.isBlank()) ? null : Path.of(path).resolve(subject).normalize();
+        if (subject == null || subject.isBlank()) {
+            return null;
+        }
+
+        Path fullPath = Path.of(path).resolve(subject).normalize();
+        return Files.exists(fullPath) ? fullPath : null;
     }
+
 
     @Override
     public String toString() {
