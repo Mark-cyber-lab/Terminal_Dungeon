@@ -2,6 +2,7 @@ package v2;
 
 import v2.doors.HiddenDoor;
 import v2.enemies.Enemy;
+import v2.mechanics.CorrectPlacementValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ public class Mission {
 
     private final List<Enemy> enemies = new ArrayList<>();
     private final List<HiddenDoor> hiddenDoors = new ArrayList<>();
+    private final List<CorrectPlacementValidator> placementValidators = new ArrayList<>();
     private final LinuxCommandExecutor linuxCommandExecutor;
     private final Player player;
 
@@ -28,6 +30,14 @@ public class Mission {
     }
 
     // ---------------------------------------------------------
+    // Add placement validator to mission
+    // ---------------------------------------------------------
+    public Mission addPlacementValidator(CorrectPlacementValidator placementValidator) {
+        placementValidators.add(placementValidator);
+        return this;
+    }
+
+    // ---------------------------------------------------------
     // Add hidden door to mission
     // ---------------------------------------------------------
     public Mission addHiddenDoor(HiddenDoor door) {
@@ -39,6 +49,10 @@ public class Mission {
         for (HiddenDoor d : hiddenDoors) {
             d.setPlayer(player);
             linuxCommandExecutor.useMiddleware(d);
+        }
+        for(CorrectPlacementValidator p : placementValidators) {
+            p.setPlayer(player);
+            linuxCommandExecutor.useMiddleware(p);
         }
         for (Enemy e : enemies) {
             e.setPlayer(player);
@@ -78,11 +92,6 @@ public class Mission {
     // ---------------------------------------------------------
     // Hidden Door utilities
     // ---------------------------------------------------------
-    public Mission addDoor(HiddenDoor door) {
-        hiddenDoors.add(door);
-        return this;
-    }
-
     public int totalHiddenDoors() {
         return hiddenDoors.size();
     }
@@ -102,18 +111,43 @@ public class Mission {
     }
 
     // ---------------------------------------------------------
+    // Placement Validator utilities
+    // ---------------------------------------------------------
+    public int totalPlacementValidators() {
+        return placementValidators.size();
+    }
+
+    public long remainingIncorrectPlacementValidators() {
+        return placementValidators.stream()
+                .filter(d -> !d.isCorrectlyPlaced())
+                .count();
+    }
+
+    public boolean allCorrectPlacementValidators() {
+        return placementValidators.stream().allMatch(CorrectPlacementValidator::isCorrectlyPlaced);
+    }
+
+    public List<CorrectPlacementValidator> getPlacementValidators() {
+        return placementValidators;
+    }
+
+    // ---------------------------------------------------------
     // Mission fully cleared when: all enemies defeated AND all doors unlocked
     // ---------------------------------------------------------
     public boolean isFullyCleared() {
-        return allEnemiesDefeated() && allDoorsUnlocked();
+        return allEnemiesDefeated() && allDoorsUnlocked() && allCorrectPlacementValidators();
     }
 
     public void cleanup() {
         hiddenDoors.clear();
         enemies.clear();
+        placementValidators.clear();
 
         for (HiddenDoor d : hiddenDoors) {
             linuxCommandExecutor.removeMiddleware(d);
+        }
+        for (CorrectPlacementValidator p : placementValidators) {
+            linuxCommandExecutor.removeMiddleware(p);
         }
         for (Enemy e : enemies) {
             e.setEnemyTroupe(enemies);

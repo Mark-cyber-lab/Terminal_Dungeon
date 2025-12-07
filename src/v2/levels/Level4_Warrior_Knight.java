@@ -6,6 +6,7 @@ import v2.levels.stages.Stage7;
 import v2.Sandbox;
 import utilities.AsciiArt;
 import utilities.CLIUtils;
+import v2.levels.stages.Stage8;
 
 public class Level4_Warrior_Knight extends Level {
 
@@ -18,9 +19,9 @@ public class Level4_Warrior_Knight extends Level {
     @Override
     public void setup() {
         Stage Stage7 = new Stage7(this);
-//        Stage Stage2 = new Stage2(this);
+        Stage Stage8 = new Stage8(this);
         addStage(Stage7);
-//        addStage(Stage2);
+        addStage(Stage8);
     }
 
     @Override

@@ -19,6 +19,7 @@ public class HiddenDoor implements CommandMiddleware {
 
     private HiddenKey hiddenKey;
     private boolean hasBeenUnlocked;
+    private boolean keyWasPlacedCorrectly = false;
     private Player player;
 
     public HiddenDoor(String name, String id, Path doorPath) {
@@ -72,24 +73,90 @@ public class HiddenDoor implements CommandMiddleware {
         return normalizedTarget.startsWith(normalizedDoor);
     }
 
+    @Override
     public boolean before(String command, String[] args, CommandContext ctx) {
+
+        // -----------------------------------------
+        // Block navigation into door folder if locked
+        // -----------------------------------------
         Path currentDir = ctx.startDir;
 
-        if (!"cd".equals(command) && !"mv".equals(command))
+        if ("cd".equals(command)) {
+            if (args.length >= 1) {
+                Path targetDir = currentDir.resolve(args[0]).normalize();
+                if (blocksNavigation(targetDir)) {
+                    IO.println("Cannot navigate: hidden door is still locked!");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // -----------------------------------------
+        // Protect key from being moved/renamed
+        // -----------------------------------------
+        if (!"mv".equals(command))
             return true;
 
-        if (args.length < 1) return true;
+        if (args.length < 2)
+            return true;
 
-        String target = args[0];
+        // Compute source/destination paths
+        Path sourcePath = norm(currentDir.resolve(args[0]));
+        Path destinationPath = norm(currentDir.resolve(args[1]));
 
-        Path targetDir = currentDir.resolve(target).normalize();
+        if (hiddenKey == null)
+            return true;
 
-        if (blocksNavigation(targetDir)) {
-            IO.println("Cannot navigate: hidden door is still locked!");
+        String expectedKeyName = hiddenKey.getKeyName();
+        String sourceName = sourcePath.getFileName().toString();
+        String destName = destinationPath.getFileName().toString();
 
+        boolean isKeySource = sourceName.equals(expectedKeyName);
+        boolean isKeyDest = destName.equals(expectedKeyName);
+
+        // If mv doesn't involve the key, ignore
+        if (!isKeySource && !isKeyDest)
+            return true;
+
+        Path destParent = destinationPath.getParent();
+        Path correctParent = doorPath.getParent();
+
+        // =======================================================
+        // CASE A — KEY ALREADY PLACED CORRECTLY (DOOR UNLOCKED)
+        // =======================================================
+        if (keyWasPlacedCorrectly) {
+
+            // A1 — Attempt to move the key out of the correct folder
+            if (!destParent.equals(correctParent)) {
+                dealDamage("You attempted to remove the key after unlocking the door!");
+                IO.println("[HiddenDoor] Key movement blocked.");
+                return false;
+            }
+
+            // A2 — Attempt to rename key
+            if (!destName.equals(expectedKeyName)) {
+                dealDamage("You attempted to rename the key after unlocking the door!");
+                IO.println("[HiddenDoor] Key rename blocked.");
+                return false;
+            }
+
+            // Correct → allow
+            return true;
+        }
+
+        // =======================================================
+        // CASE B — KEY NOT YET PLACED CORRECTLY
+        // (Prevent obvious misplacement attempts)
+        // =======================================================
+
+        // B1 — Wrong folder
+        if (!destParent.equals(correctParent)) {
+            dealDamage("Key moved to an incorrect folder.");
             return false;
         }
 
+        // If passed these checks → allow
         return true;
     }
 
@@ -102,55 +169,27 @@ public class HiddenDoor implements CommandMiddleware {
         var renamedMap = result.getContext().renamed;
         if (renamedMap.isEmpty()) return;
 
-        // --------- Extract original and new path ---------
         Path oldPath = norm(renamedMap.keySet().iterator().next());
         Path newPath = norm(renamedMap.values().iterator().next());
-
         String expectedKeyName = hiddenKey.getKeyName();
 
-        // ----------------------------------------------------------
-        // 0. HARD CHECK: Was the moved file the registered key file?
-        // ----------------------------------------------------------
         if (!oldPath.getFileName().toString().equals(expectedKeyName)) {
-//            dealDamage("Wrong key file used: expected '" + expectedKeyName + "'");
-            return; // Do not process further
-        }
-
-        // ----------------------------------------------------------
-        // 1. Validate expected target folder
-        // ----------------------------------------------------------
-        Path expectedFolder = norm(doorPath);
-
-        if (!hasBeenUnlocked && expectedFolder != null) {
-            if (!expectedFolder.getParent().equals(newPath.getParent())) {
-                dealDamage("Key moved into wrong folder");
-            }
-        }
-
-        // ----------------------------------------------------------
-        // 2. Check that key file exists at destination
-        // ----------------------------------------------------------
-        Path keyPath = newPath.getParent().resolve(expectedKeyName).normalize();
-
-        if (!Files.exists(keyPath)) {
-            dealDamage("Key file does not exist: " + keyPath);
             return;
         }
 
-        // ----------------------------------------------------------
-        // 3. Validate key content
-        // ----------------------------------------------------------
+        Path keyPath = newPath.getParent().resolve(expectedKeyName).normalize();
+
         try {
             String content = Files.readString(keyPath).trim();
             boolean correct = content.equals(hiddenKey.getKeyContent().trim());
 
-            if (!hasBeenUnlocked && !correct) {
+            if (!correct) {
                 dealDamage("Incorrect key content");
                 return;
             }
 
-            // SUCCESS → Unlock
             hasBeenUnlocked = true;
+            keyWasPlacedCorrectly = true;  // <<*** IMPORTANT LINE ***>>
             IO.println("[HiddenDoor] Door unlocked successfully!");
 
         } catch (IOException e) {

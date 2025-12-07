@@ -15,7 +15,7 @@ DIR: level_4/fractured_archive/east_wing/high_shelves/
 DIR: level_4/fractured_archive/east_wing/middle_shelves/
 DIR: level_4/fractured_archive/central_hub/
 DIR: level_4/storage_bay/
-HIDDEN_DIR: level_4/fractured_archive/.misaligned_stacks/
+HIDDEN_DIR: level_4/fractured_archive/misaligned_stacks/
 HIDDEN_DIR: level_4/fractured_archive/east_wing/.quiet_rack/
 
 # Files
@@ -25,11 +25,6 @@ Warrior Knight,
 The Fractured Archive trembles under the weight of its own disarray.
 Orb fragments drift and hide, some faint, some dim, some silent.
 Among toppled parchment and dusted shelves, decoys and corrupted notes lie in wait.
-
-Each fragment hums or pulses in its own way.
-Some whispers are soft, almost imperceptible.
-Some vibrate urgently, demanding attention.
-Some remain silent, watching from the shadows.
 
 To restore order, you must listen as well as look.
 Use 'cat' to uncover the fragments’ voices,
@@ -55,17 +50,17 @@ END
 
 FILE: level_4/fractured_archive/east_wing/middle_shelves/orb_fragment_e1.frg
 A dim fragment, hard to reach.
-(cat reveals a muted hum: ~~)
+(cat reveals silence: -)
 END
 
-HIDDEN_FILE: level_4/fractured_archive/.misaligned_stacks/.orb_fragment_f1.frg
+HIDDEN_FILE: level_4/fractured_archive/misaligned_stacks/.orb_fragment_f1.frg
 A lost fragment vibrating with irregular pulses.
 (cat reveals strong vibrations: ~~~~~~)
 END
 
 HIDDEN_FILE: level_4/fractured_archive/east_wing/.quiet_rack/.orb_fragment_e2.frg
 A silent fragment hidden behind thick dust.
-(cat reveals silence: - )
+(cat reveals a faint hum: ~~~~)
 END
 
 FILE: level_4/fractured_archive/central_hub/corrupted_note.txt
@@ -78,6 +73,10 @@ FILE: level_4/storage_bay/misplaced_record_fake.txt
 This record pretends to be a fragment… but clearly is not.
 END
 
+FILE: level_4/storage_bay/.key.secr
+QUIET_RACK_KEY
+END
+
 FILE: level_4/fractured_archive/east_wing/hint.txt
 Warrior Knight,
 
@@ -88,9 +87,9 @@ and some remain silent like shadows that watch.
 Listen to their voices—cat each fragment and it will reveal its nature.
 
 - The faintest hum belongs low in the west.
-- Strong pulses hide where shadows gather.
-- Dim murmurs linger in the east’s middle racks.
-- Silence waits in high shelves or quiet corners.
+- Strong pulses hide at the center.
+- Weak pulses linger in the east’s middle racks.
+- Silence waits in quiet corners.
 
 Guardians patrol these halls; move carefully and heed the fragments’ guidance.
 Only real fragments will answer the Archive’s call.
@@ -119,17 +118,12 @@ END
 
 FILE: level_4/fractured_archive/central_hub/ogre.mob
 A massive Ogre blocks the central hub, its footsteps echoing across the chamber.
-Move too quickly and it will strike — patience is your only ally.
+Move too quickly, and it will strike — patience is your only ally.
 END
 
-FILE: level_4/fractured_archive/.misaligned_stacks/ghoul.mob
-A ghastly Archive Wraith haunts the Misaligned Stacks.
+FILE: level_4/fractured_archive/misaligned_stacks/ghoul.mob
+A ghastly Ghoul haunts the Misaligned Stacks.
 Its form flickers like smoke, binding fragmented memories and preventing careless hands from restoring order.
-END
-
-FILE: level_4/fractured_archive/east_wing/.quiet_rack/vampire.mob
-The Silent Keeper, a Vampire of the archives, lurks among the quiet racks.
-Its cold gaze pierces the shadows; any disturbance may awaken its wrath.
 END
 
 # Game Flow
