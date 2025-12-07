@@ -1,5 +1,7 @@
 package v2;
 
+import core.items.Decoy;
+import core.items.Shards;
 import v2.doors.HiddenDoor;
 import v2.enemies.Enemy;
 import v2.mechanics.CorrectPlacementValidator;
@@ -13,12 +15,41 @@ public class Mission {
     private final List<Enemy> enemies = new ArrayList<>();
     private final List<HiddenDoor> hiddenDoors = new ArrayList<>();
     private final List<CorrectPlacementValidator> placementValidators = new ArrayList<>();
+    private final List<Decoy> decoys = new ArrayList<>();
+    private final List<Shards> shards = new ArrayList<>();
+
     private final LinuxCommandExecutor linuxCommandExecutor;
     private final Player player;
 
     public Mission(LinuxCommandExecutor linuxCommandExecutor, Player player) {
         this.linuxCommandExecutor = linuxCommandExecutor;
         this.player = player;
+    }
+
+    public Mission addDecoys(Decoy item) {
+        this.decoys.add(item);
+        return this;
+    }
+
+    public Mission addShards(Shards shards) {
+        this.shards.add(shards);
+        return this;
+    }
+
+    public List<Decoy> getDecoyItems() {
+        return this.decoys;
+    }
+
+    public List<Shards> getShards() {
+        return this.shards;
+    }
+
+    public boolean shardCompleted() {
+        return shards.isEmpty() || shards.stream().allMatch(Shards::isCorrectDir);
+    }
+
+    public boolean decoyCompleted() {
+        return decoys.isEmpty() || decoys.stream().allMatch(Decoy::isDeleted);
     }
 
     // ---------------------------------------------------------
@@ -50,7 +81,7 @@ public class Mission {
             d.setPlayer(player);
             linuxCommandExecutor.useMiddleware(d);
         }
-        for(CorrectPlacementValidator p : placementValidators) {
+        for (CorrectPlacementValidator p : placementValidators) {
             p.setPlayer(player);
             linuxCommandExecutor.useMiddleware(p);
         }
@@ -69,9 +100,7 @@ public class Mission {
     }
 
     public long remainingEnemies() {
-        return enemies.stream()
-                .filter(e -> !e.hasBeenDefeated())
-                .count();
+        return enemies.stream().filter(e -> !e.hasBeenDefeated()).count();
     }
 
     public boolean allEnemiesDefeated() {
@@ -79,10 +108,7 @@ public class Mission {
     }
 
     public Enemy getEnemyById(String id) {
-        return enemies.stream()
-                .filter(e -> Objects.equals(e.getId(), id))
-                .findFirst()
-                .orElse(null);
+        return enemies.stream().filter(e -> Objects.equals(e.getId(), id)).findFirst().orElse(null);
     }
 
     public List<Enemy> getEnemies() {
@@ -97,9 +123,7 @@ public class Mission {
     }
 
     public long remainingLockedDoors() {
-        return hiddenDoors.stream()
-                .filter(d -> !d.hasBeenUnlocked())
-                .count();
+        return hiddenDoors.stream().filter(d -> !d.hasBeenUnlocked()).count();
     }
 
     public boolean allDoorsUnlocked() {
@@ -118,9 +142,7 @@ public class Mission {
     }
 
     public long remainingIncorrectPlacementValidators() {
-        return placementValidators.stream()
-                .filter(d -> !d.isCorrectlyPlaced())
-                .count();
+        return placementValidators.stream().filter(d -> !d.isCorrectlyPlaced()).count();
     }
 
     public boolean allCorrectPlacementValidators() {
@@ -135,7 +157,7 @@ public class Mission {
     // Mission fully cleared when: all enemies defeated AND all doors unlocked
     // ---------------------------------------------------------
     public boolean isFullyCleared() {
-        return allEnemiesDefeated() && allDoorsUnlocked() && allCorrectPlacementValidators();
+        return allEnemiesDefeated() && allDoorsUnlocked() && allCorrectPlacementValidators() && shardCompleted() && decoyCompleted();
     }
 
     public void cleanup() {
