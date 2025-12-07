@@ -2,6 +2,7 @@ package core.levels.stages;
 
 import core.Mission;
 import core.enemies.*;
+import core.items.Corrupted;
 import core.items.Decoy;
 import core.items.Shards;
 import core.levels.Level;
@@ -32,84 +33,59 @@ public class Stage11 extends Stage {
     public void play() {
         Mission mission = new Mission(level.player);
 
-        Decoy firstDecoy = new Decoy("junk_log_1.tmp", "junk_log_1");
-        Decoy secondDecoy = new Decoy("combat_cache.tmp", "combat_cache");
-        Decoy thirdDecoy = new Decoy("old_potions.tmp", "old_potions");
-        Decoy fourthDecoy = new Decoy("system_cache.cache", "system_cache");
-        Decoy fifthDecoy = new Decoy("user_cache.cache", "user_cache");
-        Decoy sixthDecoy = new Decoy("map_backup.cache", "map_backup");
-        Decoy seventhDecoy = new Decoy("food_waste.garbage", "food_waste");
-        Decoy eigthDecoy = new Decoy("broken_gear.garbage", "broken_gear");
-        Decoy ninthDecoy = new Decoy("rusty_swords.garbage", "rusty_swords");
-        Decoy tenthDecoy = new Decoy("old_bones.garbage", "old_bones");
+        Corrupted corrupted1 = new Corrupted("broken_pillar_01.txt", "broken_pillar_01", "archive_pillars", "pillar_01.txt");
+        Corrupted corrupted2 = new Corrupted("corrupted_core_A.dat", "corrupted_core_A", "archive_cores", "core_A.dat");
+        Corrupted corrupted3 = new Corrupted("fragment_seal_1.piece", "fragment_seal_1", "archive_seals", "seal_fragment_1.piece");
+        Corrupted corrupted4 = new Corrupted("pillar_broken_02.txt", "pillar_broken_02", "archive_pillars", "pillar_02.txt");
+        Corrupted corrupted5 = new Corrupted("core_corrupted_B.dat", "core_corrupted_B", "archive_cores", "core_B.dat");
+        Corrupted corrupted6 = new Corrupted("seal_fragment_2.piece", "seal_fragment_2", "archive_seals", "seal_fragment_2.piece");
+        Corrupted corrupted7 = new Corrupted("pillar_03.txt", "pillar_03", "archive_pillars", "pillar_03.txt");
+        Corrupted corrupted8 = new Corrupted("core_C.dat", "core_C", "archive_cores", "core_C.dat");
 
-        Goblin garbageGoblin = new Goblin("garbage_goblin", Path.of("./sandbox/dungeon_cache/.tmp/trash_pit/goblin.mob"));
-        Zombie cacheGuardianZombie = new Zombie("cache_guardian_zombie", Path.of("./sandbox/dungeon_cache/.cache/important_vault/zombie.mob"));
-        Kobold koboldHoarder = new Kobold("kobold_hoarder", Path.of("./sandbox/dungeon_cache/.cache/hidden_chamber/kobold.mob"));
-        Ghoul ghoulFeaster = new Ghoul("ghoul_feaster", Path.of("./sandbox/dungeon_cache/.garbage/rotten_pile/ghoul.mob"));
-        Ogre junkOgre = new Ogre("junk_ogre", Path.of(("./sandbox/dungeon_cache/.garbage/scrap_heap/ogre.mob")));
-        Vampire cacheVampireLord = new Vampire("cache_vampire_lord", Path.of(("./sandbox/dungeon_cache/vampire.mob")));
-
-        // add decoys
         mission
-                .addDecoys(firstDecoy)
-                .addDecoys(secondDecoy)
-                .addDecoys(thirdDecoy)
-                .addDecoys(fourthDecoy)
-                .addDecoys(fifthDecoy)
-                .addDecoys(sixthDecoy)
-                .addDecoys(seventhDecoy)
-                .addDecoys(eigthDecoy)
-                .addDecoys(ninthDecoy)
-                .addDecoys(tenthDecoy);
-
-        // add enemies
-        mission
-                .addEnemy(garbageGoblin)
-                .addEnemy(cacheGuardianZombie)
-                .addEnemy(koboldHoarder)
-                .addEnemy(ghoulFeaster)
-                .addEnemy(junkOgre)
-                .addEnemy(cacheVampireLord);
+                .addCorrupt(corrupted1)
+                .addCorrupt(corrupted2)
+                .addCorrupt(corrupted3)
+                .addCorrupt(corrupted4)
+                .addCorrupt(corrupted5)
+                .addCorrupt(corrupted6)
+                .addCorrupt(corrupted7)
+                .addCorrupt(corrupted8);
 
         level.sandbox.getExecutor().addBlocker((Blocker[]) mission.getEnemies().toArray());
 
-        CLIUtils.typewriter("\nYou step into the dungeon cache, and the stench of old data hits immediately. Dusty code hangs in the air like fog.", 25);
-        CLIUtils.typewriter("As your eyes adjust, faint lights flicker across heaps of junk files scattered through cramped corridors.", 25);
-        CLIUtils.typewriter("Shredded .tmp scraps cling to the walls, and broken .cache fragments crunch under your boots.", 25);
-        CLIUtils.typewriter("A ghostly custodian drifts forward, its form glitching with static.", 25);
-        CLIUtils.typewriter("\"Traveler... the cache is overflowing with decoys and trash,\" it warns softly.", 25);
-        CLIUtils.typewriter("\"Real relics are buried among the garbage. Clear the junk, but do not destroy the artifacts.\"", 25);
-        CLIUtils.typewriter("The specter fades, leaving only the faint echo: \"Remove the trash... but choose wisely.\"", 25);
-        CLIUtils.typewriter("\nGoal: Purge useless files in .tmp, .cache, and .garbage without harming valuable scrolls and relics.", 25);
-        CLIUtils.typewriter("Tip: Junk looks important, and important things look like junk. Use rm and rm -rf carefully.", 25);
-        CLIUtils.typewriter("Type your command to begin the cleanup...", 25);
+        CLIUtils.typewriter("\nYou enter the Grand Archive, a place of sacred knowledge now tainted by corruption.", 25);
+        CLIUtils.typewriter("Ancient pillars of history stand cracked, their inscriptions scrambled by dark magic.", 25);
+        CLIUtils.typewriter("Memory cores flicker with corrupted data, and sacred seals lie fragmented in the labyrinth.", 25);
+        CLIUtils.typewriter("A spectral archivist materializes before you, its form shimmering with divine light.", 25);
+        CLIUtils.typewriter("\"Paladin... the Grandmaster Knight's curse has ravaged our archives,\" it intones solemnly.", 25);
+        CLIUtils.typewriter("\"Sacred pillars are broken, memory cores scrambled, and divine seals fragmented.\"", 25);
+        CLIUtils.typewriter("The archivist gestures toward the restoration room. \"You must wield sudo authority to mend what is broken.\"", 25);
+        CLIUtils.typewriter("Its form begins to fade. \"Navigate the deep vaults and catacombs. Restore order to the archives...\"", 25);
+        CLIUtils.typewriter("\nGoal: Restore all corrupted archive files and organize them in their proper sections.", 25);
+        CLIUtils.typewriter("Tip: Use 'sudo mv' to rename corrupted files, then move them to archive_pillars/, archive_cores/, or archive_seals/.", 25);
+        CLIUtils.typewriter("Some paths are deeply nested—explore holy_sanctum/, divine_hall/, and restoration_room/ thoroughly.", 25);
+        CLIUtils.typewriter("Type your command to begin the restoration...", 25);
 
-        long decoyNotDeleted;
-        long enemyCount;
+        int purifiedItems;
+        int returnedItems;
 
         boolean success = false;
         while (!success) {
-            decoyNotDeleted = mission.getDecoyItems().stream().filter(decoy -> !decoy.isDeleted()).count();
-            enemyCount = mission.getEnemies().stream().filter(enemy -> !enemy.isCleared()).count();
+            purifiedItems = (int) mission.getCorrupts().stream().filter(c -> !c.isCorrectName()).count();
+            returnedItems = (int) mission.getCorrupts().stream().filter(c -> !c.isCorrectDir()).count();
 
-            IO.println(enemyCount + " monster/s remaining.");
-            IO.println(decoyNotDeleted + " decoy/s remaining.");
-
+            IO.println(purifiedItems < returnedItems ? purifiedItems: returnedItems  + " item/s remaining.");
             IO.print(">> ");
             String input = IO.readln().trim();
 
             if (input.equalsIgnoreCase("e") || input.equalsIgnoreCase("exit"))
                 break;
 
-            if (input.startsWith("rm")) // this is for battling the mob files
-                success = rmFunction(input, mission);
-            else if (input.startsWith("ls"))
-                lsFunction(input, mission);
-            else if (input.startsWith("cat") || input.startsWith("cd") || input.startsWith("pwd") || input.startsWith("tree"))
+            if (input.startsWith("cat") || input.startsWith("cd") || input.startsWith("pwd") || input.startsWith("tree") || input.startsWith("ls"))
                 level.sandbox.getExecutor().executeCommand(input.split(" "));
-            else if (input.startsWith("mkdir") || input.startsWith("mv")) // this is for creating the destroyed dungeon
-                IO.println("The spirits whisper: \"Cannot use that command in this stage.\"");
+            else if (input.startsWith("mv")) // this is for moving the items to designated area
+                moveFunction(input, mission);
             else { // if the input command is wrong
                 IO.println("The spirits whisper: \"That is not the command you were meant to use.\"");
                 continue;
@@ -120,19 +96,6 @@ public class Stage11 extends Stage {
             if (current != null && !current.toAbsolutePath().equals(Paths.get(level.sandbox.getRootPath()).toAbsolutePath()))
                 success = true;
         }
-    }
-
-    public boolean runCommand(String input, String[] words, int wordCount) {
-        int startingPoint = input.contains("-rf") ? 2 : 1;
-
-        for (int i = startingPoint; i < wordCount; i++) {
-            if (!words[i].contains(".")) {
-                IO.println("The spirits whisper: \"You cannot remove directories\"");
-                return false;
-            }
-        }
-
-        return true;
     }
 
     public boolean testMissionComplete(Mission mission) {
@@ -148,31 +111,42 @@ public class Stage11 extends Stage {
         return false;
     }
 
-    public void lsFunction (String input, Mission mission) {
-        level.sandbox.getExecutor().executeCommand(input.split(" "));
-    }
+    public void moveFunction (String input, Mission mission) {
+        boolean match = false;
 
-    public boolean rmFunction (String input, Mission mission) {
-        String[] words = input.split(" ");
-        int wordCount = words.length;
+        for (Corrupted c : mission.getCorrupts()) {
+            if (input.contains(c.getCorrectName()) && input.contains(c.getName()))
+                match = seeMatch(input, c, false);
+            else if (input.contains(c.getTargetDir()) && input.contains(c.getName()))
+                match = seeMatch(input, c,  true);
 
-        if (wordCount == 1)
-            IO.println("The spirits whisper: \"That is not how you use the command.\"");
-        else {
-            boolean passed = runCommand(input, words, wordCount);
-
-            if (passed) {
-                level.sandbox.getExecutor().executeCommand(input.split(" "));
-                for (Decoy d : mission.getDecoyItems()) {
-                    if (input.contains(d.getName())) {
-                        d.setDeleted(true);
-                        break;
-                    }
-                }
-            }
+            if (match) break;
         }
 
-        return testMissionComplete(mission);
+        if (!match)
+            IO.println("The spirits whisper: \"There are something wrong with your action.\"");
+    }
+
+    private boolean seeMatch (String input, Corrupted c, boolean isTargetDir) {
+        CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));
+
+        if (!result.success()) {
+            IO.println("The spirits whisper: \"There are something wrong with your action.\"");
+            return false;
+        } else {
+            if (isTargetDir && !input.contains(c.getCorrectName())) {
+                c.setIsCorrectName(true);
+                c.setCorrectDir(true);
+            } else if (!isTargetDir && input.contains(c.getTargetDir())) {
+                c.setIsCorrectName(true);
+                c.setCorrectDir(true);
+            } else if (!isTargetDir)
+                c.setIsCorrectName(true);
+            else
+                c.setIsCorrectName(true);
+
+            return true;
+        }
     }
 
     @Override

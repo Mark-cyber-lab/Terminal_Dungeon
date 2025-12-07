@@ -6,6 +6,7 @@ import core.listeners.Blocker;
 
 import core.items.Decoy;
 import core.items.Shards;
+import core.items.Corrupted;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +22,16 @@ public class Mission {
     }
     private final List<Decoy> decoys = new ArrayList<>();
     private final List<Shards> shards = new ArrayList<>();
+    private final List<Corrupted> corrupts = new ArrayList<>();
 
     public Mission addEnemy(Enemy enemy) {
         enemy.setPlayer(player);
         this.enemies.add(enemy);
+        return this;
+    }
+
+    public Mission addCorrupt(Corrupted corrupted) {
+        this.corrupts.add(corrupted);
         return this;
     }
 
@@ -54,6 +61,8 @@ public class Mission {
 
     public List<Shards>  getShards() {return this.shards;}
 
+    public List<Corrupted> getCorrupts() {return this.corrupts;}
+
     public boolean shardCompleted() {
         return shards.isEmpty() ||
                 shards.stream().allMatch(Shards::isCorrectDir);
@@ -64,6 +73,12 @@ public class Mission {
                 decoys.stream().allMatch(Decoy::isDeleted);
     }
 
+    public boolean corruptPurified() {
+        return corrupts.isEmpty() ||
+                corrupts.stream().allMatch(Corrupted::isCorrectName) &&
+                        corrupts.stream().allMatch(Corrupted::isCorrectDir);
+    }
+
     public boolean isFulfilled() {
 
         boolean enemiesCleared = enemies.isEmpty() ||
@@ -72,13 +87,14 @@ public class Mission {
         boolean doorsCleared = hiddenDoors.isEmpty() ||
                 hiddenDoors.stream().allMatch(Blocker::isCleared);
 
-        boolean deletedDecoys = decoys.isEmpty() ||
-                decoys.stream().allMatch(Decoy::isDeleted);
+        boolean deletedDecoys = this.decoyCompleted();
 
-        boolean movedShards = shards.isEmpty() ||
-                shards.stream().allMatch(Shards::isCorrectDir);
+        boolean movedShards = this.shardCompleted();
 
-        return enemiesCleared && doorsCleared && deletedDecoys && movedShards;
+        boolean purified = this.corruptPurified();
+
+        return enemiesCleared && doorsCleared &&
+                deletedDecoys && movedShards && purified;
     }
 
     public void initialize(){

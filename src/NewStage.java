@@ -24,6 +24,7 @@ public class NewStage implements Loggable {
         levels.add(new Level3_Scout_Knight(sandbox, player));
         levels.add(new Level4_Warrior_Knight(sandbox, player));
         levels.add(new Level5_Arcane_Knight(sandbox, player));
+        levels.add(new Level6_Grandmaster_Knight(sandbox, player));
     }
 
     public void upStage() throws IOException {

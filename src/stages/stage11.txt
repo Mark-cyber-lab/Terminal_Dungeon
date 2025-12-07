@@ -3,6 +3,20 @@ DIR: divine_hall/
 DIR: restoration_room/
 HIDDEN_DIR: .divine_judge/
 
+FILE: instructions.txt
+"GRAND ARCHIVE RESTORATION PROTOCOL:
+1. Navigate the deep, confusing subfolders
+2. Rename corrupted files to proper names:
+   - broken_pillar_* → pillar_*.txt
+   - corrupted_core_* → core_*.dat
+   - fragment_seal_* → seal_fragment_*.piece
+3. Move ALL files to proper archive sections:
+   - pillar files → archive_pillars/
+   - core files → archive_cores/
+   - seal fragments → archive_seals/
+4. Some files need sudo authority to modify
+5. Some are already named correctly but misplaced"
+
 FILE: holy_sanctum/welcome.txt
 "Paladin Level 11: Grand Archive Restoration
 Learn divine authority to repair corrupted archives
@@ -10,8 +24,8 @@ Command: sudo"
 
 FILE: divine_hall/lesson_1.txt
 "Use sudo for powerful restoration actions
-Corrupted archives require elevated privileges to fix
-Some files are locked by the Grandmaster Knight's curse"
+Corrupted archives require elevated fixing
+Some files are ruined by the Grandmaster Knight's curse"
 
 HIDDEN_FILE: restoration_room/labyrinth/maze/center/.key.secr
 DIVINE_JUDGE
@@ -56,7 +70,6 @@ DIR: restoration_room/labyrinth/
 DIR: restoration_room/labyrinth/maze/
 DIR: restoration_room/labyrinth/maze/center/
 FILE: restoration_room/labyrinth/maze/center/seal_fragment_2.piece
-"ARCHIVE CORRUPTED: Great Seal - Fragment 2
 [Status: Hidden in Labyrinth]
 Some paths are confusing but necessary"
 
@@ -75,27 +88,3 @@ Already correctly named, waiting for proper filing"
 DIR: restoration_room/archive_pillars/
 DIR: restoration_room/archive_cores/
 DIR: restoration_room/archive_seals/
-
-FILE: restoration_room/instructions.txt
-"GRAND ARCHIVE RESTORATION PROTOCOL:
-1. Navigate the deep, confusing subfolders
-2. Rename corrupted files to proper names:
-   - broken_pillar_* → pillar_*.txt
-   - corrupted_core_* → core_*.dat
-   - fragment_seal_* → seal_fragment_*.piece
-3. Move ALL files to proper archive sections:
-   - pillar files → archive_pillars/
-   - core files → archive_cores/
-   - seal fragments → archive_seals/
-4. Some files need sudo authority to modify
-5. Some are already named correctly but misplaced"
-
-# === DIVINE JUDGE CHALLENGE ===
-FILE: divine_judge/challenge.txt
-"FINAL TEST: Grandmaster Knight's Corruption
-Wield sudo authority responsibly to restore the archive
-Complete all restorations to unlock the next level"
-
-HIDDEN_FILE: divine_hall/.holy_key.secr
-"Divine Restoration Key: archive_unlock_2024
-Some doors require both permission and knowledge"
