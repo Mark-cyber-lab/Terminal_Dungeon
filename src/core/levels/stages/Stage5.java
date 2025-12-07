@@ -45,13 +45,11 @@ public class Stage5 extends Stage {
         CLIUtils.typewriter("Type e or exit to exit the game...", 25);
 
         int enemyCount;
-        int defeatedEnemiesCount;
 
         boolean success = false;
         while (!success) {
 
-            enemyCount = mission.getEnemies().size();
-            defeatedEnemiesCount = (int) mission.getEnemies().stream().filter(Blocker::isCleared).count();
+            enemyCount = (int) mission.getEnemies().stream().filter(enemy -> !enemy.isCleared()).count();
 
             IO.println(enemyCount + " monster/s remaining.");
             IO.print(">> ");
@@ -59,9 +57,9 @@ public class Stage5 extends Stage {
 
             if (input.equalsIgnoreCase("e") || input.equalsIgnoreCase("exit"))
                 break;
-            else if (input.equals("Move Forward") && defeatedEnemiesCount == 0)
+            else if (input.equals("Move Forward") && enemyCount == 0)
                 success = true;
-            else if (input.equals("Move Forward") && defeatedEnemiesCount != 0)
+            else if (input.equals("Move Forward") && enemyCount != 0)
                 IO.println("There are still" + enemyCount + " monsters.");
 
             if (input.startsWith("rm")) {
@@ -77,9 +75,9 @@ public class Stage5 extends Stage {
                         CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));
 
                         if (result.success() && mission.isFulfilled()) {
-                            defeatedEnemiesCount = (int) mission.getEnemies().stream().filter(Blocker::isCleared).count();
+                            enemyCount = (int) mission.getEnemies().stream().filter(enemy -> !enemy.isCleared()).count();
 
-                            if (defeatedEnemiesCount == 0) {
+                            if (enemyCount == 0) {
                                 mission.cleanUp();
                                 CLIUtils.typewriter("Congratulations!!\nYou defeated all the enemies", 25);
                                 CLIUtils.typewriter("Teleporting you to the next stage\n...", 25);

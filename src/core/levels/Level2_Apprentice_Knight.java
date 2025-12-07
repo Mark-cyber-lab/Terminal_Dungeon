@@ -47,20 +47,19 @@ public class Level2_Apprentice_Knight extends Level {
             CLIUtils.typewriter("The old knight hands you a worn scroll.", 25);
             CLIUtils.typewriter("\"To gain wisdom in this dungeon, you must first understand the scrolls.\"", 25);
             CLIUtils.typewriter("These scrolls contain knowledge of enemies, hidden keys, and secret passages.", 25);
+            IO.println("Type 'cat scroll.txt' to read the scroll.\n");
 
             boolean success = false;
             boolean correct = false;
             while (!success) {
-                IO.println("Type 'cat scroll.txt' to read the scroll.\n");
                 IO.print(">> ");
 
                 String input = IO.readln().trim();
 
-                if (input.equalsIgnoreCase("e") || input.equalsIgnoreCase("exit")) {
+                if (input.equalsIgnoreCase("e") || input.equalsIgnoreCase("exit"))
                     break;
-                } else if (input.equals("Done")) {
+                else if (input.equals("Done"))
                     success = true;
-                }
 
                 if (input.startsWith("cat")) {
                     sandbox.getExecutor().executeCommand(input.split(" "));
@@ -69,7 +68,9 @@ public class Level2_Apprentice_Knight extends Level {
                         CLIUtils.typewriter("the key that contains the magic word to move on next stage.", 25);
                         correct = true;
                     }
-                } else {
+                } else if (input.startsWith("cd") || input.startsWith("ls") || input.startsWith("pwd") || input.startsWith("tree"))
+                    sandbox.getExecutor().executeCommand(input.split(" "));
+                else {
                     IO.println("The spirits whisper: \"That is not the command you were meant to use.\"");
                     IO.println("Try using **cat** ./<file_name.txt>**");
                     continue;
@@ -77,9 +78,8 @@ public class Level2_Apprentice_Knight extends Level {
 
                 // simple success condition: pwd inside a subfolder of basePath
                 Path current = sandbox.getRootPath() != null ? Paths.get(sandbox.getRootPath()) : null;
-                if (current != null && !current.toAbsolutePath().equals(Paths.get(sandbox.getRootPath()).toAbsolutePath())) {
+                if (current != null && !current.toAbsolutePath().equals(Paths.get(sandbox.getRootPath()).toAbsolutePath()))
                     success = true;
-                }
             }
         }
 

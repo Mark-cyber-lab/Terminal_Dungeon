@@ -26,8 +26,8 @@ public class Stage6 extends Stage {
         Mission mission = new Mission(level.player);
 
         Goblin ordinaryGoblin = new Goblin("hunter_goblin", Path.of("./sandbox/advanced_combat/goblin.mob"));
-        Kobold wariorKobold = new Kobold("warior_kobold", Path.of("./sandbox/warrior_hall/kobold.mob"));
-        Zombie wariorZombie = new Zombie("warior_zombie", Path.of("./sandbox/warior_hall/zombie.mob"));
+        Kobold wariorKobold = new Kobold("warrior_kobold", Path.of("./sandbox/warrior_hall/kobold.mob"));
+        Zombie wariorZombie = new Zombie("warrior_zombie", Path.of("./sandbox/warrior_hall/zombie.mob"));
         Vampire vampireBoss = new Vampire("combat_champion", Path.of(("./sandbox/combat_champion/vampire.mob")));
         Ghoul ghoul1 = new Ghoul("first_ghoul", Path.of("./sandbox/group_battle/ghoul.mob"));
         Ogre ogreGeneral = new Ogre("group_battle", Path.of(("./sandbox/group_battle/ogre.mob")));
@@ -54,12 +54,11 @@ public class Stage6 extends Stage {
         CLIUtils.typewriter("Type e or exit to retreat from the encounter...", 25);
 
         int enemyCount;
-        int defeatedEnemiesCount;
 
         boolean success = false;
         while (!success) {
 
-            enemyCount = mission.getEnemies().size();
+            enemyCount = (int) mission.getEnemies().stream().filter(enemy -> !enemy.isCleared()).count();
 
             IO.println(enemyCount + " monster/s remaining.");
             IO.print(">> ");
@@ -81,9 +80,9 @@ public class Stage6 extends Stage {
                         CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));
 
                         if (result.success() && mission.isFulfilled()) {
-                            defeatedEnemiesCount = (int) mission.getEnemies().stream().filter(Blocker::isCleared).count();
+                            enemyCount = (int) mission.getEnemies().stream().filter(enemy -> !enemy.isCleared()).count();
 
-                            if (defeatedEnemiesCount == 0) {
+                            if (enemyCount == 0) {
                                 mission.cleanUp();
                                 CLIUtils.typewriter("Congratulations!!\nYou defeated all the enemies", 25);
                                 CLIUtils.typewriter("Teleporting you to the next stage\n...", 25);

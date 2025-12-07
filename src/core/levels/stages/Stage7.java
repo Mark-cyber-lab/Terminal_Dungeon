@@ -66,14 +66,18 @@ public class Stage7 extends Stage {
         CLIUtils.typewriter("Advance carefully through inner courtyard to command hall.", 30);
 
         String input;
+        boolean success = false;
 
-        while (true) {
+        while (!success) {
             System.out.print(">> ");
             input = IO.readln().trim();
 
             if (Arrays.asList(input.split(" ")).contains("tree")) {
                 IO.println("You are not allowed to use tree in this stage.");
             }
+
+            if (input.equals("done"))
+                success = true;
 
             try {
                 CommandResult result = level.sandbox.getExecutor().executeCommand(input.split(" "));

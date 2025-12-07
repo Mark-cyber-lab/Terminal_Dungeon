@@ -11,7 +11,7 @@ import utilities.CommandResult;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class Stage10 extends Stage {
+public class Stage11 extends Stage {
     private static final String configPath = "./src/stages/stage10.txt";
     private final String[] importantItems = {
             "ancient_scroll.txt", "artifact_fragment.txt", "spellbook.txt",
@@ -19,8 +19,8 @@ public class Stage10 extends Stage {
             "holy_relic.txt", "dragon_scale.txt"
     };
 
-    public Stage10(Level level) {
-        super(10, level);
+    public Stage11(Level level) {
+        super(11, level);
     }
 
     @Override
@@ -149,7 +149,7 @@ public class Stage10 extends Stage {
     }
 
     public void lsFunction (String input, Mission mission) {
-         level.sandbox.getExecutor().executeCommand(input.split(" "));
+        level.sandbox.getExecutor().executeCommand(input.split(" "));
     }
 
     public boolean rmFunction (String input, Mission mission) {
@@ -160,16 +160,9 @@ public class Stage10 extends Stage {
             IO.println("The spirits whisper: \"That is not how you use the command.\"");
         else {
             boolean passed = runCommand(input, words, wordCount);
+
             if (passed) {
-                for (String i : importantItems) {
-                    if (input.contains(i)) {
-                        IO.println("The spirits whisper: \"Do not remove this item: " + i + ".");
-                        return false;
-                    }
-                }
-
                 level.sandbox.getExecutor().executeCommand(input.split(" "));
-
                 for (Decoy d : mission.getDecoyItems()) {
                     if (input.contains(d.getName())) {
                         d.setDeleted(true);
@@ -178,6 +171,7 @@ public class Stage10 extends Stage {
                 }
             }
         }
+
         return testMissionComplete(mission);
     }
 
