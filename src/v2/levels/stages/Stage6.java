@@ -64,7 +64,12 @@ public class Stage6 extends Stage {
 
             CommandResult result = level.sandbox.getExecutor().execute(input);
 
-        } while (mission.remainingEnemies() != 0);
+        } while (mission.remainingEnemies() != 0 && level.player.getStats().isAlive());
+
+        if (!level.player.getStats().isAlive()) {
+            mission.cleanup();
+            return;
+        }
 
         CLIUtils.typewriter("All enemies are defeated! Find the key to the next stage", 30);
 
@@ -72,26 +77,26 @@ public class Stage6 extends Stage {
 
         Path keyPath = Path.of("./sandbox/combat_master/key.txt");
 
-        while(true) {
+        while (true) {
             IO.print(">> ");
 
             String input = IO.readln().trim();
 
             CommandResult result = level.sandbox.getExecutor().execute(input);
 
-            if(!result.isSuccess()) continue;
+            if (!result.isSuccess()) continue;
 
             CommandContext context = result.getContext();
 
             // checks if the player has executed the cat command for the spefified key path
-            if(context != null && "cat".equals(context.command)) {
-                if(context.read.toString().equals(keyPath.normalize().toAbsolutePath().toString())){
+            if (context != null && "cat".equals(context.command)) {
+                if (context.read.toString().equals(keyPath.normalize().toAbsolutePath().toString())) {
                     seenKey = true;
                 }
             }
 
             // if key is seen and player prompted done
-            if(context != null && "done".equals(context.command) && seenKey)
+            if (context != null && "done".equals(context.command) && seenKey)
                 break;
         }
 

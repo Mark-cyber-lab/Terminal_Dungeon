@@ -27,8 +27,32 @@ public class NewStagev2 implements Loggable {
         levels.add(new Level1_Squire(sandbox, player));
         levels.add(new Level2_Apprentice_Knight(sandbox, player));
         levels.add(new Level3_Scout_Knight(sandbox, player));
-        levels.add(new Level4_Warrior_Knight(sandbox,player));
-        levels.add(new Level5_Arcane_Knight(sandbox,player));
+        levels.add(new Level4_Warrior_Knight(sandbox, player));
+        levels.add(new Level5_Arcane_Knight(sandbox, player));
+    }
+
+    // ----------------------
+// Helper Methods
+// ----------------------
+    private void executeLevel(Level level) {
+        CLIUtils.clearScreen();
+        level.printLevelHeader();
+        CLIUtils.center(level.getDescription());
+        CLIUtils.sleep(500);
+        CLIUtils.waitAnyKey("Press any key to start this level...");
+        CLIUtils.loading("Preparing environment", 3, 500);
+        level.setup();
+        CLIUtils.typewriter("Environment ready.", 20);
+        CLIUtils.sleep(300);
+        level.execute();
+    }
+
+    private void resetPlayerStats(PlayerStats stats) {
+        stats.setStage(1);
+        stats.setLevel(1);
+        stats.setCurrentDir("");
+        stats.setHealth(100);
+        player.initialLevel = 1;
     }
 
     public void upStage() throws IOException {
@@ -51,7 +75,7 @@ public class NewStagev2 implements Loggable {
         PlayerConfig config = new PlayerConfig("./player.json", player);
         boolean loaded = sandbox.getBackupManager().confirmLoadBackup();
 
-        if(loaded) config.load();
+        if (loaded) config.load();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             log("Saving player configuration before exit...");
@@ -65,54 +89,41 @@ public class NewStagev2 implements Loggable {
             }
         }));
 
-        while (playerStats.isAlive()) {
+        do {
+            if (playerStats.isAlive()) {
+                CLIUtils.header("A NEW DUNGEON CYCLE BEGINS");
+                CLIUtils.typewriter("Current rank: " + player.getRankName(), 20, true);
+                CLIUtils.waitAnyKey();
 
-            CLIUtils.header("A NEW DUNGEON CYCLE BEGINS");
-            CLIUtils.typewriter("Current rank: " + player.getRankName(), 20, true);
-            CLIUtils.waitAnyKey();
+                for (int i = player.initialLevel - 1; i < levels.size(); i++) {
+                    if (!playerStats.isAlive()) break;
 
-            for (int i = player.initialLevel - 1; i < levels.size(); i++) {
-                Level level = levels.get(i);
-                player.setLevelObj(level);
+                    Level level = levels.get(i);
+                    player.setLevelObj(level);
 
-                CLIUtils.clearScreen();
-                level.printLevelHeader();
-                CLIUtils.center(level.getDescription());
-                CLIUtils.sleep(500);
-                CLIUtils.waitAnyKey("Press any key to start this level...");
+                    executeLevel(level);
 
-                CLIUtils.loading("Preparing environment", 3, 500);
-                level.setup();
+                    if (!playerStats.isAlive()) break;
 
-                CLIUtils.typewriter("Environment ready.", 20);
-                CLIUtils.sleep(300);
-
-                level.execute();
-
-                CLIUtils.header("LEVEL COMPLETE");
-                CLIUtils.sleep(300);
-
-                CLIUtils.typewriter("Energy flows through you...", 20);
-                player.promoteLevel();
-                CLIUtils.typewriter("New Rank: " + player.getRankName(), 20);
-                CLIUtils.waitAnyKey("Press any key to continue...");
+                    CLIUtils.header("LEVEL COMPLETE");
+                    CLIUtils.sleep(300);
+                    CLIUtils.typewriter("Energy flows through you...", 20);
+                    player.promoteLevel();
+                    CLIUtils.typewriter("New Rank: " + player.getRankName(), 20);
+                    CLIUtils.waitAnyKey("Press any key to continue...");
+                }
             }
-
-            System.out.println();
+            IO.println();
             CLIUtils.typewriter("You have conquered the dungeon cycle.", 20);
 
             String input = IO.readln("Retry adventure? (yes/no): ").trim().toLowerCase();
             boolean retry = input.equals("yes");
 
-            player.getStats().setStage(1);
-            player.getStats().setLevel(1);
-            player.getStats().setCurrentDir("");
-            player.getStats().setHealth(100);
+            if(retry) resetPlayerStats(playerStats);
 
-            if (!retry) {
-                break;
-            }
-        }
+            if (!retry) break;
+
+        } while (true);
 
         exitedNormally = true;
         CLIUtils.typewriter("Your legend will echo in the Terminal Dungeon.", 20);

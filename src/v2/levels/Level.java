@@ -57,6 +57,8 @@ public abstract class Level {
 //        IO.println("Current Stage: " + startStage);
         for (int stageNumber = startStage; stageNumber <= lastStageOfLevel; stageNumber++) {
             int finalStageNumber = stageNumber;
+
+            if (player.getStats().getHealth() == 0) break;
 //            IO.println("Final Stage: " + finalStageNumber);
             stages.stream()
                     .filter(stage -> stage.getStageNumber() == finalStageNumber)
@@ -68,16 +70,19 @@ public abstract class Level {
                                 }, // Before setup lambda
                                 () -> {
 //                                    IO.println("base path is " + basePath);
-                                    sandbox.getExecutor().execute("cd "+ Path.of(basePath));
+                                    sandbox.getExecutor().execute("cd " + Path.of(basePath));
                                 } // After setup lambda
                         );
 
                         // Update player stage to next stage
                         player.getStats().setStage(finalStageNumber + 1);
                     });
+            if (player.getStats().getHealth() == 0) break;
         }
+        if(player.getStats().getHealth() == 0) return;
         onLevelComplete();
-        if (!basePath.isEmpty()) sandbox.getExecutor().execute("cd "+ sandbox.getSandBoxPath().toAbsolutePath().normalize());
+        if (!basePath.isEmpty())
+            sandbox.getExecutor().execute("cd " + sandbox.getSandBoxPath().toAbsolutePath().normalize());
     }
 
     public abstract String getDescription();

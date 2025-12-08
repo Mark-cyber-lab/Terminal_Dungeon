@@ -82,9 +82,10 @@ public class Stage8 extends Stage {
             } catch (Exception e) {
             }
 
-        } while (!mission.isFullyCleared());
+        } while (mission.remainingEnemies() != 0 && level.player.getStats().isAlive());
 
         mission.cleanup();
+        if(!level.player.getStats().isAlive()) return;
 
         CLIUtils.typewriter("A stabilizing resonance echoes through the archive. Type done to move forward.", 30);
         level.sandbox.getExecutor().executeStrict("done");

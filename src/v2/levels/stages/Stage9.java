@@ -104,7 +104,8 @@ public class Stage9 extends Stage {
         long decoyNotDeleted;
 
         boolean success = false;
-        while (!success) {
+
+        while (!success && level.player.getStats().isAlive()) {
 
             enemyCount = mission.remainingEnemies();
             shardsNotCompleted = mission.getShards().stream().filter(shard -> !shard.isCorrectDir()).count();
@@ -133,7 +134,11 @@ public class Stage9 extends Stage {
             else { // if the input command is wrong
                 IO.println("The spirits whisper: \"That is not the command you were meant to use.\"");
             }
+
+            if(!level.player.getStats().isAlive()) break;
         }
+
+        mission.cleanup();
     }
 
     public boolean runCommand(String input, String[] words, int wordCount) {

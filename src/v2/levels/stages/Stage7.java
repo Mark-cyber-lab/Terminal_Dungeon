@@ -75,9 +75,11 @@ public class Stage7 extends Stage {
             } catch (Exception e) {
             }
 
-        } while (!mission.isFullyCleared());
+        } while (mission.remainingEnemies() != 0 && level.player.getStats().isAlive());
 
         mission.cleanup();
+
+        if(!level.player.getStats().isAlive()) return;
 
         CLIUtils.typewriter("All doors unlocked and enemies are already defeated, and let's continue our journey. Type done if you are ready.", 30);
         level.sandbox.getExecutor().executeStrict("done");

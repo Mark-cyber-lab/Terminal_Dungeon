@@ -54,7 +54,12 @@ public class Stage5 extends Stage {
 
             CommandResult result = level.sandbox.getExecutor().execute(input);
 
-        } while (mission.remainingEnemies() != 0);
+        } while (mission.remainingEnemies() != 0 && level.player.getStats().isAlive());
+
+        if (!level.player.getStats().isAlive()) {
+            mission.cleanup();
+            return;
+        }
 
         CLIUtils.typewriter("All enemies are defeated! Find the key to the next stage", 30);
 

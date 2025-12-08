@@ -51,6 +51,7 @@ public abstract class Stage {
             after.run();
             printStageHeader();
             play();
+            if(level.player.getStats().getHealth() == 0) return;
             onSuccessPlay();
         } catch (Exception e) {
             onFailedPlay(e);
