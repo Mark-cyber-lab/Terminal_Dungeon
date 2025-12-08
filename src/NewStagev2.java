@@ -1,6 +1,6 @@
 
 import v2.PlayerConfig;
-import core.PlayerStats;
+import v2.PlayerStats;
 import utilities.CLIUtils;
 import utilities.AsciiArt;
 import utilities.Loggable;
@@ -20,7 +20,7 @@ public class NewStagev2 implements Loggable {
     private final PlayerStats playerStats = new PlayerStats();
     private final Player player = new Player(playerStats, SANDBOX_ROOT);
     private final List<Level> levels = new ArrayList<>();
-    private final Sandbox sandbox = new Sandbox(SANDBOX_ROOT, INVENTORY_ROOT);
+    private final Sandbox sandbox = new Sandbox(SANDBOX_ROOT, INVENTORY_ROOT, this.player.getStats());
     private boolean exitedNormally = false;
 
     private void initializeLevels() {
@@ -37,14 +37,21 @@ public class NewStagev2 implements Loggable {
         CLIUtils.printCentered(AsciiArt.getTitleDungeon());
         CLIUtils.sleep(600);
 
+        IO.println();
+        CLIUtils.typewriter("You awaken inside a dark cavern...", 20, true);
+        CLIUtils.sleep(100);
+        CLIUtils.typewriter("A distant voice whispers:", 30, true);
+        CLIUtils.sleep(100);
+        CLIUtils.typewriter("\"Only those who master the Terminal may survive.\"", 30, true);
+        IO.println();
+        CLIUtils.waitAnyKey();
+
         initializeLevels();
 
         PlayerConfig config = new PlayerConfig("./player.json", player);
-        boolean confirmLoad = sandbox.getBackupManager().confirmLoadBackup();
+        sandbox.getBackupManager().confirmLoadBackup();
 
-        if(confirmLoad) {
-            config.load();
-        }
+        config.load();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             log("Saving player configuration before exit...");
@@ -57,15 +64,6 @@ public class NewStagev2 implements Loggable {
                 log("Failed to save player configuration: " + e.getMessage());
             }
         }));
-
-        IO.println();
-        CLIUtils.typewriter("You awaken inside a dark cavern...", 20, true);
-        CLIUtils.sleep(100);
-        CLIUtils.typewriter("A distant voice whispers:", 30, true);
-        CLIUtils.sleep(100);
-        CLIUtils.typewriter("\"Only those who master the Terminal may survive.\"", 30, true);
-        IO.println();
-        CLIUtils.waitAnyKey();
 
         while (playerStats.isAlive()) {
 

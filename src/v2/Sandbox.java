@@ -24,11 +24,11 @@ public class Sandbox implements Loggable {
     private final SandboxBackupManager backupManager;
 
 
-    public Sandbox(String sandboxPath, String inventoryPath) {
+    public Sandbox(String sandboxPath, String inventoryPath, PlayerStats playerStats) {
         this.sandBoxPath = Path.of(sandboxPath);
         Path inventoryPath1 = Path.of(inventoryPath);
         this.executor = new DungeonExecutor(this.sandBoxPath, inventoryPath1);
-        this.granter = new CommandGranterMiddleware();
+        this.granter = new CommandGranterMiddleware(playerStats);
         this.inventory = new Inventory("inventory", "inventory", inventoryPath);
         this.backupManager = new SandboxBackupManager(this.sandBoxPath, this.inventory);
         executor.useMiddleware(granter);

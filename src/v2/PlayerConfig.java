@@ -3,8 +3,7 @@ package v2;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Handles saving and loading player configuration (progress) to a JSON file.
@@ -28,6 +27,7 @@ public class PlayerConfig {
         data.put("stage", player.getStats().getStage());
         data.put("currentDir", player.getStats().getCurrentDir());
         data.put("health", player.getStats().getHealth());
+        data.put("granted", player.getStats().getGrantedCommands());
 
         try (BufferedWriter writer = Files.newBufferedWriter(configFile)) {
             writer.write(toJson(data));
@@ -57,6 +57,11 @@ public class PlayerConfig {
                     case "health" -> player.setHealth(Integer.parseInt(value));
                     case "stage" -> player.getStats().setStage(Integer.parseInt(value));
                     case "currentDir" -> player.getStats().setCurrentDir(value);
+                    case "granted" -> {
+                        // Parse the string as a JSON array of commands
+                        List<String> commands = parseJsonArray(value);
+                        player.getStats().setGrantedCommands(new HashSet<>(commands));
+                    }
                 }
             });
 
@@ -105,6 +110,24 @@ public class PlayerConfig {
         }
 
         return map;
+    }
+
+    /**
+     * Parses a simple JSON array string: ["cmd1","cmd2"]
+     */
+    private List<String> parseJsonArray(String jsonArray) {
+        List<String> list = new ArrayList<>();
+        jsonArray = jsonArray.trim();
+        if (jsonArray.startsWith("[")) jsonArray = jsonArray.substring(1);
+        if (jsonArray.endsWith("]")) jsonArray = jsonArray.substring(0, jsonArray.length() - 1);
+
+        // Split by comma outside quotes
+        String[] items = jsonArray.split(",");
+        for (String item : items) {
+            String val = item.trim().replaceAll("^\"|\"$", ""); // remove surrounding quotes
+            if (!val.isEmpty()) list.add(val);
+        }
+        return list;
     }
 }
 

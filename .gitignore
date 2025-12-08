@@ -32,3 +32,5 @@ bin/
 sandbox/
 logs/
 sandbox_backup/
+
+player.json

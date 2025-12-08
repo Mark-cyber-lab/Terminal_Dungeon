@@ -1,8 +1,5 @@
 package v2;
 
-import core.Alive;
-import core.PlayerStats;
-import core.storage.Inventory;
 import utilities.AsciiArt;
 import utilities.CLIUtils;
 import v2.levels.Level;
@@ -21,8 +18,8 @@ public class Player extends Alive {
             "Apprentice Knight",
             "Scout Knight",
             "Warrior Knight",
-            "Guardian Knight",
-            "Arcane Knight"
+            "Arcane Knight",
+            "Grandmaster Knight"
     };
 
     public Player(PlayerStats stats, String sandboxPath) {
