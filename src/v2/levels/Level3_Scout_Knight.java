@@ -33,7 +33,7 @@ public class Level3_Scout_Knight extends Level {
 
     @Override
     public String getDescription() {
-        return "Level 3 — Scout Knight (Amature Force)";
+        return "Level 3 — Scout Knight (Amateur Force)";
     }
 
     @Override
