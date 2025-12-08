@@ -43,7 +43,7 @@ public class Level5_Arcane_Knight extends Level {
 
     @Override
     public String[] getLevelHeader() {
-        return AsciiArt.getLevel2ApprenticeKnight();
+        return AsciiArt.getLevel5ArcaneKnight();
     }
 
     @Override

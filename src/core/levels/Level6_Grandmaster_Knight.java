@@ -38,7 +38,7 @@ public class Level6_Grandmaster_Knight extends Level {
 
     @Override
     public String[] getLevelHeader() {
-        return AsciiArt.getLevel2ApprenticeKnight();
+        return AsciiArt.getLevel6GrandmasterKnight();
     }
 
     @Override

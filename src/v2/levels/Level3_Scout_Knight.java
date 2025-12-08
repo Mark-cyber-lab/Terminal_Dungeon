@@ -43,7 +43,7 @@ public class Level3_Scout_Knight extends Level {
 
     @Override
     public String[] getLevelHeader() {
-        return AsciiArt.getLevel2ApprenticeKnight();
+        return AsciiArt.getLevel3ScoutKnight();
     }
 
     @Override

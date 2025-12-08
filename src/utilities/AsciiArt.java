@@ -58,8 +58,16 @@ public class AsciiArt {
         return readAsciiFromFile("./ascii/level_5_guardian_knight.txt");
     }
 
+    public static String[] getLevel5ArcaneKnight() {
+        return readAsciiFromFile("./ascii/level_5_arcane_knight.txt");
+    }
+
     public static String[] getLevel6Paladin() {
         return readAsciiFromFile("./ascii/level_6_paladin.txt");
+    }
+
+    public static String[] getLevel6GrandmasterKnight() {
+        return readAsciiFromFile("./ascii/level_6_grandmaster_knight.txt");
     }
 
     public static String[] getLevel7ArcaneKnight() {
