@@ -18,16 +18,17 @@ public abstract class Level {
     /**
      * Level number, e.g., 1, 2, 3
      */
+    private int levelNumber;
     public final Sandbox sandbox;
     public Player player;
     protected final ArrayList<Stage> stages = new ArrayList<>();
     protected final String basePath;
 
     public Level(int levelNumber, Player player, Sandbox sandbox, String basePath) {
-        player.getStats().setLevel(levelNumber);
         this.player = player;
         this.basePath = basePath;
         this.sandbox = sandbox;
+        this.levelNumber = levelNumber;
     }
 
     public String getSandboxPath() {
@@ -39,6 +40,7 @@ public abstract class Level {
     }
 
     public void execute() {
+        player.getStats().setLevel(levelNumber);
         onBeforeInit();
         int currentStage = player.getStats().getStage(); // player's current stage
         int stagesPerLevel = 2; // 2 stages per level

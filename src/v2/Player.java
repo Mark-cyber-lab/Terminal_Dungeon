@@ -45,6 +45,7 @@ public class Player extends Alive {
     }
 
     public String getRankName() {
+//        IO.println("Stats " + playerStats.toString());
         int level = playerStats.getLevel();
         if (level >= 1 && level < RANKS.length) {
             return RANKS[level];

@@ -49,9 +49,9 @@ public class NewStagev2 implements Loggable {
         initializeLevels();
 
         PlayerConfig config = new PlayerConfig("./player.json", player);
-        sandbox.getBackupManager().confirmLoadBackup();
+        boolean loaded = sandbox.getBackupManager().confirmLoadBackup();
 
-        config.load();
+        if(loaded) config.load();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             log("Saving player configuration before exit...");

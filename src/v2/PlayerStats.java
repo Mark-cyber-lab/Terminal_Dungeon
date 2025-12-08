@@ -31,6 +31,7 @@ public class PlayerStats extends AliveStats {
     }
 
     public void setLevel(int level) {
+//        IO.println("Player stats level: " + level);
         if (level < 1) level = 1;
         this.level = level;
     }
@@ -84,5 +85,15 @@ public class PlayerStats extends AliveStats {
         if (callback != null) {
             this.grantedCommands = new HashSet<>(callback.onUpdate(this.grantedCommands));
         }
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerStats {" +
+                "level=" + level +
+                ", stage=" + stage +
+                ", currentDir='" + currentDir + '\'' +
+                ", grantedCommands=" + grantedCommands +
+                '}';
     }
 }

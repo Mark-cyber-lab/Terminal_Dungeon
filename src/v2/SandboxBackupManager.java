@@ -87,6 +87,8 @@ public class SandboxBackupManager implements Loggable {
                 }
             }
 
+            deleteDirectoryRecursively(sandBoxPath);
+
             log("Backup completed!");
             return true;
         } catch (Exception e) {
