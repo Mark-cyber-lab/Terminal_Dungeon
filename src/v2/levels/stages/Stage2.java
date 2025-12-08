@@ -5,8 +5,6 @@ import v2.CommandResult;
 import v2.items.Letter;
 import v2.levels.Level;
 
-import java.util.Objects;
-
 public class Stage2 extends Stage {
     private static final String configPath = "./src/stages/stage2.txt";
 
@@ -77,7 +75,7 @@ public class Stage2 extends Stage {
         level.sandbox.getGranter().grant("pwd");
         level.sandbox.getGranter().grant("ls");
         level.sandbox.getGranter().grant("cd");
-        level.sandbox.getGranter().grant("tree");
+        level.sandbox.getGranter().revoke("tree");
         level.sandbox.getGranter().grant("done");
         level.sandbox.getGranter().grant("cat");
     }

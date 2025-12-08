@@ -24,57 +24,57 @@ public class Stage1 extends Stage {
         CLIUtils.typewriter("\"Before you lift blade or spell, you must first command the dungeon itself.\"", 30);
         CLIUtils.typewriter("\"Speak the words: pwd to sense your current location.\"", 30);
         level.sandbox.getExecutor().executeStrict("pwd"); // input handling
-
+        CLIUtils.sleep(300);
         // After 'pwd'
         CLIUtils.typewriter("The knight nods: 'Good. A warrior who knows his ground cannot be lost.'", 30);
         CLIUtils.typewriter("\"Now, observe the surrounding chambers: ls\"", 30);
         level.sandbox.getExecutor().executeStrict("ls");
-
+        CLIUtils.sleep(300);
         // After 'ls'
-        CLIUtils.typewriter("Four paths reveal themselves: basic_training, courtyard, hall_of_movement, and a locked door.", 30);
+        CLIUtils.typewriter("Four paths reveal themselves: basic_training, courtyard, hall_of_movement, and navigation_test.", 30);
         CLIUtils.typewriter("\"Your first task: enter the Chamber of Beginnings: cd basic_training\"", 30);
         level.sandbox.getExecutor().executeStrict("cd basic_training");
-
+        CLIUtils.sleep(300);
         // Inside basic_training/
         CLIUtils.typewriter("Dust stirs as you enter. Old banners sway gently.", 30);
         CLIUtils.typewriter("\"List the notes here: ls\"", 30);
         level.sandbox.getExecutor().executeStrict("ls");
-
-        CLIUtils.typewriter("See the steps and common mistakes? Explore the structure using: tree", 30);
+        CLIUtils.sleep(300);
+        CLIUtils.typewriter("See the contents? Explore the structure using: tree", 30);
         level.sandbox.getExecutor().executeStrict("tree");
-
+        CLIUtils.sleep(300);
         CLIUtils.typewriter("\"Return to the central hall: cd ..\"", 30);
         level.sandbox.getExecutor().executeStrict("cd ..");
-
+        CLIUtils.sleep(300);
         // Back at level_1/
         CLIUtils.typewriter("The knight gestures toward the Courtyard of Awareness.", 30);
         CLIUtils.typewriter("\"Enter it now: cd courtyard\"", 30);
         level.sandbox.getExecutor().executeStrict("cd courtyard");
-
+        CLIUtils.sleep(300);
         // Inside courtyard/
         CLIUtils.typewriter("Birds scatter as you step inside. Look around: ls", 30);
         level.sandbox.getExecutor().executeStrict("ls");
-
+        CLIUtils.sleep(300);
         CLIUtils.typewriter("Check the courtyard structure visually with: tree", 30);
         level.sandbox.getExecutor().executeStrict("tree");
-
+        CLIUtils.sleep(300);
         CLIUtils.typewriter("\"Return to the central hall: cd ..\"", 30);
         level.sandbox.getExecutor().executeStrict("cd ..");
-
+        CLIUtils.sleep(300);
         // Back at level_1/
         CLIUtils.typewriter("Now — the Hall of Movement. Enter: cd hall_of_movement", 30);
         level.sandbox.getExecutor().executeStrict("cd hall_of_movement");
-
+        CLIUtils.sleep(300);
         // Inside hall_of_movement/
         CLIUtils.typewriter("Lanterns sway. The paths stretch before you. Inspect: ls paths", 30);
         level.sandbox.getExecutor().executeStrict("ls paths");
-
+        CLIUtils.sleep(300);
         CLIUtils.typewriter("Understand each path's direction with: tree paths", 30);
         level.sandbox.getExecutor().executeStrict("tree paths");
-
+        CLIUtils.sleep(300);
         CLIUtils.typewriter("\"Return to the central hall: cd ..\"", 30);
         level.sandbox.getExecutor().executeStrict("cd ..");
-
+        CLIUtils.sleep(300);
         // Back at level_1/
         CLIUtils.typewriter("A deep rumble shakes the chamber as the Navigation Test door glows faintly.", 30);
         CLIUtils.typewriter("\"You have done well, squire. You have explored the training halls with patience.\"", 30);
