@@ -17,11 +17,6 @@ public class Level5_Arcane_Knight extends Level {
 
     @Override
     public void setup() {
-        try {
-            sandbox.flush();
-        } catch (Exception e) {
-        }
-
         Stage Stage9 = new Stage9(this);
         Stage Stage10 = new Stage10(this);
 

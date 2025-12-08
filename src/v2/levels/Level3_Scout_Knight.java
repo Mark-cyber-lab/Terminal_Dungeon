@@ -18,12 +18,6 @@ public class Level3_Scout_Knight extends Level {
 
     @Override
     public void setup() {
-        try {
-            sandbox.flush();
-        } catch (Exception e) {
-            DebugLogger.log(e.getMessage());
-        }
-
         Stage Stage5 = new Stage5(this);
         Stage Stage6 = new Stage6(this);
 

@@ -22,8 +22,6 @@ public class Level2_Apprentice_Knight extends Level {
 
     @Override
     public void setup() {
-        // level based setup, because there is nothing yet to do with stages
-        sandbox.getDirGenerator().generateFromConfig(configPath, sandbox.getSandBoxPath().toString());
         Stage Stage3 = new Stage3();
         Stage Stage4 = new Stage4();
 

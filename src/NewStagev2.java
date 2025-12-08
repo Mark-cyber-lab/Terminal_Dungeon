@@ -6,6 +6,7 @@ import utilities.AsciiArt;
 import utilities.Loggable;
 import v2.Player;
 import v2.Sandbox;
+import v2.SandboxBackupManager;
 import v2.levels.*;
 
 import java.io.IOException;
@@ -39,15 +40,18 @@ public class NewStagev2 implements Loggable {
         initializeLevels();
 
         PlayerConfig config = new PlayerConfig("./player.json", player);
-        config.load();
-        sandbox.loadBackup();
+        boolean confirmLoad = sandbox.getBackupManager().confirmLoadBackup();
+
+        if(confirmLoad) {
+            config.load();
+        }
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             log("Saving player configuration before exit...");
             try {
-                if (!exitedNormally)
-                    sandbox.backup();
-                config.save();
+                if (exitedNormally || sandbox.getBackupManager().backup(SandboxBackupManager.BackupMode.BACKUP_ONLY_INVENTORY)) {
+                    config.save();
+                }
                 log("Player configuration saved successfully!");
             } catch (Exception e) {
                 log("Failed to save player configuration: " + e.getMessage());

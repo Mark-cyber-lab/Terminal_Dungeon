@@ -2,6 +2,7 @@ package v2.levels;
 
 import core.storage.Inventory;
 import v2.Player;
+import v2.SandboxBackupManager;
 import v2.levels.stages.Stage;
 import v2.Sandbox;
 
@@ -61,6 +62,7 @@ public abstract class Level {
                     .ifPresent(stage -> {
                         stage.execute(
                                 () -> {
+                                    sandbox.getBackupManager().flush(SandboxBackupManager.FlushMode.EXCEPT_INVENTORY);
                                 }, // Before setup lambda
                                 () -> {
 //                                    IO.println("base path is " + basePath);

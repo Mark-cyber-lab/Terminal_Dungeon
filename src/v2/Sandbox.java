@@ -21,6 +21,8 @@ public class Sandbox implements Loggable {
     private final DungeonExecutor executor;
     private final CommandGranterMiddleware granter;
     private final Inventory inventory;
+    private final SandboxBackupManager backupManager;
+
 
     public Sandbox(String sandboxPath, String inventoryPath) {
         this.sandBoxPath = Path.of(sandboxPath);
@@ -28,6 +30,7 @@ public class Sandbox implements Loggable {
         this.executor = new DungeonExecutor(this.sandBoxPath, inventoryPath1);
         this.granter = new CommandGranterMiddleware();
         this.inventory = new Inventory("inventory", "inventory", inventoryPath);
+        this.backupManager = new SandboxBackupManager(this.sandBoxPath, this.inventory);
         executor.useMiddleware(granter);
         executor.addListener(new CommandListener() {
             @Override
@@ -52,6 +55,10 @@ public class Sandbox implements Loggable {
         this.validator = new CommandValidator.Builder().withAllowedCommands(safeCommands).useWhitelist(true).build();
 
         this.dirGenerator = new DirGenerator();
+    }
+
+    public SandboxBackupManager getBackupManager() {
+        return backupManager;
     }
 
     public Inventory getInventory() {
@@ -86,74 +93,5 @@ public class Sandbox implements Loggable {
 
     public DirGenerator getDirGenerator() {
         return dirGenerator;
-    }
-
-    /**
-     * Creates a backup of the current sandbox root directory.
-     * The backup folder will be named rootPath + "_backup".
-     *
-     * @throws IOException if any file operations fail
-     */
-    public void backup() throws IOException {
-        File srcDir = new File(sandBoxPath.toString());
-        if (!srcDir.exists()) {
-            throw new IOException("Sandbox root does not exist: " + sandBoxPath.toString());
-        }
-
-        File backupDir = new File(sandBoxPath.toString() + "_backup");
-        if (backupDir.exists()) {
-            log("Backup folder already exists, overwriting...");
-            deleteDirectoryRecursively(backupDir.toPath());
-        }
-
-        log("Creating backup at: " + backupDir.getAbsolutePath());
-        copyDirectoryRecursively(srcDir.toPath(), backupDir.toPath());
-        log("Backup completed successfully!");
-    }
-
-    private void copyDirectoryRecursively(Path src, Path dest) throws IOException {
-        Files.walk(src).forEach(source -> {
-            try {
-                Path target = dest.resolve(src.relativize(source));
-                if (Files.isDirectory(source)) {
-                    if (!Files.exists(target)) Files.createDirectory(target);
-                } else {
-                    Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
-                }
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to copy: " + source, e);
-            }
-        });
-    }
-
-    private void deleteDirectoryRecursively(Path path) throws IOException {
-        if (!Files.exists(path)) return;
-        if(path.toAbsolutePath().normalize().equals(inventory.getBasePath().toAbsolutePath().normalize())) return;
-        Files.walk(path).sorted(Comparator.reverseOrder()).forEach(p -> {
-            try {
-                Files.delete(p);
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to delete: " + p, e);
-            }
-        });
-    }
-
-    public void flush() throws IOException {
-        File backupDir = new File(sandBoxPath + "_backup");
-        if (!backupDir.exists()) return; // nothing to restore
-
-        File rootDir = new File(sandBoxPath.toString());
-        if (rootDir.exists()) deleteDirectoryRecursively(rootDir.toPath());
-    }
-
-    public void loadBackup() throws IOException {
-        File backupDir = new File(sandBoxPath + "_backup");
-        if (!backupDir.exists()) return; // nothing to restore
-
-        File rootDir = new File(sandBoxPath.toString());
-        if (rootDir.exists()) deleteDirectoryRecursively(rootDir.toPath());
-
-        copyDirectoryRecursively(backupDir.toPath(), rootDir.toPath());
-        log("Backup restored to: " + rootDir.getAbsolutePath());
     }
 }

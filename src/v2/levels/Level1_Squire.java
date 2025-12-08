@@ -19,12 +19,6 @@ public class Level1_Squire extends Level {
 
     @Override
     public void setup() {
-        try {
-            sandbox.flush();
-        } catch (Exception e) {
-            DebugLogger.log(e.getMessage());
-        }
-
         Stage Stage1 = new Stage1(this);
         Stage Stage2 = new Stage2(this);
         addStage(Stage1);
