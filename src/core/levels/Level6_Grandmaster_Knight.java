@@ -3,6 +3,7 @@ package core.levels;
 import core.Player;
 import core.levels.stages.Stage;
 import core.levels.stages.Stage11;
+import core.levels.stages.Stage12;
 import engine.Sandbox;
 import utilities.AsciiArt;
 import utilities.CLIUtils;
@@ -23,7 +24,10 @@ public class Level6_Grandmaster_Knight extends Level {
             DebugLogger.log(e.getMessage());
         }
         Stage Stage11 = new Stage11(this);
+        Stage stage12 = new Stage12(this);
+
         addStage(Stage11);
+        addStage(stage12);
     }
 
     @Override

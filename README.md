@@ -147,20 +147,20 @@ Embark on your journey through the **Terminal Dungeon**, a mystical realm of dir
 
 ## 🏰 Stage-by-Stage Layout (2 Stages per Level)
 
-| Level | Stage | Goal / Interaction | Objects | Commands / Mechanics |
-|-------|-------|-----------------|---------|--------------------|
-| 1 — Squire (Tutorial) | 1 | Learn directory navigation commands | Simple directories | `cd`, `pwd`, `ls`, `tree` |
-|  | 2 | Find the lost letter | `dear_squire.txt` hidden in `navigation_test/archives` | `ls`, `cd`, `tree`, `cat` |
-| 2 — Apprentice Knight (Messenger) | 1 | Read scrolls about Goblins & Hidden Keys | `scroll.txt`, `key.txt` | `cat`, `mv` |
-|  | 2 | Deliver items and understand simple mechanics | `scroll.txt`, `orb_of_vision` | `cat` |
-| 3 — Scout Knight | 1 | Defeat goblins blocking the path | Goblin files | `rm` |
-|  | 2 | Defeat stronger enemy clusters | Multiple goblins / Kobold directories | `rm -rf`, simulated `sudo rm` |
-| 4 — Warrior Knight | 1 | Unlock blocked doors with keys | Door directory + Hidden Key | `mv` |
-|  | 2 | Organize the Archive Chamber | `orb_fragment_*` files scattered in wrong folders | `mv`, `mkdir`, `ls` |
-| 5 — Arcane Knight (Advanced Puzzles) | 1 | Rebuild the Deep Dungeon Map | 6–12 `map_piece_*` files scattered inside 4–7 nested folders (real + fake pieces) | `mv`, `mkdir`, `ls` |
+| Level | Stage | Goal / Interaction | Objects | Commands / Mechanics                                                       |
+|-------|-------|-----------------|---------|----------------------------------------------------------------------------|
+| 1 — Squire (Tutorial) | 1 | Learn directory navigation commands | Simple directories | `cd`, `pwd`, `ls`, `tree`                                                  |
+|  | 2 | Find the lost letter | `dear_squire.txt` hidden in `navigation_test/archives` | `ls`, `cd`, `tree`, `cat`                                                  |
+| 2 — Apprentice Knight (Messenger) | 1 | Read scrolls about Goblins & Hidden Keys | `scroll.txt`, `key.txt` | `cat`, `mv`                                                                |
+|  | 2 | Deliver items and understand simple mechanics | `scroll.txt`, `orb_of_vision` | `cat`                                                                      |
+| 3 — Scout Knight | 1 | Defeat goblins blocking the path | Goblin files | `rm`                                                                       |
+|  | 2 | Defeat stronger enemy clusters | Multiple goblins / Kobold directories | `rm -rf`, simulated `sudo rm`                                              |
+| 4 — Warrior Knight | 1 | Unlock blocked doors with keys | Door directory + Hidden Key | `mv`                                                                       |
+|  | 2 | Organize the Archive Chamber | `orb_fragment_*` files scattered in wrong folders | `mv`, `mkdir`, `ls`                                                        |
+| 5 — Arcane Knight (Advanced Puzzles) | 1 | Rebuild the Deep Dungeon Map | 6–12 `map_piece_*` files scattered inside 4–7 nested folders (real + fake pieces) | `mv`, `mkdir`, `ls`                                                        |
 |  | 2 | Advanced Dungeon Cache Cleanup | `.tmp`, `.cache`, `.garbage` files mixed with scrolls/artifacts | `rm`, `rm -rf` (some junk looks important, some important looks like junk) |
-| 6 — Grandmaster Knight (Final Boss Prep & Battle) | 1 | Restore the Grand Archive | `pillar_*`, `core_*`, `seal_fragment_*` inside deep, confusing subfolders | `mkdir`, `mv`, `ls` (some files must be renamed before placement) |
-|  | 2 | Purge the Eldritch Overlord | Real: `overlord_core.dat`, `overlord_phase2.bin`; Fake: `core_backup.dat`, `overlord_fake.bin`, `phase2_hint.txt` | `rm`, `rm -rf` (must delete multiple files in order; wrong deletion spawns extra files) |
+| 6 — Grandmaster Knight (Final Boss Prep & Battle) | 1 | Restore the Grand Archive | `pillar_*`, `core_*`, `seal_fragment_*` inside deep, confusing subfolders | `mkdir`, `mv`, `ls` (some files must be renamed before placement)          |
+|  | 2 | Purge the Eldritch Overlord | Real: `overlord_core.dat`, `overlord_phase2.bin`; Fake: `core_backup.dat`, `overlord_fake.bin`, `phase2_hint.txt` | `rm`, `rm -rf` (Mistakes in defeating the demon lord spawns random mob)    |
 
 ---
 

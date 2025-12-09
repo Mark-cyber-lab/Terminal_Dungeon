@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Stage11 extends Stage {
-    private static final String configPath = "./src/stages/stage10.txt";
+    private static final String configPath = "./src/stages/stage11.txt";
     private final String[] importantItems = {
             "ancient_scroll.txt", "artifact_fragment.txt", "spellbook.txt",
             "royal_decree.txt", "lost_artifact.txt", "ancient_tome.txt",
@@ -26,7 +26,7 @@ public class Stage11 extends Stage {
 
     @Override
     public String[] getStageHeader() {
-        return new String[]{"Stage 10 — A Dark Mysterious Aura that envelops the way"};
+        return new String[]{"Stage 11 — The Forgotten Ruins of the Past"};
     }
 
     @Override
@@ -152,7 +152,7 @@ public class Stage11 extends Stage {
     @Override
     public void onSuccessPlay() {
         //        player.remember("Learned pwd (location awareness)");
-        IO.println("Stage complete! Proceeding to Stage 7...\n");
+        IO.println("Stage complete! Proceeding to Stage 12...\n");
         CLIUtils.waitAnyKey();
     }
 

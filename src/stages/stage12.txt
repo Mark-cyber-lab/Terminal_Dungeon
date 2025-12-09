@@ -54,7 +54,7 @@ Second only to the demon lord himself.
 You must face me before the final boss.
 Delete me to prove your worth.
 
-FILE: eldritch_realms/overlord_sanctum/demon_lord.mob
+FILE: eldritch_realms/overlord_sanctum/demon_lord%9jdi#$@#2JSmk9.mob
 I AM THE DEMON LORD
 The final boss, the darkest of all.
 The Butcher of all beings
