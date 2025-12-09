@@ -2,7 +2,7 @@ package v2.levels.stages;
 
 import v2.Mission;
 import v2.enemies.*;
-import core.items.Decoy;
+import v2.items.Decoy;
 import v2.levels.Level;
 import utilities.CLIUtils;
 
@@ -187,7 +187,6 @@ public class Stage10 extends Stage {
 
     @Override
     public void setupEnvironment() {
-        level.sandbox.getDirGenerator().generateFromConfig(configPath, level.sandbox.getSandBoxPath().toString());
         level.sandbox.getDirGenerator().generateFromConfig(configPath, level.sandbox.getSandBoxPath().toString());
         level.sandbox.getGranter().grant("pwd");
         level.sandbox.getGranter().grant("ls");

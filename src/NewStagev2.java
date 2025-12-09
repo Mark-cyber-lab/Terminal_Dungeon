@@ -29,6 +29,7 @@ public class NewStagev2 implements Loggable {
         levels.add(new Level3_Scout_Knight(sandbox, player));
         levels.add(new Level4_Warrior_Knight(sandbox, player));
         levels.add(new Level5_Arcane_Knight(sandbox, player));
+        levels.add(new Level6_Grandmaster_Knight(sandbox, player));
     }
 
     // ----------------------
@@ -119,7 +120,7 @@ public class NewStagev2 implements Loggable {
             String input = IO.readln("Retry adventure? (yes/no): ").trim().toLowerCase();
             boolean retry = input.equals("yes");
 
-            if(retry) resetPlayerStats(playerStats);
+            if (retry) resetPlayerStats(playerStats);
 
             if (!retry) break;
 

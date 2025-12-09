@@ -1,7 +1,8 @@
 package v2;
 
-import core.items.Decoy;
-import core.items.Shards;
+import v2.items.Corrupted;
+import v2.items.Decoy;
+import v2.items.Shards;
 import v2.doors.HiddenDoor;
 import v2.enemies.Enemy;
 import v2.mechanics.CorrectPlacementValidator;
@@ -17,6 +18,7 @@ public class Mission {
     private final List<CorrectPlacementValidator> placementValidators = new ArrayList<>();
     private final List<Decoy> decoys = new ArrayList<>();
     private final List<Shards> shards = new ArrayList<>();
+    private final List<Corrupted> corrupts = new ArrayList<>();
 
     private final LinuxCommandExecutor linuxCommandExecutor;
     private final Player player;
@@ -36,6 +38,11 @@ public class Mission {
         return this;
     }
 
+    public Mission addCorrupt(Corrupted corrupted) {
+        this.corrupts.add(corrupted);
+        return this;
+    }
+
     public List<Decoy> getDecoyItems() {
         return this.decoys;
     }
@@ -44,12 +51,22 @@ public class Mission {
         return this.shards;
     }
 
+    public List<Corrupted> getCorrupts() {
+        return this.corrupts;
+    }
+
     public boolean shardCompleted() {
         return shards.isEmpty() || shards.stream().allMatch(Shards::isCorrectDir);
     }
 
     public boolean decoyCompleted() {
         return decoys.isEmpty() || decoys.stream().allMatch(Decoy::isDeleted);
+    }
+
+    public boolean corruptPurified() {
+        return corrupts.isEmpty() ||
+                corrupts.stream().allMatch(Corrupted::isCorrectName) &&
+                        corrupts.stream().allMatch(Corrupted::isCorrectDir);
     }
 
     // ---------------------------------------------------------
@@ -157,7 +174,7 @@ public class Mission {
     // Mission fully cleared when: all enemies defeated AND all doors unlocked
     // ---------------------------------------------------------
     public boolean isFullyCleared() {
-        return allEnemiesDefeated() && allDoorsUnlocked() && allCorrectPlacementValidators() && shardCompleted() && decoyCompleted();
+        return allEnemiesDefeated() && allDoorsUnlocked() && allCorrectPlacementValidators() && shardCompleted() && decoyCompleted() && corruptPurified();
     }
 
     public void cleanup() {

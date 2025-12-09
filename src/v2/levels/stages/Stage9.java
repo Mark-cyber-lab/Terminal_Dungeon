@@ -2,8 +2,8 @@ package v2.levels.stages;
 
 import v2.Mission;
 import v2.enemies.*;
-import core.items.Decoy;
-import core.items.Shards;
+import v2.items.Decoy;
+import v2.items.Shards;
 import v2.levels.Level;
 import utilities.CLIUtils;
 import v2.CommandResult;
