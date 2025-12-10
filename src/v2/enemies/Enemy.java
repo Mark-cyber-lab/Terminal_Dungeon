@@ -5,6 +5,8 @@ import v2.CommandMiddleware;
 import v2.CommandResult;
 import v2.Player;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,12 +25,28 @@ public class Enemy implements CommandMiddleware {
     // -------------------------------------------------
     // Constructor + setters
     // -------------------------------------------------
-    public Enemy(String name, String id, Path enemyPath, int damagePerUnit) {
+    public Enemy(String name, String id, Path enemyPath, int damagePerUnit, boolean spawnable) {
         this.name = name;
         this.id = id;
         this.enemyFilePath = enemyPath;
         this.damagePerUnit = damagePerUnit;
+
+        if (spawnable) {
+            try {
+                Files.createDirectories(enemyPath.getParent());
+
+                String content = "id=" + id + "\nname=" + name + "\n";
+                Files.writeString(enemyPath, content);
+            } catch (IOException e) {
+                System.err.println("[Enemy Spawn Error] Failed to create enemy file: " + e.getMessage());
+            }
+        }
     }
+
+    public Enemy(String name, String id, Path enemyPath, int damagePerUnit) {
+        this(name, id, enemyPath, damagePerUnit, false); // call main constructor
+    }
+
 
     public Enemy setPlayer(Player player) {
         this.player = player;
