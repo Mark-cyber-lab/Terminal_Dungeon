@@ -1,6 +1,7 @@
 package v2.levels.stages;
 
 import utilities.CLIUtils;
+import v2.SandboxBackupManager;
 import v2.levels.Level;
 
 import java.io.IOException;
@@ -53,6 +54,7 @@ public abstract class Stage {
             play();
             if(level.player.getStats().getHealth() == 0) return;
             onSuccessPlay();
+            level.sandbox.getBackupManager().flush(SandboxBackupManager.FlushMode.EXCEPT_INVENTORY);
         } catch (Exception e) {
             onFailedPlay(e);
         }
