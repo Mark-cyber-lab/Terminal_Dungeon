@@ -5,7 +5,7 @@ DIR: combat_master/
 DIR: combat_master/next_stage/portal
 
 FILE: combat_training/welcome.txt
-Scout Knight Level 1: Learn combat
+Scout Knight Stage 3: Learn combat
 Command: rm
 
 FILE: goblin_caves/lesson_1.txt
