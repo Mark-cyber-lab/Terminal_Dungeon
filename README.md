@@ -69,6 +69,5 @@ Progress from **Squire → Grandmaster Knight** while learning Linux commands sa
 Run via WSL:
 
 ```wsl
-javac -d out $(find src -name "*.java")
-java -cp out Main
+javac -d out $(find src -name "*.java") && java -cp out Mainv2
 ```
