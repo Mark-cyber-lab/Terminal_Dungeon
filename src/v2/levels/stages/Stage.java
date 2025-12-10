@@ -55,7 +55,7 @@ public abstract class Stage {
             if(level.player.getStats().getHealth() == 0) return;
             onSuccessPlay();
             level.sandbox.getBackupManager().flush(SandboxBackupManager.FlushMode.EXCEPT_INVENTORY);
-            level.sandbox.getExecutor().execute("cd " + level.sandbox.getSandBoxPath());
+            level.sandbox.getExecutor().execute("cd " + level.sandbox.getSandBoxPath().toAbsolutePath());
         } catch (Exception e) {
             onFailedPlay(e);
         }
