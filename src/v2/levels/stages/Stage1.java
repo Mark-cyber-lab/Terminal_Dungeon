@@ -81,8 +81,6 @@ public class Stage1 extends Stage {
         CLIUtils.typewriter("\"Much remains hidden, but your first lesson in navigation is complete.\"", 30);
         CLIUtils.typewriter("\"When ready, speak the word: done\"", 30);
         level.sandbox.getExecutor().executeStrict("done");
-
-        level.sandbox.getExecutor().execute("cd ..");
     }
 
     @Override

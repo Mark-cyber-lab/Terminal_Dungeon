@@ -4,40 +4,39 @@
 # Theme: Guided exploration through training halls
 # Commands / Mechanics: pwd, ls, cd, tree
 
-DIR: level_1/
-DIR: level_1/basic_training/
-DIR: level_1/basic_training/notes/
-DIR: level_1/courtyard/
-DIR: level_1/hall_of_movement/
-DIR: level_1/hall_of_movement/paths/
-HIDDEN_DIR: level_1/navigation_test/
+DIR: basic_training/
+DIR: basic_training/notes/
+DIR: courtyard/
+DIR: hall_of_movement/
+DIR: hall_of_movement/paths/
+HIDDEN_DIR: navigation_test/
 
-FILE: level_1/basic_training/welcome.txt
+FILE: basic_training/welcome.txt
 Squire Level 1: Learn basic movement
 Commands: pwd, ls, cd, tree
 
-FILE: level_1/basic_training/notes/steps.txt
+FILE: basic_training/notes/steps.txt
 A written record of every squire’s first steps.
 
-FILE: level_1/basic_training/notes/common_mistakes.txt
+FILE: basic_training/notes/common_mistakes.txt
 Warnings written by past trainees.
 
-FILE: level_1/courtyard/lesson_1.txt
+FILE: courtyard/lesson_1.txt
 Use 'ls' to see what's around you
 
-FILE: level_1/courtyard/flowers.txt
+FILE: courtyard/flowers.txt
 A list of rare blooms growing in the courtyard.
 
-FILE: level_1/hall_of_movement/lesson_2.txt
+FILE: hall_of_movement/lesson_2.txt
 Use 'cd' to move between rooms
 
-FILE: level_1/hall_of_movement/paths/north.txt
-FILE: level_1/hall_of_movement/paths/south.txt
-FILE: level_1/hall_of_movement/paths/west.txt
-FILE: level_1/hall_of_movement/paths/east.txt
+FILE: hall_of_movement/paths/north.txt
+FILE: hall_of_movement/paths/south.txt
+FILE: hall_of_movement/paths/west.txt
+FILE: hall_of_movement/paths/east.txt
 Directional stones used for movement training.
 
-FILE: level_1/navigation_test/challenge.txt
+FILE: navigation_test/challenge.txt
 Prove your mastery of movement
 
 # Game Flow
@@ -75,7 +74,7 @@ Prove your mastery of movement
 # input (only accept: cd ..)
 # continue
 #
-# Back at level_1/:
+# Back at :
 # type "The knight gestures toward the Courtyard of Awareness."
 # type "\"Enter it now: cd courtyard\""
 # input (only accept: cd courtyard)
@@ -94,7 +93,7 @@ Prove your mastery of movement
 # input (only accept: cd ..)
 # continue
 #
-# Back at level_1/:
+# Back at :
 # type "Now — the Hall of Movement. Enter: cd hall_of_movement\""
 # input (only accept: cd hall_of_movement)
 # continue
@@ -112,7 +111,7 @@ Prove your mastery of movement
 # input (only accept: cd ..)
 # continue
 #
-# Back at level_1/:
+# Back at :
 # type "A deep rumble shakes the chamber as the Navigation Test door glows faintly."
 # type "\"You have done well, squire. You have explored the training halls with patience.\""
 # type "\"Much remains hidden, but your first lesson in navigation is complete.\""

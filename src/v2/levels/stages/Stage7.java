@@ -26,17 +26,17 @@ public class Stage7 extends Stage {
 
         Mission mission = new Mission(level.sandbox.getExecutor(), level.player);
 
-        Goblin outerPatrolGoblin = new Goblin("outer_gate_patrol", Path.of("./sandbox/level_4/outer_gate/patrol/goblin.mob"));
-        Goblin trainingHallGoblin = new Goblin("training_hall", Path.of("./sandbox/level_4/inner_courtyard/training_hall/goblin.mob"));
-        Goblin commandHallGoblin = new Goblin("command_hall", Path.of("./sandbox/level_4/.command_hall/goblin.mob"));
-        Kobold guardRoomKobold = new Kobold("guard_room", Path.of("./sandbox/level_4/inner_courtyard/guard_room/kobold.mob"));
-        Ogre ogre = new Ogre("master", Path.of("./sandbox/level_4/.access_master/ogre.mob"));
+        Goblin outerPatrolGoblin = new Goblin("outer_gate_patrol", Path.of("./sandbox/outer_gate/patrol/goblin.mob"));
+        Goblin trainingHallGoblin = new Goblin("training_hall", Path.of("./sandbox/inner_courtyard/training_hall/goblin.mob"));
+        Goblin commandHallGoblin = new Goblin("command_hall", Path.of("./sandbox/.command_hall/goblin.mob"));
+        Kobold guardRoomKobold = new Kobold("guard_room", Path.of("./sandbox/inner_courtyard/guard_room/kobold.mob"));
+        Ogre ogre = new Ogre("master", Path.of("./sandbox/.access_master/ogre.mob"));
 
         HiddenKey commandHallKey = new HiddenKey(".key.secr", "COMMAND_HALL_KEY", null);
         HiddenKey accessMasterKey = new HiddenKey(".key.secr", "ACCESS_MASTER_KEY", null);
 
-        HiddenDoor commandHallDoor = new HiddenDoor("command_hall", "command_hall", Path.of("./sandbox/level_4/.command_hall")).unlocksBy(commandHallKey);
-        HiddenDoor accessMAsterDoor = new HiddenDoor("access_master", "access_master", Path.of("./sandbox/level_4/.access_master")).unlocksBy(accessMasterKey);
+        HiddenDoor commandHallDoor = new HiddenDoor("command_hall", "command_hall", Path.of("./sandbox/.command_hall")).unlocksBy(commandHallKey);
+        HiddenDoor accessMAsterDoor = new HiddenDoor("access_master", "access_master", Path.of("./sandbox/.access_master")).unlocksBy(accessMasterKey);
 
         mission
                 .addEnemy(outerPatrolGoblin)

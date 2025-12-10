@@ -31,6 +31,10 @@ public abstract class Level {
         this.levelNumber = levelNumber;
     }
 
+    public Level(int levelNumber, Player player, Sandbox sandbox) {
+        this(levelNumber, player, sandbox, "");
+    }
+
     public String getSandboxPath() {
         return player.getSandboxRoot();
     }

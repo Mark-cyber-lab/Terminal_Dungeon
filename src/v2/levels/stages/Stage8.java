@@ -27,20 +27,20 @@ public class Stage8 extends Stage {
 
         Mission mission = new Mission(level.sandbox.getExecutor(), level.player);
 
-        CorrectPlacementValidator w1 = new CorrectPlacementValidator("orb_fragment_w1.frg", Path.of("./sandbox/level_4/fractured_archive/west_wing/low_shelves"), true);
-        CorrectPlacementValidator w2 = new CorrectPlacementValidator("orb_fragment_w2.frg", Path.of("./sandbox/level_4/fractured_archive/east_wing/middle_shelves"));
-        CorrectPlacementValidator e1 = new CorrectPlacementValidator("orb_fragment_e1.frg", Path.of("./sandbox/level_4/fractured_archive/east_wing/.quiet_rack"));
-        CorrectPlacementValidator f1 = new CorrectPlacementValidator("orb_fragment_f1.frg", Path.of("./sandbox/level_4/fractured_archive/central_hub"));
-        CorrectPlacementValidator e2 = new CorrectPlacementValidator("orb_fragment_e2.frg", Path.of("./sandbox/level_4/fractured_archive/west_wing/low_shelves"));
+        CorrectPlacementValidator w1 = new CorrectPlacementValidator("orb_fragment_w1.frg", Path.of("./sandbox/fractured_archive/west_wing/low_shelves"), true);
+        CorrectPlacementValidator w2 = new CorrectPlacementValidator("orb_fragment_w2.frg", Path.of("./sandbox/fractured_archive/east_wing/middle_shelves"));
+        CorrectPlacementValidator e1 = new CorrectPlacementValidator("orb_fragment_e1.frg", Path.of("./sandbox/fractured_archive/east_wing/.quiet_rack"));
+        CorrectPlacementValidator f1 = new CorrectPlacementValidator("orb_fragment_f1.frg", Path.of("./sandbox/fractured_archive/central_hub"));
+        CorrectPlacementValidator e2 = new CorrectPlacementValidator("orb_fragment_e2.frg", Path.of("./sandbox/fractured_archive/west_wing/low_shelves"));
 
-        Goblin nimbleGoblin = new Goblin("nimble", Path.of("./sandbox/level_4/fractured_archive/west_wing/low_shelves/goblin.mob"));
-        Kobold cunningKobold = new Kobold("cunning", Path.of("./sandbox/level_4/fractured_archive/west_wing/upper_shelves/kobold.mob"));
-        Ogre hulkingOgre = new Ogre("hulking", Path.of("./sandbox/level_4/fractured_archive/east_wing/high_shelves/ogre.mob"));
-        Ogre massiveOgre = new Ogre("massiveOgre", Path.of("./sandbox/level_4/fractured_archive/central_hub/ogre.mob"));
-        Ghoul ghastlyGhoul = new Ghoul("ghastly", Path.of("./sandbox/level_4/fractured_archive/misaligned_stacks/ghoul.mob"));
+        Goblin nimbleGoblin = new Goblin("nimble", Path.of("./sandbox/fractured_archive/west_wing/low_shelves/goblin.mob"));
+        Kobold cunningKobold = new Kobold("cunning", Path.of("./sandbox/fractured_archive/west_wing/upper_shelves/kobold.mob"));
+        Ogre hulkingOgre = new Ogre("hulking", Path.of("./sandbox/fractured_archive/east_wing/high_shelves/ogre.mob"));
+        Ogre massiveOgre = new Ogre("massiveOgre", Path.of("./sandbox/fractured_archive/central_hub/ogre.mob"));
+        Ghoul ghastlyGhoul = new Ghoul("ghastly", Path.of("./sandbox/fractured_archive/misaligned_stacks/ghoul.mob"));
 
-        HiddenKey quietRackKey = new HiddenKey("quiet_rack", "QUIET_RACK_KEY", Path.of("./sandbox/level_4/storage_bay/.key.secr"));
-        HiddenDoor quietRack = new HiddenDoor("quiet_rack", "1", Path.of("./sandbox/level_4/fractured_archive/east_wing/.quiet_rack")).unlocksBy(quietRackKey);
+        HiddenKey quietRackKey = new HiddenKey("quiet_rack", "QUIET_RACK_KEY", Path.of("./sandbox/storage_bay/.key.secr"));
+        HiddenDoor quietRack = new HiddenDoor("quiet_rack", "1", Path.of("./sandbox/fractured_archive/east_wing/.quiet_rack")).unlocksBy(quietRackKey);
 
         mission.initialize();
 

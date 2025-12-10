@@ -10,11 +10,8 @@ import v2.levels.stages.Stage4;
 
 public class Level2_Apprentice_Knight extends Level {
 
-    private static final String configPath = "./src/stages";
-    private static final String basePath = "./lv2";
-
     public Level2_Apprentice_Knight(Sandbox sandbox, Player player) {
-        super(2, player, sandbox, basePath);
+        super(2, player, sandbox);
     }
 
     @Override

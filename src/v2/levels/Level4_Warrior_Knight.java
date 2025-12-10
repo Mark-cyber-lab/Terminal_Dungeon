@@ -10,10 +10,8 @@ import v2.levels.stages.Stage8;
 
 public class Level4_Warrior_Knight extends Level {
 
-    private static final String basePath = "./level_4";
-
     public Level4_Warrior_Knight(Sandbox sandbox, Player player) {
-        super(4, player, sandbox, basePath);
+        super(4, player, sandbox);
     }
 
     @Override

@@ -5,18 +5,17 @@
 # Commands / Mechanics: mv key ./door/, ls, cd, cat
 
 # Directories
-DIR: level_4/
-DIR: level_4/outer_gate/
-DIR: level_4/outer_gate/patrol/
-DIR: level_4/inner_courtyard/
-DIR: level_4/inner_courtyard/guard_room/
-DIR: level_4/inner_courtyard/training_hall/
-DIR: level_4/inner_courtyard/training_hall/secret_chamber/
-HIDDEN_DIR: level_4/.command_hall/
-HIDDEN_DIR: level_4/.access_master/
+DIR: outer_gate/
+DIR: outer_gate/patrol/
+DIR: inner_courtyard/
+DIR: inner_courtyard/guard_room/
+DIR: inner_courtyard/training_hall/
+DIR: inner_courtyard/training_hall/secret_chamber/
+HIDDEN_DIR: .command_hall/
+HIDDEN_DIR: .access_master/
 
 # Files
-FILE: level_4/outer_gate/scroll.txt
+FILE: outer_gate/scroll.txt
 Curiosity and courage are your greatest allies, Warrior Knight.
 
 Every path twists, every shadow hides a lesson, and even the quiet ground beneath your feet may conceal a secret.
@@ -30,15 +29,15 @@ Move forward with confidence. Greater trials stand ahead, but I have faith in yo
 — The Old Knight
 END
 
-FILE: level_4/outer_gate/patrol/goblin.mob
+FILE: outer_gate/patrol/goblin.mob
 Goblin patrolling the outer gate.
 END
 
-HIDDEN_FILE: level_4/outer_gate/.key.secr
+HIDDEN_FILE: outer_gate/.key.secr
 ACCESS_MASTER_KEY
 END
 
-FILE: level_4/inner_courtyard/scroll.txt
+FILE: inner_courtyard/scroll.txt
 To advance deeper into the fortress, you must guide the keys to their rightful doors.
 
 Remember:
@@ -49,15 +48,15 @@ Study the corridors. Watch for patrols.
 Keys open paths, but wisdom opens all.
 END
 
-FILE: level_4/inner_courtyard/guard_room/kobold.mob
+FILE: inner_courtyard/guard_room/kobold.mob
 Kobold guard at the inner courtyard.
 END
 
-FILE: level_4/inner_courtyard/training_hall/goblin.mob
+FILE: inner_courtyard/training_hall/goblin.mob
 Goblin blocks a corner near hidden keys.
 END
 
-FILE: level_4/inner_courtyard/training_hall/secret_chamber/scroll.txt
+FILE: inner_courtyard/training_hall/secret_chamber/scroll.txt
 Welcome, Warrior Knight.
 
 You now stand in one of the hidden chambers of the inner courtyard.
@@ -75,11 +74,11 @@ Guide for this stage:
 5. Some secrets are concealed behind silence and shadows. Search thoroughly.
 END
 
-HIDDEN_FILE: level_4/inner_courtyard/training_hall/secret_chamber/.key.secr
+HIDDEN_FILE: inner_courtyard/training_hall/secret_chamber/.key.secr
 COMMAND_HALL_KEY
 END
 
-FILE: level_4/.command_hall/scroll.txt
+FILE: .command_hall/scroll.txt
 The Command Hall stands guarded.
 
 Defeat the sentinel first. Only then will the hall reveal its secrets.
@@ -89,7 +88,7 @@ Paths to the final place remain concealed.
 A warrior who observes carefully will find the way forward.
 END
 
-FILE: level_4/.access_master/scroll.txt
+FILE: .access_master/scroll.txt
 The final challenge of this stage awaits you.
 
 Have the doors been unlocked?
@@ -102,12 +101,12 @@ Stand firm, Warrior Knight.
 If you overcome what lies ahead, you will command the mastery of this level.
 END
 
-FILE: level_4/.command_hall/goblin.mob
+FILE: .command_hall/goblin.mob
 Goblin sentinel guarding the command.
 END
 
 # final boss. if this beats, stage cleared
-FILE: level_4/.access_master/ogre.mob
+FILE: .access_master/ogre.mob
 Final sentinel guarding the master access.
 END
 

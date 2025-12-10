@@ -5,31 +5,30 @@
 # Commands / Mechanics: ls, cd, tree, cat
 
 # Directories and files from previous stages
-DIR: level_1/
-DIR: level_1/basic_training/
-DIR: level_1/basic_training/notes/
-DIR: level_1/courtyard/
-DIR: level_1/hall_of_movement/
-DIR: level_1/hall_of_movement/paths/
-DIR: level_1/navigation_test/
-DIR: level_1/navigation_test/archives/
+DIR: basic_training/
+DIR: basic_training/notes/
+DIR: courtyard/
+DIR: hall_of_movement/
+DIR: hall_of_movement/paths/
+DIR: navigation_test/
+DIR: navigation_test/archives/
 
-FILE: level_1/basic_training/welcome.txt
-FILE: level_1/basic_training/notes/steps.txt
-FILE: level_1/basic_training/notes/common_mistakes.txt
-FILE: level_1/courtyard/lesson_1.txt
-FILE: level_1/courtyard/flowers.txt
-FILE: level_1/hall_of_movement/lesson_2.txt
-FILE: level_1/hall_of_movement/paths/north.txt
-FILE: level_1/hall_of_movement/paths/south.txt
-FILE: level_1/hall_of_movement/paths/west.txt
-FILE: level_1/hall_of_movement/paths/east.txt
-FILE: level_1/navigation_test/challenge.txt
-FILE: level_1/navigation_test/tablet_inscriptions.txt
-FILE: level_1/navigation_test/archives/log_001.txt
-FILE: level_1/navigation_test/archives/log_002.txt
-FILE: level_1/navigation_test/archives/log_003.txt
-FILE: level_1/navigation_test/archives/dear_squire.txt
+FILE: basic_training/welcome.txt
+FILE: basic_training/notes/steps.txt
+FILE: basic_training/notes/common_mistakes.txt
+FILE: courtyard/lesson_1.txt
+FILE: courtyard/flowers.txt
+FILE: hall_of_movement/lesson_2.txt
+FILE: hall_of_movement/paths/north.txt
+FILE: hall_of_movement/paths/south.txt
+FILE: hall_of_movement/paths/west.txt
+FILE: hall_of_movement/paths/east.txt
+FILE: navigation_test/challenge.txt
+FILE: navigation_test/tablet_inscriptions.txt
+FILE: navigation_test/archives/log_001.txt
+FILE: navigation_test/archives/log_002.txt
+FILE: navigation_test/archives/log_003.txt
+FILE: navigation_test/archives/dear_squire.txt
 Dear Squire,
 
 Curiosity and courage are your greatest allies. The paths you walk may twist and turn, but every lesson you have learned in the training halls will guide you true.
@@ -54,7 +53,7 @@ END
 # input
 # continue
 #
-# After player cats the letter (FILE: level_1/navigation_test/archives/dear_squire.txt):
+# After player cats the letter (FILE: navigation_test/archives/dear_squire.txt):
 # type "A warm glow fills the archives as you read the letter:"
 # type "'Dear Squire, curiosity and courage are your greatest allies. Your journey has only begun. Remember your lessons, and step forward boldly.'"
 # type "The Old Knight nods: 'Your Stage 3 training is complete. Greater adventures await…'"

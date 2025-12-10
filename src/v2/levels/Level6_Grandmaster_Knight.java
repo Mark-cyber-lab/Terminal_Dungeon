@@ -9,10 +9,9 @@ import utilities.AsciiArt;
 import utilities.CLIUtils;
 
 public class Level6_Grandmaster_Knight extends Level {
-    private static final String basePath = "./lv6";
 
     public Level6_Grandmaster_Knight(Sandbox sandbox, Player player) {
-        super(6, player, sandbox, basePath);
+        super(6, player, sandbox);
     }
 
     @Override

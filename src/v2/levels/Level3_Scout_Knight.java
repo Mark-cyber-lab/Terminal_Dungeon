@@ -10,10 +10,9 @@ import utilities.CLIUtils;
 import utilities.DebugLogger;
 
 public class Level3_Scout_Knight extends Level {
-    private static final String basePath = "./lv3";
 
     public Level3_Scout_Knight(Sandbox sandbox, Player player) {
-        super(3, player, sandbox, basePath);
+        super(3, player, sandbox);
     }
 
     @Override

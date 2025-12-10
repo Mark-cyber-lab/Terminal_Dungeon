@@ -5,21 +5,20 @@
 # Commands / Mechanics: mv, mkdir, ls, cat, ls -a
 
 # Directories
-DIR: level_4/
-DIR: level_4/fractured_archive/
-DIR: level_4/fractured_archive/west_wing/
-DIR: level_4/fractured_archive/west_wing/low_shelves/
-DIR: level_4/fractured_archive/west_wing/upper_shelves/
-DIR: level_4/fractured_archive/east_wing/
-DIR: level_4/fractured_archive/east_wing/high_shelves/
-DIR: level_4/fractured_archive/east_wing/middle_shelves/
-DIR: level_4/fractured_archive/central_hub/
-DIR: level_4/storage_bay/
-HIDDEN_DIR: level_4/fractured_archive/misaligned_stacks/
-HIDDEN_DIR: level_4/fractured_archive/east_wing/.quiet_rack/
+DIR: fractured_archive/
+DIR: fractured_archive/west_wing/
+DIR: fractured_archive/west_wing/low_shelves/
+DIR: fractured_archive/west_wing/upper_shelves/
+DIR: fractured_archive/east_wing/
+DIR: fractured_archive/east_wing/high_shelves/
+DIR: fractured_archive/east_wing/middle_shelves/
+DIR: fractured_archive/central_hub/
+DIR: storage_bay/
+HIDDEN_DIR: fractured_archive/misaligned_stacks/
+HIDDEN_DIR: fractured_archive/east_wing/.quiet_rack/
 
 # Files
-FILE: level_4/fractured_archive/scroll.txt
+FILE: fractured_archive/scroll.txt
 Warrior Knight,
 
 The Fractured Archive trembles under the weight of its own disarray.
@@ -38,46 +37,46 @@ Only the patient and observant may align the fragments and stabilize the Archive
 — Keeper Arvian
 END
 
-FILE: level_4/fractured_archive/west_wing/low_shelves/orb_fragment_w1.frg
+FILE: fractured_archive/west_wing/low_shelves/orb_fragment_w1.frg
 A blue shard flickering with faint energy.
 (cat reveals a faint hum: ~~~~)
 END
 
-FILE: level_4/fractured_archive/west_wing/upper_shelves/orb_fragment_w2.frg
+FILE: fractured_archive/west_wing/upper_shelves/orb_fragment_w2.frg
 A fragment resting among toppled parchment rolls, vibrating softly.
 (cat reveals a weak pulse: ~~~)
 END
 
-FILE: level_4/fractured_archive/east_wing/middle_shelves/orb_fragment_e1.frg
+FILE: fractured_archive/east_wing/middle_shelves/orb_fragment_e1.frg
 A dim fragment, hard to reach.
 (cat reveals silence: -)
 END
 
-HIDDEN_FILE: level_4/fractured_archive/misaligned_stacks/.orb_fragment_f1.frg
+HIDDEN_FILE: fractured_archive/misaligned_stacks/.orb_fragment_f1.frg
 A lost fragment vibrating with irregular pulses.
 (cat reveals strong vibrations: ~~~~~~)
 END
 
-HIDDEN_FILE: level_4/fractured_archive/east_wing/.quiet_rack/.orb_fragment_e2.frg
+HIDDEN_FILE: fractured_archive/east_wing/.quiet_rack/.orb_fragment_e2.frg
 A silent fragment hidden behind thick dust.
 (cat reveals a faint hum: ~~~~)
 END
 
-FILE: level_4/fractured_archive/central_hub/corrupted_note.txt
+FILE: fractured_archive/central_hub/corrupted_note.txt
 WARNING: FILE STATE INVALID ###
 ?? ??? ///
 Fragment misdir—ERROR—refer—##STOP##
 END
 
-FILE: level_4/storage_bay/misplaced_record_fake.txt
+FILE: storage_bay/misplaced_record_fake.txt
 This record pretends to be a fragment… but clearly is not.
 END
 
-FILE: level_4/storage_bay/.key.secr
+FILE: storage_bay/.key.secr
 QUIET_RACK_KEY
 END
 
-FILE: level_4/fractured_archive/east_wing/hint.txt
+FILE: fractured_archive/east_wing/hint.txt
 Warrior Knight,
 
 Not every glow is safe to touch.
@@ -97,31 +96,31 @@ Only real fragments will answer the Archive’s call.
 — Keeper Arvian
 END
 
-FILE: level_4/fractured_archive/central_hub/fake_fragment.tmp
+FILE: fractured_archive/central_hub/fake_fragment.tmp
 A fake orb fragment meant to confuse the unwary.
 END
 
-FILE: level_4/fractured_archive/west_wing/low_shelves/goblin.mob
+FILE: fractured_archive/west_wing/low_shelves/goblin.mob
 A nimble Goblin prowls between the low shelves, its eyes glinting in the dim light.
 It hisses and shifts, ready to snatch careless hands that disturb the fragments.
 END
 
-FILE: level_4/fractured_archive/west_wing/upper_shelves/kobold.mob
+FILE: fractured_archive/west_wing/upper_shelves/kobold.mob
 A cunning Kobold lurks atop the upper shelves.
 It guards misplaced scrolls and hums suspiciously, alert to any movement nearby.
 END
 
-FILE: level_4/fractured_archive/east_wing/high_shelves/ogre.mob
+FILE: fractured_archive/east_wing/high_shelves/ogre.mob
 A hulking Ogre rumbles atop the high shelves, swatting aside papers and fragments with brute force.
 Its heavy breathing shakes the racks and warns of impending danger.
 END
 
-FILE: level_4/fractured_archive/central_hub/ogre.mob
+FILE: fractured_archive/central_hub/ogre.mob
 A massive Ogre blocks the central hub, its footsteps echoing across the chamber.
 Move too quickly, and it will strike — patience is your only ally.
 END
 
-FILE: level_4/fractured_archive/misaligned_stacks/ghoul.mob
+FILE: fractured_archive/misaligned_stacks/ghoul.mob
 A ghastly Ghoul haunts the Misaligned Stacks.
 Its form flickers like smoke, binding fragmented memories and preventing careless hands from restoring order.
 END

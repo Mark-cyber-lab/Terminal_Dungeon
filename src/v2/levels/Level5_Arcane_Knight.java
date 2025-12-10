@@ -9,10 +9,9 @@ import utilities.AsciiArt;
 import utilities.CLIUtils;
 
 public class Level5_Arcane_Knight extends Level {
-    private static final String basePath = "./lv5";
 
     public Level5_Arcane_Knight(Sandbox sandbox, Player player) {
-        super(5, player, sandbox, basePath);
+        super(5, player, sandbox);
     }
 
     @Override

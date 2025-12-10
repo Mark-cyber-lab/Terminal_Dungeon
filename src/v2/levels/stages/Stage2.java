@@ -52,9 +52,6 @@ public class Stage2 extends Stage {
 
         CLIUtils.typewriter("The Old Knight nods: 'Your Stage 2 training is complete. Greater adventures await…'", 30);
         CLIUtils.typewriter("\"Stage 2 complete. Prepare for what comes next.\"", 30);
-
-        level.sandbox.getExecutor().execute("cd ..");
-
     }
 
     @Override
