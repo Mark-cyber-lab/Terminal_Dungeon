@@ -139,18 +139,33 @@ public class LinuxCommandExecutor {
         }
     }
 
-    private String[] expandWildcards(String[] args) throws IOException {
+    private String[] expandWildcards(String[] args, String cmd) throws IOException {
+        if (args.length == 0) return args;
+
         List<String> expanded = new ArrayList<>();
-        for (String arg : args) {
+        int lastIndex = args.length - 1;
+
+        for (int i = 0; i < args.length; i++) {
+            String arg = args[i];
+
+            // For mv/cp, last argument is destination; do not expand it
+            if ((cmd.equals("mv") || cmd.equals("cp")) && i == lastIndex) {
+                expanded.add(arg);
+                continue;
+            }
+
+            // For rm, expand all args
             if (arg.contains("*") || arg.contains("?")) {
-                // Use glob to match files
                 try (DirectoryStream<Path> stream = Files.newDirectoryStream(currentDir, arg)) {
-                    for (Path p : stream) expanded.add(p.getFileName().toString());
+                    for (Path p : stream) {
+                        expanded.add(p.getFileName().toString());
+                    }
                 }
             } else {
                 expanded.add(arg);
             }
         }
+
         return expanded.toArray(new String[0]);
     }
 
@@ -163,7 +178,7 @@ public class LinuxCommandExecutor {
         CommandContext ctx = new CommandContext();
         ctx.startDir = currentDir;
         ctx.endDir = currentDir; // default, auto-updates later
-        ctx.command =  cmdName;
+        ctx.command = cmdName;
         try {
 
 
@@ -171,7 +186,7 @@ public class LinuxCommandExecutor {
             // 2) Expand wildcards for all commands *except* "cd" and "mv"
             // ----------------------------------------------------------------------
             if (!cmdName.equals("cd") && !cmdName.equals("mv")) {
-                args = expandWildcards(args);
+                args = expandWildcards(args, cmdName);
             }
 
             // ----------------------------------------------------------------------
@@ -210,7 +225,7 @@ public class LinuxCommandExecutor {
 
             ctx.executionTimeMs = System.currentTimeMillis() - startTime;
 
-            if(cmdName.equals("cat")) {
+            if (cmdName.equals("cat")) {
                 ctx.read = currentDir.resolve(args[0]).toAbsolutePath().normalize();
             }
 
@@ -314,7 +329,6 @@ public class LinuxCommandExecutor {
         return new CommandResult(exitCode == 0, output.toString().trim(), ctx);
     }
 
-    // ----- Windows translation -----
     private List<String> translateIfWindows(String cmd, String[] args) {
         if (!isWindows) {
             List<String> c = new ArrayList<>();
@@ -324,16 +338,19 @@ public class LinuxCommandExecutor {
         }
 
         List<String> command = new ArrayList<>();
+
         switch (cmd) {
             case "ls" -> {
                 command.add("cmd");
                 command.add("/c");
                 command.add("dir");
+                Collections.addAll(command, args);
             }
             case "cat" -> {
                 command.add("cmd");
                 command.add("/c");
                 command.add("type");
+                Collections.addAll(command, args);
             }
             case "pwd" -> {
                 command.add("cmd");
@@ -357,19 +374,24 @@ public class LinuxCommandExecutor {
                 command.add("/c");
                 StringBuilder sb = new StringBuilder();
                 for (String file : args) sb.append("type nul > \"").append(file).append("\" & ");
-                command.add(sb.substring(0, sb.length() - 3));
+                sb.setLength(sb.length() - 3); // remove last &
+                command.add(sb.toString());
             }
             case "rm" -> {
-                boolean recursive = Arrays.asList(args).contains("-r");
                 command.add("cmd");
                 command.add("/c");
+                boolean recursive = Arrays.asList(args).contains("-r");
                 StringBuilder sb = new StringBuilder();
 
                 for (String a : args) {
                     if (a.equals("-r")) continue;
 
                     Path resolved = currentDir.resolve(a);
-                    if (!Files.exists(resolved)) continue; // skip missing
+
+                    if (!Files.exists(resolved)) {
+                        sb.append("echo Skipping missing: ").append(a).append(" & ");
+                        continue;
+                    }
 
                     if (Files.isDirectory(resolved)) {
                         if (recursive) sb.append("rmdir /s /q \"").append(a).append("\" & ");
@@ -379,7 +401,7 @@ public class LinuxCommandExecutor {
                     }
                 }
 
-                if (sb.length() > 3) sb.setLength(sb.length() - 3); // remove last ' & '
+                if (sb.length() > 3) sb.setLength(sb.length() - 3); // remove last &
                 command.add(sb.toString());
             }
             default -> {
@@ -387,6 +409,7 @@ public class LinuxCommandExecutor {
                 Collections.addAll(command, args);
             }
         }
+
         return command;
     }
 }
