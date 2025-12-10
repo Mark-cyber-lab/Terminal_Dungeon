@@ -97,7 +97,6 @@ public class Stage8 extends Stage {
 
     @Override
     public void onSuccessPlay() {
-        //        player.remember("Learned pwd (location awareness)");
         IO.println("Stage complete! Proceeding to Stage 9...\n");
         CLIUtils.waitAnyKey();
     }

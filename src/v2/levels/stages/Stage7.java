@@ -8,7 +8,6 @@ import utilities.CLIUtils;
 import v2.CommandResult;
 
 import java.nio.file.Path;
-import java.util.Arrays;
 
 public class Stage7 extends Stage {
     private static final String configPath = "./src/stages/stage7.txt";
@@ -91,8 +90,7 @@ public class Stage7 extends Stage {
 
     @Override
     public void onSuccessPlay() {
-        //        player.remember("Learned pwd (location awareness)");
-        IO.println("Stage complete! Proceeding to Stage 3...\n");
+        IO.println("Stage complete! Proceeding to Stage 8...\n");
         CLIUtils.waitAnyKey();
     }
 

@@ -42,7 +42,6 @@ public class Stage5 extends Stage {
         CLIUtils.typewriter("The knight's words ring in your ears: \"Use the knowledge you've gained, adventurer.\"", 25);
         CLIUtils.typewriter("Goal: Explore the corridor, defeat the monster, and find the key for the next stage.", 25);
         CLIUtils.typewriter("Tip: Use rm to defeat the hostile mob, example use \"rm zombie\".", 25);
-        CLIUtils.typewriter("Type e or exit to exit the game...", 25);
 
         int totalEnemies = mission.totalEnemies();
 

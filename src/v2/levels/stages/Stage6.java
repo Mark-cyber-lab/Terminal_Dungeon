@@ -50,9 +50,11 @@ public class Stage6 extends Stage {
         CLIUtils.typewriter("The vampire's form seems to shift, as if part shadow. It moves with unnatural speed.", 25);
         CLIUtils.typewriter("\nGoal: Vanquish the vampire using the correct command before it drains your life!", 25);
         CLIUtils.typewriter("Tip: Vampires are creatures of darkness. To defeat one, you might need something that brings light.", 25);
+
+        // Pano ung use neto bro
         CLIUtils.typewriter("Perhaps you could use something like: \"use torch\" or \"wield stake\"...", 25);
+
         CLIUtils.typewriter("Or maybe a more direct approach: \"rm vampire\" if you're feeling bold.", 25);
-        CLIUtils.typewriter("Type e or exit to retreat from the encounter...", 25);
 
         int totalEnemies = mission.totalEnemies();
 
