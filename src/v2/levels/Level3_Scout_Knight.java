@@ -1,13 +1,12 @@
 package v2.levels;
 
-import v2.Player;
+import v2.player.Player;
 import v2.levels.stages.Stage;
 import v2.levels.stages.Stage5;
 import v2.levels.stages.Stage6;
-import v2.Sandbox;
+import v2.engine.Sandbox;
 import utilities.AsciiArt;
 import utilities.CLIUtils;
-import utilities.DebugLogger;
 
 public class Level3_Scout_Knight extends Level {
 

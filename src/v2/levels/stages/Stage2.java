@@ -1,8 +1,8 @@
 package v2.levels.stages;
 
 import utilities.CLIUtils;
-import v2.CommandResult;
-import v2.items.Letter;
+import v2.gameplay.CommandResult;
+import v2.elements.items.Letter;
 import v2.levels.Level;
 
 public class Stage2 extends Stage {

@@ -1,12 +1,12 @@
 package v2.levels.stages;
 
-import v2.Mission;
-import v2.enemies.*;
-import v2.items.Decoy;
-import v2.items.Shards;
+import v2.gameplay.Mission;
+import v2.elements.enemies.*;
+import v2.elements.items.Decoy;
+import v2.elements.items.Shards;
 import v2.levels.Level;
 import utilities.CLIUtils;
-import v2.CommandResult;
+import v2.gameplay.CommandResult;
 
 import java.nio.file.Path;
 

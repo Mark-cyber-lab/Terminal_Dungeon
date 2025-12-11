@@ -1,12 +1,12 @@
 
-import v2.PlayerConfig;
-import v2.PlayerStats;
+import v2.player.PlayerConfig;
+import v2.player.PlayerStats;
 import utilities.CLIUtils;
 import utilities.AsciiArt;
 import utilities.Loggable;
-import v2.Player;
-import v2.Sandbox;
-import v2.SandboxBackupManager;
+import v2.player.Player;
+import v2.engine.Sandbox;
+import v2.engine.SandboxBackupManager;
 import v2.levels.*;
 
 import java.io.IOException;

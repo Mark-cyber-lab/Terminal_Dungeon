@@ -1,13 +1,12 @@
 package v2.levels.stages;
 
-import v2.Mission;
-import v2.enemies.*;
+import v2.gameplay.Mission;
+import v2.elements.enemies.*;
 import v2.levels.Level;
 import utilities.CLIUtils;
-import v2.CommandResult;
+import v2.gameplay.CommandResult;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Stage12 extends Stage {
     private static final String configPath = "./src/stages/stage12.txt";

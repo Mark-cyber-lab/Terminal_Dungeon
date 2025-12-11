@@ -1,7 +1,10 @@
-import v2.*;
-import v2.doors.HiddenDoor;
-import v2.doors.HiddenKey;
-import v2.enemies.Enemy;
+import v2.elements.doors.HiddenDoor;
+import v2.elements.doors.HiddenKey;
+import v2.elements.enemies.Enemy;
+import v2.gameplay.CommandListener;
+import v2.gameplay.CommandResult;
+import v2.gameplay.DungeonExecutor;
+import v2.gameplay.Mission;
 import v2.mechanics.CorrectPlacementValidator;
 
 import java.nio.file.Path;

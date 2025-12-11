@@ -1,8 +1,8 @@
 package v2.levels.stages;
 
-import v2.Mission;
-import v2.enemies.*;
-import v2.items.Decoy;
+import v2.gameplay.Mission;
+import v2.elements.enemies.*;
+import v2.elements.items.Decoy;
 import v2.levels.Level;
 import utilities.CLIUtils;
 

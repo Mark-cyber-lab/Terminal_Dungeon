@@ -1,10 +1,10 @@
 package v2.levels;
 
-import v2.Player;
+import v2.player.Player;
 import v2.levels.stages.Stage;
 import v2.levels.stages.Stage10;
 import v2.levels.stages.Stage9;
-import v2.Sandbox;
+import v2.engine.Sandbox;
 import utilities.AsciiArt;
 import utilities.CLIUtils;
 

@@ -1,7 +1,7 @@
 package v2.storage;
 
 import utilities.Loggable;
-import v2.items.ObtainableItem;
+import v2.elements.items.ObtainableItem;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

@@ -1,9 +1,9 @@
 package v2.mechanics;
 
-import v2.CommandContext;
-import v2.CommandMiddleware;
-import v2.CommandResult;
-import v2.Player;
+import v2.gameplay.CommandContext;
+import v2.gameplay.CommandMiddleware;
+import v2.gameplay.CommandResult;
+import v2.player.Player;
 
 import java.nio.file.Path;
 
