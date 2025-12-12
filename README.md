@@ -8,7 +8,7 @@ Progress from **Squire → Grandmaster Knight** while learning Linux commands sa
 
 ## Prerequesites
 - Only fully runnable on WSL or any linux environment
-- Java JDK25
+- Java JDK25 must be insalled on the target linux environment
 
 ## 🎮 Level & Stage Structure
 
