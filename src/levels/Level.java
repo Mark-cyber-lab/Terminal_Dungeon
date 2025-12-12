@@ -72,8 +72,8 @@ public abstract class Level {
                                     sandbox.getBackupManager().flush(SandboxBackupManager.FlushMode.EXCEPT_INVENTORY);
                                 }, // Before setup lambda
                                 () -> {
-//                                    IO.println("base path is " + basePath);
-                                    sandbox.getExecutor().execute("cd " + Path.of(basePath));
+                                //    IO.println("base path is " + Path.of(player.getSandboxRoot(), basePath).toAbsolutePath().normalize());
+                                    sandbox.getExecutor().execute("cd " + Path.of(player.getSandboxRoot(), basePath).toAbsolutePath().normalize());
                                 } // After setup lambda
                         );
 
@@ -84,6 +84,7 @@ public abstract class Level {
         }
         if(player.getStats().getHealth() == 0) return;
         onLevelComplete();
+        IO.print( sandbox.getSandBoxPath().toAbsolutePath().normalize());
         if (!basePath.isEmpty())
             sandbox.getExecutor().execute("cd " + sandbox.getSandBoxPath().toAbsolutePath().normalize());
     }
