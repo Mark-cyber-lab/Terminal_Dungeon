@@ -1,0 +1,183 @@
+DIR: advanced_training/
+DIR: advanced_training/combat_prep/
+DIR: advanced_training/strategy_room/
+DIR: advanced_training/techniques/
+DIR: exploration_hall/
+DIR: exploration_hall/eastern_wing/
+DIR: exploration_hall/eastern_wing/hidden_alcove/
+DIR: exploration_hall/western_wing/
+DIR: exploration_hall/western_wing/observatory/
+DIR: exploration_hall/northern_archive/
+DIR: exploration_hall/northern_archive/restricted_section/
+DIR: pathfinding_maze/
+DIR: pathfinding_maze/alpha_sector/
+DIR: pathfinding_maze/alpha_sector/corridor_a/
+DIR: pathfinding_maze/alpha_sector/corridor_b/
+DIR: pathfinding_maze/beta_sector/
+DIR: pathfinding_maze/beta_sector/dead_ends/
+DIR: pathfinding_maze/beta_sector/circular_path/
+DIR: pathfinding_maze/gamma_sector/
+DIR: pathfinding_maze/gamma_sector/spiral_corridor/
+DIR: pathfinding_maze/gamma_sector/crossroads/
+DIR: pathfinding_maze/delta_sector/
+DIR: pathfinding_maze/delta_sector/final_challenge/
+DIR: mastery_chamber/
+DIR: mastery_chamber/forbidden_library/
+DIR: mastery_chamber/next_stage/
+DIR: mastery_chamber/meditation_room/
+DIR: mastery_chamber/next_stage/the_abyssal_descent/
+DIR: mastery_chamber/next_stage/forbidden_library/
+DIR: mastery_chamber/next_stage/portal/
+
+FILE: scroll.txt
+Apprentice Knight Level 2: Read txt files
+Command: cat
+
+FILE: advanced_training/tactics.txt
+Advanced movement for combat
+Practice cd with precision
+
+FILE: advanced_training/strategy_room/positioning.txt
+Know your location in battle
+pwd saves lives
+
+FILE: advanced_training/techniques/stealth.txt
+Move silently between directories
+Master cd path/navigation
+
+FILE: exploration_hall/lesson_1.txt
+Use 'pwd' to track your location
+Never get lost in complex areas
+
+FILE: exploration_hall/eastern_wing/map_fragment_1.txt
+Fragment shows path to mastery
+Continue to western_wing
+
+FILE: exploration_hall/eastern_wing/hidden_alcove/secret_note.txt
+The maze has four sectors
+Alpha, Beta, Gamma, Delta
+
+FILE: exploration_hall/western_wing/map_fragment_2.txt
+Second fragment reveals maze entrance
+The maze has multiple layers
+
+FILE: exploration_hall/western_wing/observatory/starmap.txt
+Stars align for those who complete all challenges
+The next_stage awaits masters
+
+FILE: exploration_hall/northern_archive/history.txt
+Ancient texts speak of deeper dungeons
+Where commands have power
+
+FILE: exploration_hall/northern_archive/restricted_section/prophecy.txt
+One who masters navigation
+Shall unlock the next_stage
+
+FILE: mastery_chamber/meditation_room/final_test.txt
+Please type "Done" to move onto the next area
+
+FILE: advanced_training/strategy_room/hint.txt
+The final meditation reveals completion
+
+FILE: exploration_hall/eastern_wing/clue.txt
+Where warriors find peace, the word awaits
+
+FILE: exploration_hall/western_wing/observatory/direction.txt
+Look to the chamber of quiet reflection
+
+FILE: pathfinding_maze/delta_sector/final_challenge/guidance.txt
+After all challenges, find stillness to continue
+
+FILE: mastery_chamber/forbidden_library/ancient_hint.txt
+The answer lies where mind and path become one
+
+FILE: mastery_chamber/next_stage/access_hint.txt
+Before proceeding, complete your journey in the room of contemplation
+
+FILE: pathfinding_maze/alpha_sector/beginning_clue.txt
+Start your search where battles end and peace begins
+
+FILE: exploration_hall/northern_archive/restricted_section/prophecy_clue.txt
+He who masters both movement and stillness shall speak the word
+
+FILE: pathfinding_maze/challenge.txt
+Navigate this complex maze
+Use all navigation commands
+
+FILE: pathfinding_maze/alpha_sector/instruction.txt
+Alpha: Use ls to find next sector
+Look for beta_sector
+
+FILE: pathfinding_maze/alpha_sector/corridor_a/dead_end.txt
+Not this way, try corridor_b
+
+FILE: pathfinding_maze/alpha_sector/corridor_b/correct_path.txt
+Good navigation! Continue to beta_sector
+
+FILE: pathfinding_maze/beta_sector/instruction.txt
+Beta: cd to gamma_sector
+The path continues
+
+FILE: pathfinding_maze/beta_sector/dead_ends/wrong_turn.txt
+Dead end, go back
+
+FILE: pathfinding_maze/beta_sector/circular_path/loop_warning.txt
+You're going in circles
+Find the exit to gamma_sector
+
+FILE: pathfinding_maze/gamma_sector/instruction.txt
+Gamma: Find delta_sector
+Final maze challenge ahead
+
+FILE: pathfinding_maze/gamma_sector/spiral_corridor/puzzle.txt
+Follow the spiral to the center
+Then cd to crossroads
+
+FILE: pathfinding_maze/gamma_sector/crossroads/direction.txt
+Three paths, one leads to delta
+Choose the middle path
+
+FILE: pathfinding_maze/delta_sector/solution.txt
+Maze complete! Return to mastery_chamber
+You've proven your skills
+
+FILE: pathfinding_maze/delta_sector/final_challenge/congratulations.txt
+You navigated the entire maze
+Mastery chamber awaits
+
+FILE: mastery_chamber/test.txt
+Final navigation challenge
+Become a master of movement
+
+FILE: mastery_chamber/forbidden_library/ancient_texts.txt
+Knowledge of the ancients
+Use cat to read wisely
+
+FILE: mastery_chamber/next_stage/access_denied.txt
+Portal to Next Stage: The Abyssal Descent
+Access requires completion of all Level 2 challenges
+Return when you have proven yourself
+
+FILE: mastery_chamber/next_stage/the_abyssal_descent/preview.txt
+Next Stage: The Abyssal Descent
+Where paths become sentient
+And directories shift like sand
+
+FILE: mastery_chamber/next_stage/forbidden_library/preview.txt
+Next Stage: Ancient knowledge awaits
+But beware the living texts
+
+FILE: mastery_chamber/next_stage/forbidden_library/key.txt
+Type "done" to move to the next stage
+cd ..
+FILE: mastery_chamber/meditation_room/reflections.txt
+You have learned well, Apprentice Knight
+But greater challenges await in next_stage
+
+FILE: mastery_chamber/dear_apprentice.txt
+Dear Apprentice Knight,
+You have progressed well in your training.
+Now you must master the art of navigation in complex environments.
+Use pwd to know your location, ls to see what surrounds you,
+cd to move between chambers, and cat to read the ancient texts.
+Prove yourself worthy of advancement.

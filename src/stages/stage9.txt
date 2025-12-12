@@ -1,0 +1,94 @@
+DIR: arcane_knight/
+DIR: crumbling_corridor/
+DIR: crumbling_corridor/map_chamber/
+DIR: forgotten_library/
+DIR: forgotten_library/dusty_archives/
+DIR: haunted_crypt/
+DIR: haunted_crypt/deep_catacombs/
+DIR: echoing_caverns/
+DIR: echoing_caverns/ancient_grotto/
+DIR: echoing_caverns/ancient_grotto/hidden_alcove/
+DIR: spider_infested_vault/
+DIR: dungeon_cache/
+
+FILE: arcane_knight/welcome.txt
+Arcane Knight Level 5: Advanced Puzzles
+Stage 1: Rebuild the Deep Dungeon Map
+Find the 6 real map pieces and assemble them in map_chamber
+Real pieces contain "FRAGMENT:"
+Create first the target_point directory where you can move the fragments there.
+
+FILE: crumbling_corridor/goblin.mob
+Cunning goblin - guards the entrance corridor
+
+FILE: forgotten_library/zombie.mob
+Ancient librarian zombie - shambles through archives
+
+FILE: forgotten_library/dusty_archives/map_piece_1.txt
+FRAGMENT:1
+
+FILE: forgotten_library/dusty_archives/kobold.mob
+Kobold scribe - protects scroll fragments
+
+FILE: haunted_crypt/ghoul.mob
+Hungry crypt ghoul - feasts on intruders
+
+FILE: haunted_crypt/deep_catacombs/map_piece_2.txt
+FRAGMENT:2
+
+FILE: haunted_crypt/deep_catacombs/map_piece_13.txt
+DECOY
+
+FILE: haunted_crypt/deep_catacombs/zombie.mob
+Crypt zombie - risen from ancient graves
+
+FILE: echoing_caverns/ogre.mob
+Cavern ogre - blocks the passage
+
+FILE: echoing_caverns/ancient_grotto/ogre.mob
+Tough cave ogre - an elite monster
+
+FILE: echoing_caverns/ancient_grotto/hidden_alcove/map_piece_3.txt
+FRAGMENT:3
+
+FILE: echoing_caverns/ancient_grotto/hidden_alcove/map_piece_A.txt
+DECOY
+
+FILE: echoing_caverns/ancient_grotto/hidden_alcove/goblin.mob
+Goblin trap-setter - ambushes from shadows
+
+FILE: spider_infested_vault/map_piece_5.txt
+FRAGMENT:5
+
+FILE: spider_infested_vault/map_piece_8.txt
+FRAGMENT:8
+
+FILE: spider_infested_vault/map_piece_10.txt
+FRAGMENT:10
+
+FILE: spider_infested_vault/map_piece_0.txt
+DECOY
+
+FILE: spider_infested_vault/map_piece_99.txt
+DECOY
+
+FILE: spider_infested_vault/vampire.mob
+Ancient vampire - boss of the vault
+
+FILE: spider_infested_vault/ghoul.mob
+Vault ghoul - servant to the vampire
+
+FILE: dungeon_cache/.tmp/junk1.tmp
+Temporary cache file - can be deleted
+
+FILE: dungeon_cache/.cache/important_scroll.txt
+Ancient scroll of wisdom - DO NOT DELETE
+
+FILE: dungeon_cache/.cache/zombie.mob
+Cache zombie - mindlessly organizes files
+
+FILE: dungeon_cache/.garbage/old_logs.log
+Old dungeon logs - safe to delete
+
+FILE: dungeon_cache/.garbage/kobold.mob
+Garbage kobold - scavenges discarded items

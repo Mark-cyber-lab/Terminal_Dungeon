@@ -1,0 +1,41 @@
+DIR: level_20/
+DIR: level_20/creation_chamber/
+DIR: level_20/destiny_hall/
+DIR: level_20/eternal_nexus/
+LOCKED_DIR: level_20/god_of_terminals/
+
+FILE: level_20/creation_chamber/welcome.txt
+Terminal Lord Level 2: Divine command
+You shape dungeon reality
+
+FILE: level_20/destiny_hall/lesson_1.txt
+Command the fabric of the dungeon
+Your words become reality
+
+FILE: level_20/eternal_nexus/practice.txt
+Face the essence of terminal power
+Prove absolute mastery
+
+FILE: level_20/creation_chamber/final_goblin.mob
+Last goblin in existence
+FILE: level_20/creation_chamber/final_kobold.mob
+Last kobold in existence
+
+FILE: level_20/destiny_hall/reality_test.txt
+Test of ultimate command power
+FILE: level_20/destiny_hall/destiny_guardian.mob
+Guardian of final destiny
+
+FILE: level_20/eternal_nexus/eternal_force.mob
+Eternal enemy essence
+FILE: level_20/eternal_nexus/eternal_force.mob
+Eternal enemy essence
+
+HIDDEN_FILE: level_20/destiny_hall/.god_key.secr
+Key of terminal divinity
+
+FILE: level_20/god_of_terminals/final_challenge.txt
+FINAL CHALLENGE: GOD OF TERMINALS
+You have mastered all 20 levels
+The terminal obeys your every command
+You are the Terminal God

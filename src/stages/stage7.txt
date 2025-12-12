@@ -1,0 +1,134 @@
+# Level 4, Stage 7.
+# Warrior Knight
+# Goal / Interaction: Bring hidden keys to hidden doors
+# Objects: Locked doors, hidden keys, scroll guides, enemies
+# Commands / Mechanics: mv key ./door/, ls, cd, cat
+
+# Directories
+DIR: outer_gate/
+DIR: outer_gate/patrol/
+DIR: inner_courtyard/
+DIR: inner_courtyard/guard_room/
+DIR: inner_courtyard/training_hall/
+DIR: inner_courtyard/training_hall/secret_chamber/
+HIDDEN_DIR: .command_hall/
+HIDDEN_DIR: .access_master/
+
+# Files
+FILE: outer_gate/scroll.txt
+Curiosity and courage are your greatest allies, Warrior Knight.
+
+Every path twists, every shadow hides a lesson, and even the quiet ground beneath your feet may conceal a secret.
+The training halls have prepared you well—your eyes must stay sharp, and your steps must carry purpose.
+
+Do not rush. Observe your surroundings carefully.
+Sometimes, what you seek is not in plain sight… but beneath it.
+
+Move forward with confidence. Greater trials stand ahead, but I have faith in your journey.
+
+— The Old Knight
+END
+
+FILE: outer_gate/patrol/goblin.mob
+Goblin patrolling the outer gate.
+END
+
+HIDDEN_FILE: outer_gate/.key.secr
+ACCESS_MASTER_KEY
+END
+
+FILE: inner_courtyard/scroll.txt
+To advance deeper into the fortress, you must guide the keys to their rightful doors.
+
+Remember:
+Enemies will not allow careless hands to take what they guard.
+A key cannot be picked up if even a single foe still draws breath in the same chamber.
+
+Study the corridors. Watch for patrols.
+Keys open paths, but wisdom opens all.
+END
+
+FILE: inner_courtyard/guard_room/kobold.mob
+Kobold guard at the inner courtyard.
+END
+
+FILE: inner_courtyard/training_hall/goblin.mob
+Goblin blocks a corner near hidden keys.
+END
+
+FILE: inner_courtyard/training_hall/secret_chamber/scroll.txt
+Welcome, Warrior Knight.
+
+You now stand in one of the hidden chambers of the inner courtyard.
+Only those who observe with intent ever find this place.
+
+Guide for this stage:
+
+1. Hidden keys are scattered throughout the grounds. Use `ls` and `cd` to uncover them.
+2. Keys cannot be taken while enemies remain. Defeat them with care.
+3. Move a key into its door with:
+     mv <key> ./<door>/
+4. Use:
+     ls -l
+   to see the hidden doors.
+5. Some secrets are concealed behind silence and shadows. Search thoroughly.
+END
+
+HIDDEN_FILE: inner_courtyard/training_hall/secret_chamber/.key.secr
+COMMAND_HALL_KEY
+END
+
+FILE: .command_hall/scroll.txt
+The Command Hall stands guarded.
+
+Defeat the sentinel first. Only then will the hall reveal its secrets.
+When the foe falls, search again—something important lies hidden where eyes seldom wander.
+
+Paths to the final place remain concealed.
+A warrior who observes carefully will find the way forward.
+END
+
+FILE: .access_master/scroll.txt
+The final challenge of this stage awaits you.
+
+Have the doors been unlocked?
+Have all keys been placed where they belong?
+Only those who prepare fully may pass.
+
+Beware: traps remain, and hidden foes may rise once more.
+
+Stand firm, Warrior Knight.
+If you overcome what lies ahead, you will command the mastery of this level.
+END
+
+FILE: .command_hall/goblin.mob
+Goblin sentinel guarding the command.
+END
+
+# final boss. if this beats, stage cleared
+FILE: .access_master/ogre.mob
+Final sentinel guarding the master access.
+END
+
+# Game Flow
+# type "You step into the outer gate; sentries patrol the area."
+# type "Enemies prevent careless grabs — keys cannot be picked up if a mob is present."
+# type "Use ls to inspect folders and cd to move."
+# type "Check patrol paths, training halls, and secret chambers for hidden keys and scrolls."
+# type "Read scrolls to find guides and hints."
+# type "Advance carefully through inner courtyard to command hall."
+# input
+# continue
+#
+# After player unlocks command_hall and access_master:
+# type "Doors unlock with a click, mobs retreat, keys secured."
+# type "'Stage 7 complete. Your strategy, observation, and courage have been tested and proven.'"
+# type "\"Prepare for the next challenge, Warrior Knight.\""
+
+# Rules
+# 1. An item cannot be picked up if any enemy (.mob file) exists in the same folder.
+# 2. Use ls, cd to inspect folder structures and locate hidden files.
+# 3. Use mv <key> ./<door>/ to move keys to blocked directories.
+# 4. Secret chambers may contain scroll.txt guides or extra keys; explore thoroughly.
+# 5. Some enemies may be in hidden or nested folders; strategy and observation are key.
+# 6. Trees are disabled here

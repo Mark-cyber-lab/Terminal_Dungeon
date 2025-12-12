@@ -1,0 +1,39 @@
+DIR: advanced_combat/
+DIR: warrior_hall/
+DIR: group_battle/
+DIR: combat_champion/
+DIR: combat_champion/next_stage/portal
+
+FILE: advanced_combat/welcome.txt
+Scout Knight Level 2: Master combat
+Face multiple enemies
+
+FILE: warrior_hall/lesson_1.txt
+Fight stronger goblins
+Some enemies are tougher
+
+FILE: group_battle/challenge.txt
+Face groups of enemies
+Learn to handle multiple threats
+
+FILE: advanced_combat/goblin.mob
+Stronger goblin warrior
+
+FILE: warrior_hall/kobold.mob
+Experienced Kobold fighter
+
+FILE: warrior_hall/zombie.mob
+Another warrior goblin
+
+FILE: group_battle/ghoul.mob
+Ghoul squad member
+
+FILE: group_battle/ogre.mob
+Pgre squad member
+
+FILE: /warrior_hall/next_stage/key.txt
+move onto the next corridor to go to next stage
+
+FILE: combat_champion/vampire.mob
+Boss mob for this level
+
