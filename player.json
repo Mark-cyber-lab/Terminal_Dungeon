@@ -1,7 +1,7 @@
 {
-  "level": 3,
-  "stage": 6,
+  "level": 1,
+  "stage": 1,
   "currentDir": "./",
-  "health": 65,
-  "granted": "[rm, ls, cat, done, pwd, cd]"
+  "health": 100,
+  "granted": "[cd, pwd, tree, ls, done]"
 }
