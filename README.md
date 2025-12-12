@@ -6,6 +6,10 @@ Progress from **Squire → Grandmaster Knight** while learning Linux commands sa
 
 ---
 
+## Prerequesites
+- Only fully runnable on WSL or any linux environment
+- Java JDK25
+
 ## 🎮 Level & Stage Structure
 
 - **Total Levels:** 6
@@ -69,5 +73,5 @@ Progress from **Squire → Grandmaster Knight** while learning Linux commands sa
 Run via WSL:
 
 ```wsl
-javac -d out $(find src -name "*.java") && java -cp out Mainv2
+javac -d out $(find src -name "*.java") && java -cp out Main
 ```
