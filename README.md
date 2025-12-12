@@ -1,8 +1,8 @@
-# ⚔️ Terminal Dungeon: Full Gameplay & Implementation Guide
+# Terminal Dungeon
 
-Welcome to the **Terminal Dungeon**, a gamified Linux adventure where every directory is a chamber, every file is an
+Welcome to the **Terminal Dungeon**, a gamified Linux CLI game simulated using Java where every directory is a chamber, every file is an
 entity, and every command is a skill.  
-Progress from **Squire → Grandmaster Knight** while learning Linux commands safely in a controlled sandbox.
+Progress from **Squire to Grandmaster Knight** while learning Linux commands safely in a controlled sandbox.
 
 ---
 
@@ -10,7 +10,7 @@ Progress from **Squire → Grandmaster Knight** while learning Linux commands sa
 - Only fully runnable on WSL or any linux environment
 - Java JDK25 must be insalled on the target linux environment
 
-## 🎮 Level & Stage Structure
+## Level & Stage Structure
 
 - **Total Levels:** 6
 - **Stages per Level:** 2
@@ -38,7 +38,7 @@ Progress from **Squire → Grandmaster Knight** while learning Linux commands sa
 | **6 — Grandmaster Knight**            | 11    | Restore the Grand Archive     | Core archive directories                | `mv`, `mkdir`, `ls` to restore structure                                                     |
 |                                       | 12    | Defeat the final adversary    | Boss and decoy files                    | `rm`, `rm -rf` to complete final challenge                                                   |
 
-# 🧩 Game Elements
+# Game Elements
 
 ## **Enemies**
 
@@ -64,14 +64,18 @@ Progress from **Squire → Grandmaster Knight** while learning Linux commands sa
 
 | Obstacle       | Interaction   |
 |----------------|---------------|
-| 🚪 Hidden Door | Requires keys |
+| Hidden Door | Requires keys |
 
 ---
 
-# ⚙️ Development
+## Development
 
 Run via WSL:
 
 ```wsl
 javac -d out $(find src -name "*.java") && java -cp out Main
 ```
+
+## Build
+Build instructions coming soon...
+
