@@ -1,0 +1,52 @@
+package com.terminaldungeon.levels;
+
+import com.terminaldungeon.player.Player;
+import com.terminaldungeon.engine.Sandbox;
+import com.terminaldungeon.utilities.AsciiArt;
+import com.terminaldungeon.utilities.CLIUtils;
+import com.terminaldungeon.levels.stages.Stage;
+import com.terminaldungeon.levels.stages.Stage1;
+import com.terminaldungeon.levels.stages.Stage2;
+
+public class Level1_Squire extends Level {
+
+//    private static final String basePath = "./level_1";
+
+    public Level1_Squire(Sandbox sandbox, Player player) {
+        super(1, player, sandbox);
+    }
+
+    @Override
+    public void setup() {
+        Stage Stage1 = new Stage1(this);
+        Stage Stage2 = new Stage2(this);
+        addStage(Stage1);
+        addStage(Stage2);
+    }
+
+    @Override
+    public String getDescription() {
+        return "Level 1 — Squire (Navigation Training)";
+    }
+
+    @Override
+    public void printLevelHeader() {
+        CLIUtils.header(getLevelHeader(), 1);
+    }
+
+    @Override
+    public String[] getLevelHeader() {
+        return AsciiArt.getLevel1Squire();
+    }
+
+    @Override
+    public void onBeforeInit() {
+
+    }
+
+    @Override
+    public void onLevelComplete() {
+        IO.println("🎉 You have mastered the fundamentals, young Squire!");
+        IO.println("You feel a surge of confidence as you prepare for Level 2...\n");
+    }
+}

@@ -73,7 +73,7 @@ Progress from **Squire to Grandmaster Knight** while learning Linux commands saf
 Run via WSL:
 
 ```wsl
-javac -d out $(find src -name "*.java") && java -cp out Main
+javac -d out $(find src -name "*.java") && java -cp out com.terminaldungeon.Main
 ```
 
 ## Build
