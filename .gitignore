@@ -34,3 +34,6 @@ logs/
 sandbox_backup/
 
 player.json
+
+.gradle/
+build/
