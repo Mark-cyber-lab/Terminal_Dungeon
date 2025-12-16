@@ -7,6 +7,7 @@ import utilities.Loggable;
 import player.Player;
 import engine.Sandbox;
 import engine.SandboxBackupManager;
+import leaderboards.LeaderBoards;
 import levels.*;
 
 import java.io.IOException;
@@ -33,8 +34,8 @@ public class NewStage implements Loggable {
     }
 
     // ----------------------
-// Helper Methods
-// ----------------------
+    // Helper Methods
+    // ----------------------
     private void executeLevel(Level level) {
         CLIUtils.clearScreen();
         level.printLevelHeader();
@@ -69,14 +70,43 @@ public class NewStage implements Loggable {
         CLIUtils.sleep(100);
         CLIUtils.typewriter("\"Only those who master the Terminal may survive.\"", 30, true);
         IO.println();
-        CLIUtils.waitAnyKey();
+        IO.print("Menu:\n[1] Start New Adventure\n[2] Continue where we left off\n[3] See Leaderboards\n[4] Exit\n\nPlease select an option: ");
+        
+        String choice = "";
+        do {   
+            choice = IO.readln().trim();        
+            
+            if (choice.equals("1")) { // starts a new game
+                CLIUtils.clearScreen();
+                CLIUtils.typewriter("A new adventure begins...", 20);
+                resetPlayerStats(playerStats);
+            } else if (choice.equals("2")) { // continues from last save
+                CLIUtils.clearScreen();
+                CLIUtils.typewriter("Continuing your adventure...", 20);
+            } else if (choice.equals("3")) { // shows the leaderboards
+                CLIUtils.clearScreen();
+                LeaderBoards.retrieveLeaderBoardData();
+                String c = IO.readln().trim();
 
-        initializeLevels();
+                if (c.equalsIgnoreCase("y")) {
+                    LeaderBoards.clearLeaderboardData();
+                    CLIUtils.typewriter("\nLeaderboards cleared.", 20);
+                    CLIUtils.waitAnyKey();
+                }
+                upStage();
+                return;
+            } else if (choice.equals("4")) { // exit the game
+                CLIUtils.typewriter("Farewell, adventurer.", 20);
+                CLIUtils.waitAnyKey();
+                return;
+            }
+        } while (!choice.equals("1") && !choice.equals("2") && !choice.equals("3") && !choice.equals("4"));
 
         PlayerConfig config = new PlayerConfig("./player.json", player);
-        boolean loaded = sandbox.getBackupManager().confirmLoadBackup();
+        CLIUtils.waitAnyKey();
+        initializeLevels();
 
-        if (loaded) config.load();
+        if (choice.equals("2")) config.load();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             log("Saving player configuration before exit...");
