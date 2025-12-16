@@ -16,6 +16,7 @@ import java.util.List;
 
 public class NewStage implements Loggable {
 
+    private String userName = "player";
     private static final String SANDBOX_ROOT = "./sandbox";
     private static final String INVENTORY_ROOT = "./sandbox/inventory";
     private final PlayerStats playerStats = new PlayerStats();
@@ -57,6 +58,10 @@ public class NewStage implements Loggable {
         player.initialLevel = 1;
     }
 
+    private String getPlayerPath() {
+        return "./" + userName + "_data.json";
+    }
+
     public void upStage() throws IOException {
 
         CLIUtils.clearScreen();
@@ -70,15 +75,30 @@ public class NewStage implements Loggable {
         CLIUtils.sleep(100);
         CLIUtils.typewriter("\"Only those who master the Terminal may survive.\"", 30, true);
         IO.println();
-        IO.print("Menu:\n[1] Start New Adventure\n[2] Continue where we left off\n[3] See Leaderboards\n[4] Exit\n\nPlease select an option: ");
-        
+        IO.print(
+                "Menu:\n[1] Start New Adventure\n[2] Continue where we left off\n[3] See Leaderboards\n[4] Exit\n\nPlease select an option: ");
+
         String choice = "";
-        do {   
-            choice = IO.readln().trim();        
-            
+        String playerPath = getPlayerPath();
+        do {
+            choice = IO.readln().trim();
+
             if (choice.equals("1")) { // starts a new game
-                CLIUtils.clearScreen();
-                CLIUtils.typewriter("A new adventure begins...", 20);
+                // CLIUtils.clearScreen();
+                // CLIUtils.typewriter("A new adventure begins...", 20);
+
+                while (true) {
+                    IO.println("Enter your adventurer name: ");
+                    String name = IO.readln().trim();
+                    if (!name.isEmpty()) {
+                        userName = name;
+                        break;
+                    } else {
+                        IO.println("Name cannot be empty. Please enter a valid name.");
+                    }
+                }
+
+                playerPath = getPlayerPath();
                 resetPlayerStats(playerStats);
             } else if (choice.equals("2")) { // continues from last save
                 CLIUtils.clearScreen();
@@ -102,16 +122,18 @@ public class NewStage implements Loggable {
             }
         } while (!choice.equals("1") && !choice.equals("2") && !choice.equals("3") && !choice.equals("4"));
 
-        PlayerConfig config = new PlayerConfig("./player.json", player);
+        PlayerConfig config = new PlayerConfig(playerPath, player);
         CLIUtils.waitAnyKey();
         initializeLevels();
 
-        if (choice.equals("2")) config.load();
+        if (choice.equals("2"))
+            config.load();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             log("Saving player configuration before exit...");
             try {
-                if (exitedNormally || sandbox.getBackupManager().backup(SandboxBackupManager.BackupMode.BACKUP_ONLY_INVENTORY)) {
+                if (exitedNormally
+                        || sandbox.getBackupManager().backup(SandboxBackupManager.BackupMode.BACKUP_ONLY_INVENTORY)) {
                     config.save();
                 }
                 log("Player configuration saved successfully!");
@@ -127,14 +149,16 @@ public class NewStage implements Loggable {
                 CLIUtils.waitAnyKey();
 
                 for (int i = player.initialLevel - 1; i < levels.size(); i++) {
-                    if (!playerStats.isAlive()) break;
+                    if (!playerStats.isAlive())
+                        break;
 
                     Level level = levels.get(i);
                     player.setLevelObj(level);
 
                     executeLevel(level);
 
-                    if (!playerStats.isAlive()) break;
+                    if (!playerStats.isAlive())
+                        break;
 
                     CLIUtils.header("LEVEL COMPLETE");
                     CLIUtils.sleep(300);
@@ -145,14 +169,20 @@ public class NewStage implements Loggable {
                 }
             }
             IO.println();
-            CLIUtils.typewriter("You have conquered the dungeon cycle.", 20);
+            if (playerStats.isAlive())
+                CLIUtils.typewriter("You have conquered the dungeon cycle.", 20);
 
             String input = IO.readln("Retry adventure? (yes/no): ").trim().toLowerCase();
             boolean retry = input.equals("yes");
 
-            if (retry) resetPlayerStats(playerStats);
+            if (retry) {
+                LeaderBoards.addLeaderboardEntry(userName, playerStats.getHealth(),
+                        playerStats.getLevel());
+                resetPlayerStats(playerStats);
+            }
 
-            if (!retry) break;
+            if (!retry)
+                break;
 
         } while (true);
 
