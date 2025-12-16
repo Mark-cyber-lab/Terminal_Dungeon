@@ -77,7 +77,7 @@ public class NewStage implements Loggable {
         IO.println();
         String playerPath;
         while (true) {
-            IO.print("Enter your adventurer name: ");
+            IO.print("Enter your adventurer name:  ");
             String name = IO.readln().trim();
             if (!name.isEmpty()) {
                 userName = name.toLowerCase();
