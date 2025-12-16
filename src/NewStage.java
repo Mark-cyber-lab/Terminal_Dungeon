@@ -75,34 +75,40 @@ public class NewStage implements Loggable {
         CLIUtils.sleep(100);
         CLIUtils.typewriter("\"Only those who master the Terminal may survive.\"", 30, true);
         IO.println();
+        String playerPath;
+        while (true) {
+            IO.print("Enter your adventurer name: ");
+            String name = IO.readln().trim();
+            if (!name.isEmpty()) {
+                userName = name.toLowerCase();
+                break;
+            } else {
+                IO.println("Name cannot be empty. Please enter a valid name.");
+            }
+        }
+
+        playerPath = getPlayerPath();
         IO.print(
                 "Menu:\n[1] Start New Adventure\n[2] Continue where we left off\n[3] See Leaderboards\n[4] Exit\n\nPlease select an option: ");
 
-        String choice = "";
-        String playerPath = getPlayerPath();
+        String choice;
+        PlayerConfig config = new PlayerConfig(playerPath, player);
+
         do {
             choice = IO.readln().trim();
+
 
             if (choice.equals("1")) { // starts a new game
                 // CLIUtils.clearScreen();
                 // CLIUtils.typewriter("A new adventure begins...", 20);
-
-                while (true) {
-                    IO.println("Enter your adventurer name: ");
-                    String name = IO.readln().trim();
-                    if (!name.isEmpty()) {
-                        userName = name;
-                        break;
-                    } else {
-                        IO.println("Name cannot be empty. Please enter a valid name.");
-                    }
-                }
-
-                playerPath = getPlayerPath();
                 resetPlayerStats(playerStats);
             } else if (choice.equals("2")) { // continues from last save
-                CLIUtils.clearScreen();
-                CLIUtils.typewriter("Continuing your adventure...", 20);
+//                CLIUtils.clearScreen();
+//                CLIUtils.typewriter("Continuing your adventure...", 20);
+                boolean load = sandbox.getBackupManager().confirmLoadBackup(userName);
+                if (load) config.load();
+                else IO.println("There's nothing to load. We'll create the new adventure for you.");
+
             } else if (choice.equals("3")) { // shows the leaderboards
                 CLIUtils.clearScreen();
                 LeaderBoards.retrieveLeaderBoardData();
@@ -120,20 +126,16 @@ public class NewStage implements Loggable {
                 CLIUtils.waitAnyKey();
                 return;
             }
-        } while (!choice.equals("1") && !choice.equals("2") && !choice.equals("3") && !choice.equals("4"));
+        } while (!choice.equals("1") && !choice.equals("2"));
 
-        PlayerConfig config = new PlayerConfig(playerPath, player);
         CLIUtils.waitAnyKey();
         initializeLevels();
-
-        if (choice.equals("2"))
-            config.load();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             log("Saving player configuration before exit...");
             try {
                 if (exitedNormally
-                        || sandbox.getBackupManager().backup(SandboxBackupManager.BackupMode.BACKUP_ONLY_INVENTORY)) {
+                        || sandbox.getBackupManager().backup(SandboxBackupManager.BackupMode.BACKUP_ONLY_INVENTORY, userName)) {
                     config.save();
                 }
                 log("Player configuration saved successfully!");

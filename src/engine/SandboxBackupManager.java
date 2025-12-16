@@ -32,18 +32,18 @@ public class SandboxBackupManager implements Loggable {
 
     // ---------------- BACKUP ----------------
 
-    public boolean backup(BackupMode mode) throws IOException {
-        return backup(mode, null);
+    public boolean backup(BackupMode mode, String identifier) throws IOException {
+        return backup(mode, null, identifier);
     }
 
-    public boolean backup(BackupMode mode, Path specificDir) throws IOException {
+    public boolean backup(BackupMode mode, Path specificDir, String identifier) throws IOException {
         try {
             File srcDir = sandBoxPath.toFile();
             if (!srcDir.exists()) {
                 throw new IOException("Sandbox root does not exist: " + sandBoxPath);
             }
 
-            File backupDir = new File(sandBoxPath + "_backup");
+            File backupDir = new File(sandBoxPath + "_" + identifier + "_backup");
 
             if (backupDir.exists()) {
                 log("Backup folder exists. Overwriting...");
@@ -177,6 +177,10 @@ public class SandboxBackupManager implements Loggable {
         return new File(sandBoxPath + "_backup");
     }
 
+    private File getBackupDir(String identifier) {
+        return new File(sandBoxPath+ "_" + identifier + "_backup" );
+    }
+
     private void copyDirectoryRecursively(Path src, Path dest) throws IOException {
         Files.walk(src).forEach(source -> {
             try {
@@ -214,8 +218,8 @@ public class SandboxBackupManager implements Loggable {
         return input.equals("y") || input.equals("yes");
     }
 
-    public boolean confirmLoadBackup() throws IOException {
-        File backupDir = getBackupDir();
+    public boolean confirmLoadBackup(String identifier) throws IOException {
+        File backupDir = getBackupDir(identifier);
 
         if (!backupDir.exists()) return false;
 
