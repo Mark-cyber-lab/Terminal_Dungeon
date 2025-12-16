@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.terminaldungeon'
+version = '1.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // your deps here
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+}
+
+
+/* ---------- NORMAL JAR ---------- */
+jar {
+    archiveBaseName.set("terminaldungeon")
+    
+    manifest {
+        attributes(
+            'Main-Class': 'Main'
+        )
+    }
+
+    destinationDirectory.set(file("$buildDir/output"))
+}
