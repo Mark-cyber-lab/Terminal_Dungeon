@@ -27,7 +27,7 @@ public class Stage6 extends Stage {
 
         Goblin ordinaryGoblin = new Goblin("hunter_goblin", Path.of("./sandbox/advanced_combat/goblin.mob"));
         Kobold wariorKobold = new Kobold("warior_kobold", Path.of("./sandbox/warrior_hall/kobold.mob"));
-        Zombie wariorZombie = new Zombie("warior_zombie", Path.of("./sandbox/warior_hall/zombie.mob"));
+        Zombie wariorZombie = new Zombie("warior_zombie", Path.of("./sandbox/warrior_hall/zombie.mob"));
         Vampire vampireBoss = new Vampire("combat_champion", Path.of(("./sandbox/combat_champion/vampire.mob")));
         Ghoul ghoul1 = new Ghoul("first_ghoul", Path.of("./sandbox/group_battle/ghoul.mob"));
         Ogre ogreGeneral = new Ogre("group_battle", Path.of(("./sandbox/group_battle/ogre.mob")));
@@ -76,7 +76,7 @@ public class Stage6 extends Stage {
 
         boolean seenKey = false;
 
-        Path keyPath = Path.of("./sandbox/combat_master/key.txt");
+        Path keyPath = Path.of("./sandbox/warrior_hall/next_stage/key.txt");
 
         while (true) {
             IO.print(">> ");
