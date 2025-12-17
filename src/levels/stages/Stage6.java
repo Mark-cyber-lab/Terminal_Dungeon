@@ -18,7 +18,7 @@ public class Stage6 extends Stage {
 
     @Override
     public String[] getStageHeader() {
-        return new String[]{"Stage 6 — A Dark Mysterious Aura that envelops the way"};
+        return new String[] { "Stage 6 — A Dark Mysterious Aura that envelops the way" };
     }
 
     @Override
@@ -42,13 +42,19 @@ public class Stage6 extends Stage {
 
         mission.initialize();
 
-        CLIUtils.typewriter("\nThe corridor narrows and the air grows cold. The scent of aged earth and old blood fills your nostrils.", 25);
-        CLIUtils.typewriter("Before you stands a tall, pale figure with eyes that glow crimson in the gloom—a vampire noble.", 25);
+        CLIUtils.typewriter(
+                "\nThe corridor narrows and the air grows cold. The scent of aged earth and old blood fills your nostrils.",
+                25);
+        CLIUtils.typewriter(
+                "Before you stands a tall, pale figure with eyes that glow crimson in the gloom—a vampire noble.", 25);
         CLIUtils.typewriter("Its cloak billows without wind, and it reveals sharp fangs in a predatory smile.", 25);
-        CLIUtils.typewriter("\"Ah, fresh blood has wandered into my domain. You will make a fine addition to my collection.\"", 25);
+        CLIUtils.typewriter(
+                "\"Ah, fresh blood has wandered into my domain. You will make a fine addition to my collection.\"", 25);
         CLIUtils.typewriter("The vampire's form seems to shift, as if part shadow. It moves with unnatural speed.", 25);
         CLIUtils.typewriter("\nGoal: Vanquish the vampire using the correct command before it drains your life!", 25);
-        CLIUtils.typewriter("Tip: Vampires are creatures of darkness. To defeat one, you might need something that brings light.", 25);
+        CLIUtils.typewriter(
+                "Tip: Vampires are creatures of darkness. To defeat one, you might need something that brings light.",
+                25);
 
         // Pano ung use neto bro
         CLIUtils.typewriter("Perhaps you could use something like: \"use torch\" or \"wield stake\"...", 25);
@@ -85,7 +91,8 @@ public class Stage6 extends Stage {
 
             CommandResult result = level.sandbox.getExecutor().execute(input);
 
-            if (!result.isSuccess()) continue;
+            if (!result.isSuccess())
+                continue;
 
             CommandContext context = result.getContext();
 
@@ -106,7 +113,7 @@ public class Stage6 extends Stage {
 
     @Override
     public void onSuccessPlay() {
-        //        player.remember("Learned pwd (location awareness)");
+        // player.remember("Learned pwd (location awareness)");
         IO.println("Stage complete! Proceeding to Stage 7...\n");
         CLIUtils.waitAnyKey();
     }
