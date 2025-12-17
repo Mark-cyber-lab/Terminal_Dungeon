@@ -1,7 +1,9 @@
 DIR: advanced_combat/
 DIR: warrior_hall/
+DIR: warrior_hall/next_stage/
 DIR: group_battle/
 DIR: combat_champion/
+DIR: combat_champion/next_stage/
 DIR: combat_champion/next_stage/portal
 
 FILE: advanced_combat/welcome.txt
@@ -31,9 +33,8 @@ Ghoul squad member
 FILE: group_battle/ogre.mob
 Pgre squad member
 
-FILE: /warrior_hall/next_stage/key.txt
-move onto the next corridor to go to next stage
+FILE: warrior_hall/next_stage/key.txt
+type "done" to move onto the next corridor to go to next stage
 
 FILE: combat_champion/vampire.mob
 Boss mob for this level
-
