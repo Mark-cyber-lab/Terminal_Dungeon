@@ -37,3 +37,4 @@ player.json
 
 .gradle/
 build/
+*_data.json
