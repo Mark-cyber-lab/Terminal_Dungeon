@@ -128,7 +128,10 @@ public class LinuxCommandExecutor {
         for (Path d : new ArrayList<>(ctx.deleted)) {
             FileMetadata deletedMeta = before.get(d);
             for (Path c : new ArrayList<>(ctx.created)) {
-                if (deletedMeta.contentEquals(after.get(c), currentDir.resolve(d), currentDir.resolve(c))) {
+                FileMetadata createdMeta = after.get(c);
+                // Add null check here
+                if (createdMeta != null && deletedMeta.contentEquals(createdMeta, 
+                        currentDir.resolve(d), currentDir.resolve(c))) {
                     ctx.renamed.put(currentDir.resolve(d).toAbsolutePath().normalize(),
                             currentDir.resolve(c).toAbsolutePath().normalize());
                     ctx.deleted.remove(d);
