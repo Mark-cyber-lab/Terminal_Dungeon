@@ -11,7 +11,7 @@ import mechanics.CorrectPlacementValidator;
 import java.nio.file.Path;
 
 public class Stage8 extends Stage {
-    private static final String configPath = "./src/stages/stage7.txt";
+    private static final String configPath = "./src/stages/stage8.txt";
 
     public Stage8(Level level) {
         super(8, level);
