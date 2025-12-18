@@ -24,6 +24,9 @@ sourceSets {
         java {
             srcDirs = ['src']
         }
+        resources {
+            srcDirs = ['src/ascii', 'src/stages']
+        }
     }
 }
 

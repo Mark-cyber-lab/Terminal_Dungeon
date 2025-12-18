@@ -9,6 +9,12 @@ public class AsciiArt {
 
     private static String[] readAsciiFromFile(String filePath) {
         try {
+            Path srcPath = Path.of("./src");
+
+            if(Files.exists(srcPath.resolve(filePath))) {
+                filePath = srcPath.resolve(filePath).toString();
+            } 
+            
             List<String> lines = Files.readAllLines(Path.of(filePath));
 
             return lines.stream()
