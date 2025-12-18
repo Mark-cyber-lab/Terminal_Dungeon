@@ -1,54 +1,59 @@
 #!/bin/bash
 set -e
 
-# Check if zip is installed
-if ! command -v zip &> /dev/null; then
-    echo "zip is not installed. Installing..."
-    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        if command -v apt-get &> /dev/null; then
-            sudo apt-get update
-            sudo apt-get install -y zip
-        fi
-    elif [[ "$OSTYPE" == "darwin"* ]]; then
-        if command -v brew &> /dev/null; then
-            brew install zip
-        fi
-    fi
+# Ensure zip is available
+if ! command -v zip >/dev/null; then
+  echo "zip not found. Installing..."
+
+  case "$OSTYPE" in
+    linux-gnu*)
+      if command -v apt-get >/dev/null; then
+        sudo apt-get update
+        sudo apt-get install -y zip
+      else
+        echo "Error: unsupported Linux package manager."
+        exit 1
+      fi
+      ;;
+    darwin*)
+      if command -v brew >/dev/null; then
+        brew install zip
+      else
+        echo "Error: Homebrew is required to install zip."
+        exit 1
+      fi
+      ;;
+    *)
+      echo "Error: automatic zip installation not supported on this OS."
+      exit 1
+      ;;
+  esac
 fi
 
 # Variables
-DIST_DIR="./dist"
-JAR_NAME="terminaldungeon-1.0.jar"
-BUILD_JAR="./build/output/$JAR_NAME"
-OUTPUT_JAR="$DIST_DIR/$JAR_NAME"
-INSTALL_SCRIPT="install.sh"
-LAUNCHER_SCRIPT="game-start"
-ZIP_DIR="app"
-ZIP_NAME="Terminal_Dungeon.zip"
+DIST_DIR=dist
+APP_DIR=app
+JAR_NAME=terminaldungeon-1.0.jar
+ZIP_NAME=Terminal_Dungeon.zip
 
-echo "=== Terminal Dungeon Export Script ==="
+echo "=== Terminal Dungeon Export ==="
 
-echo "Building project..."
-./gradlew build || { echo "Build failed!"; exit 1; }
+# Build
+./gradlew build
 
+# Prepare directories
+rm -rf "$DIST_DIR" "$APP_DIR"
+mkdir -p "$DIST_DIR" "$APP_DIR"
 
-# Clean and recreate dist folder
-rm -rf "$DIST_DIR"
-mkdir -p "$DIST_DIR"
+# Stage files
+cp "build/output/$JAR_NAME" "$DIST_DIR/"
+cp install.sh game-start "$DIST_DIR/"
+chmod +x "$DIST_DIR/"{install.sh,game-start}
 
-# Copy JAR
-cp "$BUILD_JAR" "$OUTPUT_JAR"
-echo "Copied JAR to $OUTPUT_JAR"
+# Zip only dist contents into app/
+(
+  cd "$DIST_DIR"
+  zip -r "../$APP_DIR/$ZIP_NAME" .
+)
 
-# Copy install and launcher scripts
-cp "$INSTALL_SCRIPT" "$DIST_DIR/"
-cp "$LAUNCHER_SCRIPT" "$DIST_DIR/"
-chmod +x "$DIST_DIR/$INSTALL_SCRIPT" "$DIST_DIR/$LAUNCHER_SCRIPT"
-echo "Copied install scripts"
-
-# Create zip archive
-rm -f "$ZIP_NAME"
-zip -r "$ZIP_DIR/$ZIP_NAME" "$DIST_DIR"
-echo "Created zip package: $ZIP_NAME"
-
-echo "Export complete! You can distribute $ZIP_NAME"
+echo "Package created: $APP_DIR/$ZIP_NAME"
