@@ -29,8 +29,13 @@ public class SandboxBackupManager implements Loggable {
         this.sandBoxPath = sandboxPath;
         this.inventory = inventory;
 
-        // cache folder beside sandbox
-        this.cacheDir = sandboxPath.getParent().resolve("cache");
+        Path parent = sandboxPath.getParent();
+
+        if (parent != null) {
+            this.cacheDir = parent.resolve("cache");
+        } else {
+            this.cacheDir = Path.of("cache");
+        }
 
         try {
             Files.createDirectories(cacheDir);
@@ -124,7 +129,8 @@ public class SandboxBackupManager implements Loggable {
                 log("Flushing all EXCEPT inventory...");
                 try (var stream = Files.list(sandBoxPath)) {
                     for (Path p : stream.toList()) {
-                        if (p.getFileName().toString().equals("inventory")) continue;
+                        if (p.getFileName().toString().equals("inventory"))
+                            continue;
                         deleteDirectoryRecursively(p);
                     }
                 }
@@ -135,7 +141,8 @@ public class SandboxBackupManager implements Loggable {
                     throw new IllegalArgumentException("specificDirName required.");
 
                 Path target = sandBoxPath.resolve(specificDirName);
-                if (!Files.exists(target)) return;
+                if (!Files.exists(target))
+                    return;
 
                 deleteDirectoryRecursively(target);
                 Files.createDirectories(target);
@@ -182,11 +189,14 @@ public class SandboxBackupManager implements Loggable {
     }
 
     private void deleteDirectoryRecursively(Path path) throws IOException {
-        if (!Files.exists(path)) return;
+        if (!Files.exists(path))
+            return;
 
         // Protect inventory root and cache directory
-        if (path.toRealPath().equals(inventory.getBasePath().toRealPath())) return;
-        if (path.toRealPath().startsWith(cacheDir.toRealPath())) return;
+        if (path.toRealPath().equals(inventory.getBasePath().toRealPath()))
+            return;
+        if (path.toRealPath().startsWith(cacheDir.toRealPath()))
+            return;
 
         Files.walk(path)
                 .sorted(Comparator.reverseOrder())
@@ -207,10 +217,12 @@ public class SandboxBackupManager implements Loggable {
 
     public boolean confirmLoadBackup(String identifier) throws IOException {
         Path backupDir = getBackupDir(identifier);
-        if (!Files.exists(backupDir)) return false;
+        if (!Files.exists(backupDir))
+            return false;
 
         IO.print("Your journey was left unfinished. Resume your progress? (yes/no): ");
-        if (!waitForYes()) return false;
+        if (!waitForYes())
+            return false;
 
         loadBackup(identifier);
         return true;

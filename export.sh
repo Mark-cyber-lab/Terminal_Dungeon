@@ -23,6 +23,7 @@ BUILD_JAR="./build/output/$JAR_NAME"
 OUTPUT_JAR="$DIST_DIR/$JAR_NAME"
 INSTALL_SCRIPT="install.sh"
 LAUNCHER_SCRIPT="game-start"
+ZIP_DIR="app"
 ZIP_NAME="Terminal_Dungeon.zip"
 
 echo "=== Terminal Dungeon Export Script ==="
@@ -47,7 +48,7 @@ echo "Copied install scripts"
 
 # Create zip archive
 rm -f "$ZIP_NAME"
-zip -r "$ZIP_NAME" "$DIST_DIR"
+zip -r "$ZIP_DIR/$ZIP_NAME" "$DIST_DIR"
 echo "Created zip package: $ZIP_NAME"
 
 echo "Export complete! You can distribute $ZIP_NAME"

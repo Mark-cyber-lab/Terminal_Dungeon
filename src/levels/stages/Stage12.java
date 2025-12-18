@@ -9,7 +9,7 @@ import gameplay.CommandResult;
 import java.nio.file.Path;
 
 public class Stage12 extends Stage {
-    private static final String configPath = "./src/stages/stage12.txt";
+    private static final String configPath = "stages/stage12.txt";
     private final String[] mobs = {
             "goblin", "kobold", "zombie", "ghoul", "ogre"
     };
@@ -20,19 +20,24 @@ public class Stage12 extends Stage {
 
     @Override
     public String[] getStageHeader() {
-        return new String[]{"Stage 12 — A Dark Mysterious Aura that envelops the way"};
+        return new String[] { "Stage 12 — A Dark Mysterious Aura that envelops the way" };
     }
 
     @Override
     public void play() {
         Mission mission = new Mission(level.sandbox.getExecutor(), level.player);
 
-        Goblin normalGoblin = new Goblin("normal_goblin", Path.of(("./sandbox/eldritch_realms/corrupted_caverns/goblin.mob")));
-        Zombie slowZombie = new Zombie("slow_zombie", Path.of(("./sandbox/eldritch_realms/corrupted_caverns/zombie.mob")));
-        Kobold cunningKobold = new Kobold("cunning_kobold", Path.of(("./sandbox/eldritch_realms/forbidden_crypt/kobold.mob")));
-        Ogre powerfulOgre = new Ogre("powerful_ogre", Path.of(("./sandbox/eldritch_realms/void_chamber/ogre.mob")));
-        Vampire ancientVampire = new Vampire("ancient_vampire", Path.of(("./sandbox/eldritch_realms/purging_grounds/vampire.mob")));
-        DemonLord demonLord = new DemonLord("demon_lord", Path.of(("./sandbox/eldritch_realms/overlord_sanctum/demon_lord%9jdi#$@#2JSmk9.mob")));
+        Goblin normalGoblin = new Goblin("normal_goblin",
+                Path.of(("sandbox/eldritch_realms/corrupted_caverns/goblin.mob")));
+        Zombie slowZombie = new Zombie("slow_zombie",
+                Path.of(("sandbox/eldritch_realms/corrupted_caverns/zombie.mob")));
+        Kobold cunningKobold = new Kobold("cunning_kobold",
+                Path.of(("sandbox/eldritch_realms/forbidden_crypt/kobold.mob")));
+        Ogre powerfulOgre = new Ogre("powerful_ogre", Path.of(("sandbox/eldritch_realms/void_chamber/ogre.mob")));
+        Vampire ancientVampire = new Vampire("ancient_vampire",
+                Path.of(("sandbox/eldritch_realms/purging_grounds/vampire.mob")));
+        DemonLord demonLord = new DemonLord("demon_lord",
+                Path.of(("sandbox/eldritch_realms/overlord_sanctum/demon_lord%9jdi#$@#2JSmk9.mob")));
 
         mission
                 .addEnemy(normalGoblin)
@@ -44,12 +49,16 @@ public class Stage12 extends Stage {
 
         mission.initialize();
 
-        CLIUtils.typewriter("\n'NO!' bellows the Demon Lord. 'Those archives were meant to be forgotten! Their knowledge was MINE to erase!'", 25);
+        CLIUtils.typewriter(
+                "\n'NO!' bellows the Demon Lord. 'Those archives were meant to be forgotten! Their knowledge was MINE to erase!'",
+                25);
         CLIUtils.typewriter("'You restored order where I sowed chaos... This changes nothing!'", 25);
         CLIUtils.typewriter("\n**Clogged Pathways:** The corruption remains, hindering your abilities.", 25);
         CLIUtils.typewriter("Your movements are sluggish", 25);
         CLIUtils.typewriter("Energy flows inefficiently to you", 25);
-        CLIUtils.typewriter("Defeat all the enemy.\nRemember that if you make mistakes, then the demon lord will spawn monsters!.", 25);
+        CLIUtils.typewriter(
+                "Defeat all the enemy.\nRemember that if you make mistakes, then the demon lord will spawn monsters!.",
+                25);
 
         int enemyCount;
         int multiplier = 1;
@@ -72,14 +81,16 @@ public class Stage12 extends Stage {
 
             if (input.startsWith("rm")) // this is for battling the mob files
                 success = rmFunction(input, mission, i, multiplier);
-            else if (input.startsWith("cat") || input.startsWith("cd") || input.startsWith("pwd") || input.startsWith("tree") || input.startsWith("ls"))
+            else if (input.startsWith("cat") || input.startsWith("cd") || input.startsWith("pwd")
+                    || input.startsWith("tree") || input.startsWith("ls"))
                 level.sandbox.getExecutor().execute(input);
             else { // if the input command is wrong
                 IO.println("The spirits whisper: \"That is not the command you were meant to use.\"");
                 continue;
             }
 
-            if(!level.player.getStats().isAlive()) break;
+            if (!level.player.getStats().isAlive())
+                break;
         }
 
         mission.cleanup();
@@ -121,7 +132,7 @@ public class Stage12 extends Stage {
 
     @Override
     public void onSuccessPlay() {
-        //        player.remember("Learned pwd (location awareness)");
+        // player.remember("Learned pwd (location awareness)");
         IO.println("Stage complete! Congratulation for clearing this challenge!...\n");
         CLIUtils.waitAnyKey();
     }

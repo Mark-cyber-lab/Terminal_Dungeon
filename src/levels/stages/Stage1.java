@@ -4,7 +4,7 @@ import utilities.CLIUtils;
 import levels.Level;
 
 public class Stage1 extends Stage {
-    private static final String configPath = "./src/stages/stage1.txt";
+    private static final String configPath = "stages/stage1.txt";
 
     public Stage1(Level level) {
         super(1, level);

@@ -7,7 +7,7 @@ import utilities.CLIUtils;
 import gameplay.CommandResult;
 
 public class Stage11 extends Stage {
-    private static final String configPath = "./src/stages/stage11.txt";
+    private static final String configPath = "stages/stage11.txt";
     private final String[] importantItems = {
             "ancient_scroll.txt", "artifact_fragment.txt", "spellbook.txt",
             "royal_decree.txt", "lost_artifact.txt", "ancient_tome.txt",
@@ -20,19 +20,23 @@ public class Stage11 extends Stage {
 
     @Override
     public String[] getStageHeader() {
-        return new String[]{"Stage 11 — The Forgotten Ruins of the Past"};
+        return new String[] { "Stage 11 — The Forgotten Ruins of the Past" };
     }
 
     @Override
     public void play() {
         Mission mission = new Mission(level.sandbox.getExecutor(), level.player);
 
-        Corrupted corrupted1 = new Corrupted("broken_pillar_01.txt", "broken_pillar_01", "archive_pillars", "pillar_01.txt");
+        Corrupted corrupted1 = new Corrupted("broken_pillar_01.txt", "broken_pillar_01", "archive_pillars",
+                "pillar_01.txt");
         Corrupted corrupted2 = new Corrupted("corrupted_core_A.dat", "corrupted_core_A", "archive_cores", "core_A.dat");
-        Corrupted corrupted3 = new Corrupted("fragment_seal_1.piece", "fragment_seal_1", "archive_seals", "seal_fragment_1.piece");
-        Corrupted corrupted4 = new Corrupted("pillar_broken_02.txt", "pillar_broken_02", "archive_pillars", "pillar_02.txt");
+        Corrupted corrupted3 = new Corrupted("fragment_seal_1.piece", "fragment_seal_1", "archive_seals",
+                "seal_fragment_1.piece");
+        Corrupted corrupted4 = new Corrupted("pillar_broken_02.txt", "pillar_broken_02", "archive_pillars",
+                "pillar_02.txt");
         Corrupted corrupted5 = new Corrupted("core_corrupted_B.dat", "core_corrupted_B", "archive_cores", "core_B.dat");
-        Corrupted corrupted6 = new Corrupted("seal_fragment_2.piece", "seal_fragment_2", "archive_seals", "seal_fragment_2.piece");
+        Corrupted corrupted6 = new Corrupted("seal_fragment_2.piece", "seal_fragment_2", "archive_seals",
+                "seal_fragment_2.piece");
         Corrupted corrupted7 = new Corrupted("pillar_03.txt", "pillar_03", "archive_pillars", "pillar_03.txt");
         Corrupted corrupted8 = new Corrupted("core_C.dat", "core_C", "archive_cores", "core_C.dat");
 
@@ -48,17 +52,30 @@ public class Stage11 extends Stage {
 
         mission.initialize();
 
-        CLIUtils.typewriter("\nYou enter the Grand Archive, a place of sacred knowledge now tainted by corruption.", 25);
-        CLIUtils.typewriter("Ancient pillars of history stand cracked, their inscriptions scrambled by dark magic.", 25);
-        CLIUtils.typewriter("Memory cores flicker with corrupted data, and sacred seals lie fragmented in the labyrinth.", 25);
+        CLIUtils.typewriter("\nYou enter the Grand Archive, a place of sacred knowledge now tainted by corruption.",
+                25);
+        CLIUtils.typewriter("Ancient pillars of history stand cracked, their inscriptions scrambled by dark magic.",
+                25);
+        CLIUtils.typewriter(
+                "Memory cores flicker with corrupted data, and sacred seals lie fragmented in the labyrinth.", 25);
         CLIUtils.typewriter("A spectral archivist materializes before you, its form shimmering with divine light.", 25);
-        CLIUtils.typewriter("\"Paladin... the Grandmaster Knight's curse has ravaged our archives,\" it intones solemnly.", 25);
+        CLIUtils.typewriter(
+                "\"Paladin... the Grandmaster Knight's curse has ravaged our archives,\" it intones solemnly.", 25);
         CLIUtils.typewriter("\"Sacred pillars are broken, memory cores scrambled, and divine seals fragmented.\"", 25);
-        CLIUtils.typewriter("The archivist gestures toward the restoration room. \"You must wield sudo authority to mend what is broken.\"", 25);
-        CLIUtils.typewriter("Its form begins to fade. \"Navigate the deep vaults and catacombs. Restore order to the archives...\"", 25);
-        CLIUtils.typewriter("\nGoal: Restore all corrupted archive files and organize them in their proper sections.", 25);
-        CLIUtils.typewriter("Tip: Use 'mv' to rename corrupted files, then move them to archive_pillars/, archive_cores/, or archive_seals/.", 25);
-        CLIUtils.typewriter("Some paths are deeply nested—explore holy_sanctum/, divine_hall/, and restoration_room/ thoroughly.", 25);
+        CLIUtils.typewriter(
+                "The archivist gestures toward the restoration room. \"You must wield sudo authority to mend what is broken.\"",
+                25);
+        CLIUtils.typewriter(
+                "Its form begins to fade. \"Navigate the deep vaults and catacombs. Restore order to the archives...\"",
+                25);
+        CLIUtils.typewriter("\nGoal: Restore all corrupted archive files and organize them in their proper sections.",
+                25);
+        CLIUtils.typewriter(
+                "Tip: Use 'mv' to rename corrupted files, then move them to archive_pillars/, archive_cores/, or archive_seals/.",
+                25);
+        CLIUtils.typewriter(
+                "Some paths are deeply nested—explore holy_sanctum/, divine_hall/, and restoration_room/ thoroughly.",
+                25);
         CLIUtils.typewriter("Type your command to begin the restoration...", 25);
 
         int purifiedItems;
@@ -76,7 +93,8 @@ public class Stage11 extends Stage {
             if (input.equalsIgnoreCase("e") || input.equalsIgnoreCase("exit"))
                 break;
 
-            if (input.startsWith("cat") || input.startsWith("cd") || input.startsWith("pwd") || input.startsWith("tree") || input.startsWith("ls"))
+            if (input.startsWith("cat") || input.startsWith("cd") || input.startsWith("pwd") || input.startsWith("tree")
+                    || input.startsWith("ls"))
                 level.sandbox.getExecutor().execute(input);
             else if (input.startsWith("mv")) // this is for moving the items to designated area
                 success = moveFunction(input, mission);
@@ -85,7 +103,8 @@ public class Stage11 extends Stage {
                 continue;
             }
 
-            if(!level.player.getStats().isAlive()) break;
+            if (!level.player.getStats().isAlive())
+                break;
         }
         mission.cleanup();
     }
@@ -111,7 +130,8 @@ public class Stage11 extends Stage {
             else if (input.contains(c.getTargetDir()) && input.contains(c.getName()))
                 match = seeMatch(input, c, true);
 
-            if (match) break;
+            if (match)
+                break;
         }
 
         if (!match)
@@ -144,7 +164,7 @@ public class Stage11 extends Stage {
 
     @Override
     public void onSuccessPlay() {
-        //        player.remember("Learned pwd (location awareness)");
+        // player.remember("Learned pwd (location awareness)");
         IO.println("Stage complete! Proceeding to Stage 12...\n");
         CLIUtils.waitAnyKey();
     }

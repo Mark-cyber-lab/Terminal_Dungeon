@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 public class LeaderBoards {
-    private static final Path FILE_PATH = Paths.get("./db/leaderboards.txt");
+    private static final Path FILE_PATH = Paths.get("db/leaderboards.txt");
 
     static {
         try {

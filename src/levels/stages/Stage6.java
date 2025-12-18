@@ -10,7 +10,7 @@ import gameplay.CommandResult;
 import java.nio.file.Path;
 
 public class Stage6 extends Stage {
-    private static final String configPath = "./src/stages/stage6.txt";
+    private static final String configPath = "stages/stage6.txt";
 
     public Stage6(Level level) {
         super(6, level);
@@ -25,12 +25,12 @@ public class Stage6 extends Stage {
     public void play() {
         Mission mission = new Mission(level.sandbox.getExecutor(), level.player);
 
-        Goblin ordinaryGoblin = new Goblin("hunter_goblin", Path.of("./sandbox/advanced_combat/goblin.mob"));
-        Kobold wariorKobold = new Kobold("warior_kobold", Path.of("./sandbox/warrior_hall/kobold.mob"));
-        Zombie wariorZombie = new Zombie("warior_zombie", Path.of("./sandbox/warrior_hall/zombie.mob"));
-        Vampire vampireBoss = new Vampire("combat_champion", Path.of(("./sandbox/combat_champion/vampire.mob")));
-        Ghoul ghoul1 = new Ghoul("first_ghoul", Path.of("./sandbox/group_battle/ghoul.mob"));
-        Ogre ogreGeneral = new Ogre("group_battle", Path.of(("./sandbox/group_battle/ogre.mob")));
+        Goblin ordinaryGoblin = new Goblin("hunter_goblin", Path.of("sandbox/advanced_combat/goblin.mob"));
+        Kobold wariorKobold = new Kobold("warior_kobold", Path.of("sandbox/warrior_hall/kobold.mob"));
+        Zombie wariorZombie = new Zombie("warior_zombie", Path.of("sandbox/warrior_hall/zombie.mob"));
+        Vampire vampireBoss = new Vampire("combat_champion", Path.of(("sandbox/combat_champion/vampire.mob")));
+        Ghoul ghoul1 = new Ghoul("first_ghoul", Path.of("sandbox/group_battle/ghoul.mob"));
+        Ogre ogreGeneral = new Ogre("group_battle", Path.of(("sandbox/group_battle/ogre.mob")));
 
         mission
                 .addEnemy(ordinaryGoblin)
@@ -82,7 +82,7 @@ public class Stage6 extends Stage {
 
         boolean seenKey = false;
 
-        Path keyPath = Path.of("./sandbox/warrior_hall/next_stage/key.txt");
+        Path keyPath = Path.of("sandbox/warrior_hall/next_stage/key.txt");
 
         while (true) {
             IO.print(">> ");

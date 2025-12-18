@@ -6,7 +6,7 @@ import elements.items.Letter;
 import levels.Level;
 
 public class Stage2 extends Stage {
-    private static final String configPath = "./src/stages/stage2.txt";
+    private static final String configPath = "stages/stage2.txt";
 
     public Stage2(Level level) {
         super(2, level);

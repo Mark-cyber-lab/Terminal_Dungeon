@@ -1,26 +1,25 @@
 #!/bin/bash
+set -e  # Exit on any error
 
-# Detect Linux + Ubuntu
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    if command -v apt-get &> /dev/null; then
-        echo "Ubuntu/Debian detected."
+# Directories
+SRC_DIR="src"
+OUT_DIR="out"
+RES_DIR="$SRC_DIR/resources"
 
-        # Check if binary exists
-        if ! command -v tree &> /dev/null; then
-            echo "tree is not installed. Installing..."
-            sudo apt-get update
-            sudo apt-get install -y tree
-        else
-            echo "tree already installed."
-        fi
-    fi
+# Clean previous build
+rm -rf "$OUT_DIR"
+mkdir -p "$OUT_DIR"
+
+# Compile all Java files
+echo "Compiling Java files..."
+javac -d "$OUT_DIR" $(find "$SRC_DIR" -name "*.java")
+
+# Copy resources
+if [ -d "$RES_DIR" ]; then
+    echo "Copying resources..."
+    cp -r "$RES_DIR/"* "$OUT_DIR/"
 fi
 
-# build if its not built
-if [ ! -f "./build/libs/Terminal_Dungeon.jar" ]; then
-    echo "Building project..."
-    ./gradlew build || { echo "Build failed. Exiting."; exit 1; }
-fi
-
-# Run the application
-java -jar ./build/output/terminaldungeon-1.0.jar
+# Run the program
+echo "Running program..."
+java -cp "$OUT_DIR" Main

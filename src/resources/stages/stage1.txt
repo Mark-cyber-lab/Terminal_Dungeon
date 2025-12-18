@@ -9,7 +9,7 @@ DIR: basic_training/notes/
 DIR: courtyard/
 DIR: hall_of_movement/
 DIR: hall_of_movement/paths/
-HIDDEN_DIR: navigation_test/
+HIDDEN_DIR: .navigation_test/
 
 FILE: basic_training/welcome.txt
 Squire Level 1: Learn basic movement
@@ -36,7 +36,7 @@ FILE: hall_of_movement/paths/west.txt
 FILE: hall_of_movement/paths/east.txt
 Directional stones used for movement training.
 
-FILE: navigation_test/challenge.txt
+FILE: .navigation_test/challenge.txt
 Prove your mastery of movement
 
 # Game Flow

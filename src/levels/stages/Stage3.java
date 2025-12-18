@@ -8,7 +8,7 @@ import levels.Level;
 import java.nio.file.Path;
 
 public class Stage3 extends Stage {
-    private static final String stageConfigPath = "./src/stages/stage3.txt";
+    private static final String stageConfigPath = "stages/stage3.txt";
 
     public Stage3(Level level) {
         super(3, level);
@@ -16,7 +16,7 @@ public class Stage3 extends Stage {
 
     @Override
     public String[] getStageHeader() {
-        return new String[]{"Stage 3 — Secrets of the Lower Keep"};
+        return new String[] { "Stage 3 — Secrets of the Lower Keep" };
     }
 
     @Override
@@ -25,12 +25,13 @@ public class Stage3 extends Stage {
         CLIUtils.typewriter("\"To gain wisdom in this dungeon, you must first understand the scrolls.\"", 25);
         CLIUtils.typewriter("These scrolls contain knowledge of enemies, hidden keys, and secret passages.", 25);
 
-
         while (true) {
             IO.println("Type 'cat scroll.txt' to read the scroll.\n");
-            // The "That is not the command..." message is already handled in executeStrict method
+            // The "That is not the command..." message is already handled in executeStrict
+            // method
             CommandResult res = level.sandbox.getExecutor().executeStrict("cat scroll.txt");
-            if(res.isSuccess()) break;
+            if (res.isSuccess())
+                break;
         }
 
         CLIUtils.typewriter("Correct." + "\nNow explore all the corridors of dungeon and find", 25);
@@ -38,30 +39,31 @@ public class Stage3 extends Stage {
 
         boolean seenKey = false;
 
-        Path keyPath = Path.of("./sandbox/mastery_chamber/next_stage/forbidden_library/key.txt");
+        Path keyPath = Path.of("sandbox/mastery_chamber/next_stage/forbidden_library/key.txt");
 
-        while(true) {
+        while (true) {
             IO.print(">> ");
 
             String input = IO.readln().trim();
 
             CommandResult result = level.sandbox.getExecutor().execute(input);
 
-            if(!result.isSuccess()) continue;
+            if (!result.isSuccess())
+                continue;
 
             CommandContext context = result.getContext();
 
             // checks if the player has executed the cat command for the spefified key path
-            if(context != null && "cat".equals(context.command)) {
+            if (context != null && "cat".equals(context.command)) {
                 // CommandContext.read contains the Path of the file that is being read
-                if(context.read.toString().equals(keyPath.normalize().toAbsolutePath().toString())){
+                if (context.read.toString().equals(keyPath.normalize().toAbsolutePath().toString())) {
                     seenKey = true;
                 }
             }
 
             // if key is seen and player prompted done
             // only terminates the loop when the user enters done and has seen the key
-            if(context != null && "done".equals(context.command) && seenKey)
+            if (context != null && "done".equals(context.command) && seenKey)
                 break;
         }
     }

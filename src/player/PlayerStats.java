@@ -16,7 +16,7 @@ public class PlayerStats extends AliveStats {
     protected int stage = 1;
 
     /** Current working directory (sandbox context) */
-    protected String currentDir = "./";
+    protected String currentDir = "";
 
     /** Granted commands */
     protected Set<String> grantedCommands = new HashSet<>();
@@ -29,8 +29,9 @@ public class PlayerStats extends AliveStats {
     }
 
     public void setLevel(int level) {
-//        IO.println("Player stats level: " + level);
-        if (level < 1) level = 1;
+        // IO.println("Player stats level: " + level);
+        if (level < 1)
+            level = 1;
         this.level = level;
     }
 
@@ -42,7 +43,8 @@ public class PlayerStats extends AliveStats {
     }
 
     public void setStage(int stage) {
-        if (stage < 1) stage = 1;
+        if (stage < 1)
+            stage = 1;
         this.stage = stage;
     }
 

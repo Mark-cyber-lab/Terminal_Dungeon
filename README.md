@@ -74,17 +74,57 @@ Progress from **Squire to Grandmaster Knight** while learning Linux commands saf
 Run via WSL:
 
 ```wsl
-javac -d out $(find src -name "*.java") && java -cp out Main
+./run.sh
 ```
+
+> Make sure that the EOL (End of Line Sequence) of the shell file is set up to LF.
 
 ## Build
 
-Make sure that you have **Gradle** installed in your machine.
+### A. Generate and Distribute the Application
 
-Then run this command to generate the JAR
+Run the following command to export the distributable package:
 
-```powershell
-gradlew build
+```wsl
+./export.sh
 ```
 
-The generated JAR is located on the folder `./build/output`
+Ensure the shell script uses `LF` (Unix) line endings. `CRLF` line endings may cause execution issues.
+
+After execution, the distributable ZIP file will be available in the `./app` directory and is ready for distribution.
+
+### B. Test the Distributable Application
+
+You may test the application in one of the following ways:
+
+#### Option 1: Run Directly from the Directory
+
+```wsl
+cd dist
+```
+
+#### Option 2: Install the Distributed Package
+
+Go to the exported zip, and then, unzip it.
+
+After doing those options, install the exported application:
+
+```wsl
+./install.sh
+```
+
+Follow the on-screen instructions to complete the installation.
+
+## Running the Game
+
+Once installed, you can launch the game from any terminal:
+
+```wsl
+terminal-dungeon
+```
+
+or
+
+```wsl
+tdungeon start
+```

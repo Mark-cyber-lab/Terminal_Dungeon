@@ -42,7 +42,7 @@ if ! grep -q "game()" "$SHELL_CONFIG"; then
 cat << 'EOF' >> "$SHELL_CONFIG"
 
 # Terminal Dungeon CLI
-tdungeon() {
+game() {
     if [ "$1" = "start" ]; then
         terminal-dungeon
     else
@@ -59,4 +59,4 @@ echo "Restart your terminal or run:"
 echo "  source $SHELL_CONFIG"
 echo ""
 echo "Start the game with:"
-echo "  tdungeon start"
+echo "  game start"

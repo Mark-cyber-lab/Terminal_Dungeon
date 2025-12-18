@@ -10,7 +10,7 @@ import gameplay.CommandResult;
 import java.nio.file.Path;
 
 public class Stage7 extends Stage {
-    private static final String configPath = "./src/stages/stage7.txt";
+    private static final String configPath = "stages/stage7.txt";
 
     public Stage7(Level level) {
         super(7, level);
@@ -18,7 +18,7 @@ public class Stage7 extends Stage {
 
     @Override
     public String[] getStageHeader() {
-        return new String[]{"Stage 7 — The Hidden Doors"};
+        return new String[] { "Stage 7 — The Hidden Doors" };
     }
 
     @Override
@@ -26,17 +26,20 @@ public class Stage7 extends Stage {
 
         Mission mission = new Mission(level.sandbox.getExecutor(), level.player);
 
-        Goblin outerPatrolGoblin = new Goblin("outer_gate_patrol", Path.of("./sandbox/outer_gate/patrol/goblin.mob"));
-        Goblin trainingHallGoblin = new Goblin("training_hall", Path.of("./sandbox/inner_courtyard/training_hall/goblin.mob"));
-        Goblin commandHallGoblin = new Goblin("command_hall", Path.of("./sandbox/.command_hall/goblin.mob"));
-        Kobold guardRoomKobold = new Kobold("guard_room", Path.of("./sandbox/inner_courtyard/guard_room/kobold.mob"));
-        Ogre ogre = new Ogre("master", Path.of("./sandbox/.access_master/ogre.mob"));
+        Goblin outerPatrolGoblin = new Goblin("outer_gate_patrol", Path.of("sandbox/outer_gate/patrol/goblin.mob"));
+        Goblin trainingHallGoblin = new Goblin("training_hall",
+                Path.of("sandbox/inner_courtyard/training_hall/goblin.mob"));
+        Goblin commandHallGoblin = new Goblin("command_hall", Path.of("sandbox/.command_hall/goblin.mob"));
+        Kobold guardRoomKobold = new Kobold("guard_room", Path.of("sandbox/inner_courtyard/guard_room/kobold.mob"));
+        Ogre ogre = new Ogre("master", Path.of("sandbox/.access_master/ogre.mob"));
 
         HiddenKey commandHallKey = new HiddenKey(".key.secr", "COMMAND_HALL_KEY", null);
         HiddenKey accessMasterKey = new HiddenKey(".key.secr", "ACCESS_MASTER_KEY", null);
 
-        HiddenDoor commandHallDoor = new HiddenDoor("command_hall", "command_hall", Path.of("./sandbox/.command_hall")).unlocksBy(commandHallKey);
-        HiddenDoor accessMAsterDoor = new HiddenDoor("access_master", "access_master", Path.of("./sandbox/.access_master")).unlocksBy(accessMasterKey);
+        HiddenDoor commandHallDoor = new HiddenDoor("command_hall", "command_hall", Path.of("sandbox/.command_hall"))
+                .unlocksBy(commandHallKey);
+        HiddenDoor accessMAsterDoor = new HiddenDoor("access_master", "access_master",
+                Path.of("sandbox/.access_master")).unlocksBy(accessMasterKey);
 
         mission
                 .addEnemy(outerPatrolGoblin)
@@ -46,7 +49,6 @@ public class Stage7 extends Stage {
                 .addEnemy(ogre)
                 .addHiddenDoor(commandHallDoor)
                 .addHiddenDoor(accessMAsterDoor);
-
 
         mission.initialize();
 
@@ -78,9 +80,12 @@ public class Stage7 extends Stage {
 
         mission.cleanup();
 
-        if(!level.player.getStats().isAlive()) return;
+        if (!level.player.getStats().isAlive())
+            return;
 
-        CLIUtils.typewriter("All doors unlocked and enemies are already defeated, and let's continue our journey. Type done if you are ready.", 30);
+        CLIUtils.typewriter(
+                "All doors unlocked and enemies are already defeated, and let's continue our journey. Type done if you are ready.",
+                30);
         level.sandbox.getExecutor().executeStrict("done");
 
         CLIUtils.typewriter("The Old Knight nods: 'Your Stage 7 training is complete. Greater adventures await…'", 30);

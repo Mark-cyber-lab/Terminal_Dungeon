@@ -25,7 +25,7 @@ sourceSets {
             srcDirs = ['src']
         }
         resources {
-            srcDirs = ['src/ascii', 'src/stages']
+            srcDirs = ['src/resources']
         }
     }
 }
@@ -41,5 +41,7 @@ jar {
         )
     }
 
+    
     destinationDirectory.set(file("$buildDir/output"))
+
 }

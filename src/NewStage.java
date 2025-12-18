@@ -16,9 +16,10 @@ import java.util.List;
 
 public class NewStage implements Loggable {
 
+    private PlayerConfig config;
     private String userName = "player";
-    private static final String SANDBOX_ROOT = "./sandbox";
-    private static final String INVENTORY_ROOT = "./sandbox/inventory";
+    private static final String SANDBOX_ROOT = "sandbox";
+    private static final String INVENTORY_ROOT = "sandbox/inventory";
     private final PlayerStats playerStats = new PlayerStats();
     private final Player player = new Player(playerStats, SANDBOX_ROOT);
     private final List<Level> levels = new ArrayList<>();
@@ -59,7 +60,7 @@ public class NewStage implements Loggable {
     }
 
     private String getPlayerPath() {
-        return "./" + userName + "_data.json";
+        return "" + userName + "_data.json";
     }
 
     public void upStage() throws IOException {
@@ -75,41 +76,40 @@ public class NewStage implements Loggable {
         CLIUtils.sleep(100);
         CLIUtils.typewriter("\"Only those who master the Terminal may survive.\"", 30, true);
         IO.println();
-        String playerPath;
-        while (true) {
-            IO.print("Enter your adventurer name:  ");
-            String name = IO.readln().trim();
-            if (!name.isEmpty()) {
-                userName = name.toLowerCase();
-                break;
-            } else {
-                IO.println("Name cannot be empty. Please enter a valid name.");
-            }
-        }
 
-        playerPath = getPlayerPath();
         IO.print(
-                "Menu:\n[1] Start New Adventure\n[2] Continue where we left off\n[3] See Leaderboards\n[4] Exit\n\nPlease select an option: ");
+                "Menu:\n[1] Start New Adventure\n[2] See Leaderboards\n[3] Exit\n\nPlease select an option: ");
 
         String choice;
-        PlayerConfig config = new PlayerConfig(playerPath, player);
-
+        
         do {
             choice = IO.readln().trim();
 
-
             if (choice.equals("1")) { // starts a new game
-                // CLIUtils.clearScreen();
-                // CLIUtils.typewriter("A new adventure begins...", 20);
-                resetPlayerStats(playerStats);
-            } else if (choice.equals("2")) { // continues from last save
-//                CLIUtils.clearScreen();
-//                CLIUtils.typewriter("Continuing your adventure...", 20);
-                boolean load = sandbox.getBackupManager().confirmLoadBackup(userName);
-                if (load) config.load();
-                else IO.println("There's nothing to load. We'll create the new adventure for you.");
 
-            } else if (choice.equals("3")) { // shows the leaderboards
+                String playerPath;
+                while (true) {
+                    IO.print("Enter your adventurer name:  ");
+                    String name = IO.readln().trim();
+                    if (!name.isEmpty()) {
+                        userName = name.toLowerCase();
+                        break;
+                    } else {
+                        IO.println("Name cannot be empty. Please enter a valid name.");
+                    }
+                }
+
+                playerPath = getPlayerPath();
+                config = new PlayerConfig(playerPath, player);
+
+                boolean load = sandbox.getBackupManager().confirmLoadBackup(userName);
+                if (load)
+                    config.load();
+                else {
+                    IO.println("We'll create the new adventure for you.");
+                    resetPlayerStats(playerStats);
+                }
+            } else if (choice.equals("2")) { // shows the leaderboards
                 CLIUtils.clearScreen();
                 LeaderBoards.retrieveLeaderBoardData();
                 String c = IO.readln().trim();
@@ -121,12 +121,12 @@ public class NewStage implements Loggable {
                 }
                 upStage();
                 return;
-            } else if (choice.equals("4")) { // exit the game
+            } else if (choice.equals("3")) { // exit the game
                 CLIUtils.typewriter("Farewell, adventurer.", 20);
                 CLIUtils.waitAnyKey();
                 return;
             }
-        } while (!choice.equals("1") && !choice.equals("2"));
+        } while (!choice.equals("1"));
 
         CLIUtils.waitAnyKey();
         initializeLevels();
@@ -135,7 +135,8 @@ public class NewStage implements Loggable {
             log("Saving player configuration before exit...");
             try {
                 if (exitedNormally
-                        || sandbox.getBackupManager().backup(SandboxBackupManager.BackupMode.BACKUP_ONLY_INVENTORY, userName)) {
+                        || sandbox.getBackupManager().backup(SandboxBackupManager.BackupMode.BACKUP_ONLY_INVENTORY,
+                                userName)) {
                     config.save();
                 }
                 log("Player configuration saved successfully!");
@@ -178,8 +179,8 @@ public class NewStage implements Loggable {
             boolean retry = input.equals("yes");
 
             LeaderBoards.addLeaderboardEntry(userName, playerStats.getHealth(),
-                        playerStats.getLevel());
-                
+                    playerStats.getLevel());
+
             if (retry) {
                 resetPlayerStats(playerStats);
             }
