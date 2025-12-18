@@ -177,9 +177,10 @@ public class NewStage implements Loggable {
             String input = IO.readln("Retry adventure? (yes/no): ").trim().toLowerCase();
             boolean retry = input.equals("yes");
 
-            if (retry) {
-                LeaderBoards.addLeaderboardEntry(userName, playerStats.getHealth(),
+            LeaderBoards.addLeaderboardEntry(userName, playerStats.getHealth(),
                         playerStats.getLevel());
+                
+            if (retry) {
                 resetPlayerStats(playerStats);
             }
 
