@@ -3,59 +3,59 @@ set -e
 
 GAME_NAME="terminal-dungeon"
 INSTALL_BIN="$HOME/.local/bin"
-SCRIPT_NAME="game-start"
-SHELL_CONFIG=""
+INSTALL_DIR="$HOME/.local/share/terminal-dungeon"
 
 echo "Installing Terminal Dungeon..."
 
-# Detect shell
-if [[ "$SHELL" == *"zsh"* ]]; then
-    SHELL_CONFIG="$HOME/.zshrc"
-else
-    SHELL_CONFIG="$HOME/.bashrc"
-fi
-
-# Ensure local bin exists
+# Ensure directories exist
 mkdir -p "$INSTALL_BIN"
+mkdir -p "$INSTALL_DIR"
 
 # Ensure ~/.local/bin is in PATH
+SHELL_CONFIG="$HOME/.bashrc"
+if [[ "$SHELL" == *"zsh"* ]]; then
+    SHELL_CONFIG="$HOME/.zshrc"
+fi
+
 if ! echo "$PATH" | grep -q "$INSTALL_BIN"; then
     echo "export PATH=\"\$HOME/.local/bin:\$PATH\"" >> "$SHELL_CONFIG"
     echo "Added ~/.local/bin to PATH"
 fi
 
-# Install required packages (Ubuntu/Debian)
-if [[ "$OSTYPE" == "linux-gnu"* ]] && command -v apt-get &> /dev/null; then
+# Install optional dependency (Ubuntu/Debian)
+if command -v apt-get &> /dev/null; then
     echo "Checking dependencies..."
     sudo apt-get update
     sudo apt-get install -y tree
 fi
 
-# Make launcher executable
-chmod +x "$SCRIPT_NAME"
+# Copy game files
+cp terminaldungeon-1.0.jar "$INSTALL_DIR/"
+cp -r resources "$INSTALL_DIR/" 2>/dev/null || true
 
-# Copy launcher to local bin
-cp "$SCRIPT_NAME" "$INSTALL_BIN/$GAME_NAME"
+# Install game launcher
+chmod +x game-start
+cp game-start "$INSTALL_BIN/$GAME_NAME"
 
-# Add `game start` function if missing
-if ! grep -q "game()" "$SHELL_CONFIG"; then
-cat << 'EOF' >> "$SHELL_CONFIG"
-
-# Terminal Dungeon CLI
-tdungeon() {
-    if [ "$1" = "start" ]; then
+# Install tdungeon wrapper
+cat > "$INSTALL_BIN/tdungeon" <<'EOF'
+#!/bin/bash
+set -e
+case "$1" in
+    start)
         terminal-dungeon
-    else
-        echo "Usage: game start"
-    fi
-}
+        ;;
+    *)
+        echo "Usage: tdungeon start"
+        exit 1
+        ;;
+esac
 EOF
-    echo "Added 'game start' command"
-fi
+chmod +x "$INSTALL_BIN/tdungeon"
 
 echo ""
 echo "Installation complete!"
-echo "Restart your terminal or run:"
+echo "Reload your shell:"
 echo "  source $SHELL_CONFIG"
 echo ""
 echo "Start the game with:"
