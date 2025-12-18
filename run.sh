@@ -16,6 +16,11 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     fi
 fi
 
-# Compile and run Java
-javac -d out $(find src -name "*.java") &&
-java -cp out Main
+# build if its not built
+if [ ! -f "./build/libs/Terminal_Dungeon.jar" ]; then
+    echo "Building project..."
+    ./gradlew build || { echo "Build failed. Exiting."; exit 1; }
+fi
+
+# Run the application
+java -jar ./build/output/terminaldungeon-1.0.jar
