@@ -3,6 +3,7 @@ package player;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 /**
@@ -13,9 +14,19 @@ public class PlayerConfig {
     private final Path configFile;
     private final Player player;
 
-    public PlayerConfig(String filePath,  Player player) {
-        this.configFile = Path.of(filePath);
+    public PlayerConfig(String fileName, Player player) {
         this.player = player;
+
+        // cache/player directory beside sandbox
+        Path cacheDir = Path.of(fileName).getParent().resolve("cache").resolve("player");
+
+        try {
+            Files.createDirectories(cacheDir);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to initialize player cache directory", e);
+        }
+
+        this.configFile = cacheDir.resolve(fileName);
     }
 
     /**
@@ -29,8 +40,13 @@ public class PlayerConfig {
         data.put("health", player.getStats().getHealth());
         data.put("granted", player.getStats().getGrantedCommands());
 
-        try (BufferedWriter writer = Files.newBufferedWriter(configFile)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(
+                configFile,
+                StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING)) {
+
             writer.write(toJson(data));
+
         } catch (IOException e) {
             System.err.println("Failed to save player config: " + e.getMessage());
         }
@@ -40,7 +56,6 @@ public class PlayerConfig {
      * Loads the player state from a JSON file.
      */
     public void load() {
-        Map<String, Object> result = new LinkedHashMap<>();
         if (!Files.exists(configFile)) return;
 
         try (BufferedReader reader = Files.newBufferedReader(configFile)) {
@@ -58,7 +73,6 @@ public class PlayerConfig {
                     case "stage" -> player.getStats().setStage(Integer.parseInt(value));
                     case "currentDir" -> player.getStats().setCurrentDir(value);
                     case "granted" -> {
-                        // Parse the string as a JSON array of commands
                         List<String> commands = parseJsonArray(value);
                         player.getStats().setGrantedCommands(new HashSet<>(commands));
                     }
@@ -68,44 +82,60 @@ public class PlayerConfig {
         } catch (IOException e) {
             System.err.println("Failed to load player config: " + e.getMessage());
         }
-
     }
 
     // -----------------------
     // Simple JSON builder
     // -----------------------
+
     private String toJson(Map<String, Object> data) {
         StringBuilder sb = new StringBuilder("{\n");
         int count = 0;
+
         for (Map.Entry<String, Object> entry : data.entrySet()) {
             sb.append("  \"").append(entry.getKey()).append("\": ");
             Object val = entry.getValue();
-            if (val instanceof Number) sb.append(val);
-            else sb.append("\"").append(val).append("\"");
+
+            if (val instanceof Number) {
+                sb.append(val);
+            } else if (val instanceof Collection<?> col) {
+                sb.append("[");
+                sb.append(col.stream()
+                        .map(v -> "\"" + v + "\"")
+                        .reduce((a, b) -> a + "," + b)
+                        .orElse(""));
+                sb.append("]");
+            } else {
+                sb.append("\"").append(val).append("\"");
+            }
+
             count++;
             if (count < data.size()) sb.append(",");
             sb.append("\n");
         }
+
         sb.append("}");
         return sb.toString();
     }
 
     /**
      * Very simple JSON parser for flat key-value pairs.
-     * Expects: {"key1":"val1","key2":123}
      */
     private Map<String, String> parseJson(String json) {
         Map<String, String> map = new LinkedHashMap<>();
+
         json = json.trim();
         if (json.startsWith("{")) json = json.substring(1);
         if (json.endsWith("}")) json = json.substring(0, json.length() - 1);
 
-        String[] pairs = json.split(",");
+        String[] pairs = json.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+
         for (String pair : pairs) {
             String[] kv = pair.split(":", 2);
             if (kv.length != 2) continue;
+
             String key = kv[0].trim().replaceAll("\"", "");
-            String val = kv[1].trim().replaceAll("\"", "");
+            String val = kv[1].trim();
             map.put(key, val);
         }
 
@@ -117,17 +147,18 @@ public class PlayerConfig {
      */
     private List<String> parseJsonArray(String jsonArray) {
         List<String> list = new ArrayList<>();
+
         jsonArray = jsonArray.trim();
         if (jsonArray.startsWith("[")) jsonArray = jsonArray.substring(1);
         if (jsonArray.endsWith("]")) jsonArray = jsonArray.substring(0, jsonArray.length() - 1);
 
-        // Split by comma outside quotes
-        String[] items = jsonArray.split(",");
-        for (String item : items) {
-            String val = item.trim().replaceAll("^\"|\"$", ""); // remove surrounding quotes
-            if (!val.isEmpty()) list.add(val);
+        if (jsonArray.isBlank()) return list;
+
+        for (String item : jsonArray.split(",")) {
+            String val = item.trim().replaceAll("^\"|\"$", "");
+            list.add(val);
         }
+
         return list;
     }
 }
-

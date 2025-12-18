@@ -3,7 +3,6 @@ package engine;
 import utilities.Loggable;
 import storage.Inventory;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.Comparator;
@@ -11,6 +10,7 @@ import java.util.Comparator;
 public class SandboxBackupManager implements Loggable {
 
     private final Path sandBoxPath;
+    private final Path cacheDir;
     private final Inventory inventory;
 
     public enum BackupMode {
@@ -28,6 +28,15 @@ public class SandboxBackupManager implements Loggable {
     public SandboxBackupManager(Path sandboxPath, Inventory inventory) {
         this.sandBoxPath = sandboxPath;
         this.inventory = inventory;
+
+        // cache folder beside sandbox
+        this.cacheDir = sandboxPath.getParent().resolve("cache");
+
+        try {
+            Files.createDirectories(cacheDir);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to initialize cache directory", e);
+        }
     }
 
     // ---------------- BACKUP ----------------
@@ -36,28 +45,26 @@ public class SandboxBackupManager implements Loggable {
         return backup(mode, null, identifier);
     }
 
-    public boolean backup(BackupMode mode, Path specificDir, String identifier) throws IOException {
+    public boolean backup(BackupMode mode, Path specificDir, String identifier) {
         try {
-            File srcDir = sandBoxPath.toFile();
-            if (!srcDir.exists()) {
+            if (!Files.exists(sandBoxPath))
                 throw new IOException("Sandbox root does not exist: " + sandBoxPath);
-            }
 
-            File backupDir = new File(sandBoxPath + "_" + identifier + "_backup");
+            Path backupDir = getBackupDir(identifier);
 
-            if (backupDir.exists()) {
+            if (Files.exists(backupDir)) {
                 log("Backup folder exists. Overwriting...");
-                deleteDirectoryRecursively(backupDir.toPath());
+                deleteDirectoryRecursively(backupDir);
             }
 
-            log("Creating backup at: " + backupDir.getAbsolutePath());
-            Files.createDirectories(backupDir.toPath());
+            log("Creating backup at: " + backupDir.toAbsolutePath());
+            Files.createDirectories(backupDir);
 
             switch (mode) {
 
                 case BACKUP_ALL -> {
                     log("Backing up entire sandbox...");
-                    copyDirectoryRecursively(srcDir.toPath(), backupDir.toPath());
+                    copyDirectoryRecursively(sandBoxPath, backupDir);
                 }
 
                 case BACKUP_ONLY_INVENTORY -> {
@@ -65,8 +72,7 @@ public class SandboxBackupManager implements Loggable {
                     if (!Files.exists(source))
                         throw new IOException("Inventory folder missing: " + source);
 
-                    Path target = backupDir.toPath().resolve("inventory");
-                    log("Backing up inventory folder...");
+                    Path target = backupDir.resolve("inventory");
                     Files.createDirectories(target);
                     copyDirectoryRecursively(source, target);
                 }
@@ -79,23 +85,20 @@ public class SandboxBackupManager implements Loggable {
                     if (!Files.exists(src))
                         throw new IOException("Directory does not exist: " + src);
 
-                    Path dest = backupDir.toPath().resolve(src.getFileName().toString());
-                    log("Backing up specific directory: " + src);
-
+                    Path dest = backupDir.resolve(src.getFileName());
                     Files.createDirectories(dest);
                     copyDirectoryRecursively(src, dest);
                 }
             }
 
             deleteDirectoryRecursively(sandBoxPath);
-
             log("Backup completed!");
             return true;
+
         } catch (Exception e) {
             log(e.getMessage());
             return false;
         }
-
     }
 
     // ---------------- FLUSH ----------------
@@ -103,13 +106,13 @@ public class SandboxBackupManager implements Loggable {
     public void flush(FlushMode mode) throws IOException {
         flush(mode, null);
     }
+
     public void flush(FlushMode mode, String specificDirName) throws IOException {
 
         switch (mode) {
 
             case ALL -> {
                 log("Flushing ALL contents...");
-
                 try (var stream = Files.list(sandBoxPath)) {
                     for (Path p : stream.toList()) {
                         deleteDirectoryRecursively(p);
@@ -119,13 +122,9 @@ public class SandboxBackupManager implements Loggable {
 
             case EXCEPT_INVENTORY -> {
                 log("Flushing all EXCEPT inventory...");
-
                 try (var stream = Files.list(sandBoxPath)) {
                     for (Path p : stream.toList()) {
-                        if (p.getFileName().toString().equals("inventory")) {
-                            log("Keeping inventory directory.");
-                            continue;
-                        }
+                        if (p.getFileName().toString().equals("inventory")) continue;
                         deleteDirectoryRecursively(p);
                     }
                 }
@@ -136,13 +135,8 @@ public class SandboxBackupManager implements Loggable {
                     throw new IllegalArgumentException("specificDirName required.");
 
                 Path target = sandBoxPath.resolve(specificDirName);
+                if (!Files.exists(target)) return;
 
-                if (!Files.exists(target)) {
-                    log("Directory does not exist: " + target);
-                    return;
-                }
-
-                log("Flushing directory: " + target);
                 deleteDirectoryRecursively(target);
                 Files.createDirectories(target);
             }
@@ -153,32 +147,23 @@ public class SandboxBackupManager implements Loggable {
 
     // ---------------- LOAD BACKUP ----------------
 
-    public void loadBackup() throws IOException {
-        File backupDir = getBackupDir();
-        loadBackup(backupDir);
-    }
+    public void loadBackup(String identifier) throws IOException {
+        Path backupDir = getBackupDir(identifier);
 
-    public void loadBackup(File backupDir) throws IOException {
-        if (!backupDir.exists())
+        if (!Files.exists(backupDir))
             throw new IOException("Backup directory does not exist: " + backupDir);
 
-        File rootDir = sandBoxPath.toFile();
+        if (Files.exists(sandBoxPath))
+            deleteDirectoryRecursively(sandBoxPath);
 
-        if (rootDir.exists())
-            deleteDirectoryRecursively(rootDir.toPath());
-
-        copyDirectoryRecursively(backupDir.toPath(), rootDir.toPath());
+        copyDirectoryRecursively(backupDir, sandBoxPath);
         log("Backup restored to sandbox!");
     }
 
     // ---------------- UTILS ----------------
 
-    private File getBackupDir() {
-        return new File(sandBoxPath + "_backup");
-    }
-
-    private File getBackupDir(String identifier) {
-        return new File(sandBoxPath+ "_" + identifier + "_backup" );
+    private Path getBackupDir(String identifier) {
+        return cacheDir.resolve(sandBoxPath.getFileName() + "_" + identifier + "_backup");
     }
 
     private void copyDirectoryRecursively(Path src, Path dest) throws IOException {
@@ -186,7 +171,7 @@ public class SandboxBackupManager implements Loggable {
             try {
                 Path target = dest.resolve(src.relativize(source));
                 if (Files.isDirectory(source)) {
-                    if (!Files.exists(target)) Files.createDirectory(target);
+                    Files.createDirectories(target);
                 } else {
                     Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
                 }
@@ -199,17 +184,19 @@ public class SandboxBackupManager implements Loggable {
     private void deleteDirectoryRecursively(Path path) throws IOException {
         if (!Files.exists(path)) return;
 
-        // Never delete the real inventory root
-        if (path.toRealPath().equals(inventory.getBasePath().toRealPath()))
-            return;
+        // Protect inventory root and cache directory
+        if (path.toRealPath().equals(inventory.getBasePath().toRealPath())) return;
+        if (path.toRealPath().startsWith(cacheDir.toRealPath())) return;
 
-        Files.walk(path).sorted(Comparator.reverseOrder()).forEach(p -> {
-            try {
-                Files.delete(p);
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to delete: " + p, e);
-            }
-        });
+        Files.walk(path)
+                .sorted(Comparator.reverseOrder())
+                .forEach(p -> {
+                    try {
+                        Files.delete(p);
+                    } catch (IOException e) {
+                        throw new RuntimeException("Failed to delete: " + p, e);
+                    }
+                });
     }
 
     private boolean waitForYes() {
@@ -219,14 +206,13 @@ public class SandboxBackupManager implements Loggable {
     }
 
     public boolean confirmLoadBackup(String identifier) throws IOException {
-        File backupDir = getBackupDir(identifier);
-
-        if (!backupDir.exists()) return false;
+        Path backupDir = getBackupDir(identifier);
+        if (!Files.exists(backupDir)) return false;
 
         IO.print("Your journey was left unfinished. Resume your progress? (yes/no): ");
         if (!waitForYes()) return false;
 
-        loadBackup(backupDir);
+        loadBackup(identifier);
         return true;
     }
 }
