@@ -99,13 +99,17 @@ You may test the application in one of the following ways:
 
 #### Option 1: Run Directly from the Directory
 
+> Note: Just do this if you are in testing mode, you just want to test if the distributed app is truly working.
+
 ```wsl
 cd dist
 ```
 
+If you obrained the zip file, just go to the option 2.
+
 #### Option 2: Install the Distributed Package
 
-Go to the exported zip, and then, unzip it.
+If you have the zip file, go to the exported directory, then run wsl. Go to the exported zip, and then, unzip it.
 
 After doing those options, install the exported application:
 
