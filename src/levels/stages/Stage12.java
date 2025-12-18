@@ -78,7 +78,11 @@ public class Stage12 extends Stage {
                 IO.println("The spirits whisper: \"That is not the command you were meant to use.\"");
                 continue;
             }
+
+            if(!level.player.getStats().isAlive()) break;
         }
+
+        mission.cleanup();
     }
 
     private boolean rmFunction(String input, Mission mission, int loopCount, int multiplier) {
