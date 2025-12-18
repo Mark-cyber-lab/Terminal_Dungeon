@@ -41,5 +41,12 @@ jar {
         )
     }
 
+    from('src/ascii') {
+        into 'ascii'
+    }
+    from('src/stages') {
+        into 'stages'
+    }
+
     destinationDirectory.set(file("$buildDir/output"))
 }
