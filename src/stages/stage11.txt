@@ -14,16 +14,16 @@ FILE: instructions.txt
    - pillar files → archive_pillars/
    - core files → archive_cores/
    - seal fragments → archive_seals/
-4. Some files need sudo authority to modify
+4. Some files need authority to modify
 5. Some are already named correctly but misplaced"
 
 FILE: holy_sanctum/welcome.txt
 "Paladin Level 11: Grand Archive Restoration
 Learn divine authority to repair corrupted archives
-Command: sudo"
+Command: mv"
 
 FILE: divine_hall/lesson_1.txt
-"Use sudo for powerful restoration actions
+"Use for powerful restoration actions
 Corrupted archives require elevated fixing
 Some files are ruined by the Grandmaster Knight's curse"
 
@@ -40,17 +40,17 @@ Remember: With great power comes great responsibility"
 FILE: holy_sanctum/broken_pillar_01.txt
 "ARCHIVE CORRUPTED: Pillar of History - Segment 1
 [Status: Fragmented]
-Restoration command: sudo mv broken_pillar_01.txt pillar_01.txt"
+Restoration command: mv broken_pillar_01.txt pillar_01.txt"
 
 FILE: divine_hall/corrupted_core_A.dat
 "ARCHIVE CORRUPTED: Core Memory Bank - Alpha
 [Status: Data Scrambled]
-Restoration command: sudo mv corrupted_core_A.dat core_A.dat"
+Restoration command: mv corrupted_core_A.dat core_A.dat"
 
 FILE: restoration_room/fragment_seal_1.piece
 "ARCHIVE CORRUPTED: Great Seal - Fragment 1
 [Status: Magical Signature Faded]
-Restoration command: sudo mv fragment_seal_1.piece seal_fragment_1.piece"
+Restoration command: mv fragment_seal_1.piece seal_fragment_1.piece"
 
 # === DEEPLY NESTED CORRUPTED FILES ===
 DIR: holy_sanctum/forgotten_vault/

@@ -92,10 +92,11 @@ public class Stage12 extends Stage {
             if (passed) {
                 CommandResult result = level.sandbox.getExecutor().execute(input);
 
-                if (!result.isSuccess())
+                if (!result.isSuccess()) {
                     IO.println("The spirits whisper: \"There is something wrong with your command.\"");
-                else
+                    IO.println("result: " + result);
                     DemonLord.spawnEnemies(mission, loopCount, multiplier, result);
+                }
             }
         }
         return mission.allEnemiesDefeated();

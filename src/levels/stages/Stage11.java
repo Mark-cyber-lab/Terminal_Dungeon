@@ -57,7 +57,7 @@ public class Stage11 extends Stage {
         CLIUtils.typewriter("The archivist gestures toward the restoration room. \"You must wield sudo authority to mend what is broken.\"", 25);
         CLIUtils.typewriter("Its form begins to fade. \"Navigate the deep vaults and catacombs. Restore order to the archives...\"", 25);
         CLIUtils.typewriter("\nGoal: Restore all corrupted archive files and organize them in their proper sections.", 25);
-        CLIUtils.typewriter("Tip: Use 'sudo mv' to rename corrupted files, then move them to archive_pillars/, archive_cores/, or archive_seals/.", 25);
+        CLIUtils.typewriter("Tip: Use 'mv' to rename corrupted files, then move them to archive_pillars/, archive_cores/, or archive_seals/.", 25);
         CLIUtils.typewriter("Some paths are deeply nested—explore holy_sanctum/, divine_hall/, and restoration_room/ thoroughly.", 25);
         CLIUtils.typewriter("Type your command to begin the restoration...", 25);
 
@@ -69,7 +69,7 @@ public class Stage11 extends Stage {
             purifiedItems = (int) mission.getCorrupts().stream().filter(c -> !c.isCorrectName()).count();
             returnedItems = (int) mission.getCorrupts().stream().filter(c -> !c.isCorrectDir()).count();
 
-            IO.println(purifiedItems < returnedItems ? purifiedItems : returnedItems + " item/s remaining.");
+            IO.println(purifiedItems < returnedItems ? purifiedItems : returnedItems + " item/s remaining.\n\n");
             IO.print(">> ");
             String input = IO.readln().trim();
 
@@ -79,7 +79,7 @@ public class Stage11 extends Stage {
             if (input.startsWith("cat") || input.startsWith("cd") || input.startsWith("pwd") || input.startsWith("tree") || input.startsWith("ls"))
                 level.sandbox.getExecutor().execute(input);
             else if (input.startsWith("mv")) // this is for moving the items to designated area
-                moveFunction(input, mission);
+                success = moveFunction(input, mission);
             else { // if the input command is wrong
                 IO.println("The spirits whisper: \"That is not the command you were meant to use.\"");
                 continue;
@@ -102,7 +102,7 @@ public class Stage11 extends Stage {
         return false;
     }
 
-    public void moveFunction(String input, Mission mission) {
+    public boolean moveFunction(String input, Mission mission) {
         boolean match = false;
 
         for (Corrupted c : mission.getCorrupts()) {
@@ -116,6 +116,8 @@ public class Stage11 extends Stage {
 
         if (!match)
             IO.println("The spirits whisper: \"There are something wrong with your action.\"");
+
+        return mission.getCorrupts().stream().filter(c -> !c.isCorrectDir() || !c.isCorrectName()).count() == 0;
     }
 
     private boolean seeMatch(String input, Corrupted c, boolean isTargetDir) {

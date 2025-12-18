@@ -26,17 +26,17 @@ public class Stage9 extends Stage {
     public void play() {
         Mission mission = new Mission(level.sandbox.getExecutor(), level.player);
 
-        Goblin corridorGoblin = new Goblin("corridor_goblin", Path.of("./sandbox/crumbling_corridor/goblin.mob"));
+        Goblin corridorGoblin = new Goblin("corridor_goblin", Path.of("./sandbox/crumbling_corridor/goblin.mob"));//
         Goblin hiddenGoblin = new Goblin("goblin_trap_setter", Path.of("./sandbox/echoing_caverns/ancient_grotto/hidden_alcove/goblin.mob"));
-        Kobold dustyKobold = new Kobold("dusty_kobold", Path.of("./sandbox/forgotten_library/dusty_archives/kobold.mob"));
+        Kobold dustyKobold = new Kobold("dusty_kobold", Path.of("./sandbox/forgotten_library/dusty_archives/kobold.mob"));//
         Kobold dungeonKobold = new Kobold("garbage_kobold", Path.of("./sandbox/dungeon_cache/.garbage/kobold.mob"));
-        Zombie forgottenZombie = new Zombie("forgotten_zombie", Path.of("./sandbox/forgotten_library/zombie.mob"));
-        Zombie hauntedZombie = new Zombie("haunted_zombie", Path.of("./sandbox/haunted_crypt/deep_catacombs/zombie.mob"));
+        Zombie forgottenZombie = new Zombie("forgotten_zombie", Path.of("./sandbox/forgotten_library/zombie.mob"));//
+        Zombie hauntedZombie = new Zombie("haunted_zombie", Path.of("./sandbox/haunted_crypt/deep_catacombs/zombie.mob"));//
         Zombie dungeonZombie = new Zombie("cache_zombie", Path.of("./sandbox/dungeon_cache/.cache/zombie.mob"));
-        Ghoul hauntedGhoul = new Ghoul("haunted_ghoul", Path.of("./sandbox/haunted_crypt/ghoul.mob"));
+        Ghoul hauntedGhoul = new Ghoul("haunted_ghoul", Path.of("./sandbox/haunted_crypt/ghoul.mob"));//
         Ghoul vaultGhoul = new Ghoul("vault_ghoul", Path.of("./sandbox/spider_infested_vault/ghoul.mob"));
-        Ogre cavernOgre = new Ogre("cavern_ogre", Path.of(("./sandbox/echoing_caverns/ogre.mob")));
-        Ogre ancientOgre = new Ogre("ancient_ogre", Path.of(("./sandbox/group_battle/ogre.mob")));
+        Ogre cavernOgre = new Ogre("cavern_ogre", Path.of(("./sandbox/echoing_caverns/ogre.mob")));//
+        Ogre ancientOgre = new Ogre("ancient_ogre", Path.of(("./sandbox/echoing_caverns/ancient_grotto/ogre.mob")));
         Vampire ancientVampire = new Vampire("ancient_vampire", Path.of(("./sandbox/spider_infested_vault/vampire.mob")));
 
         Shards firstShard = new Shards("map_piece_1.txt", "map_piece_1", "target_point");
@@ -113,7 +113,7 @@ public class Stage9 extends Stage {
 
             IO.println(enemyCount + " monster/s remaining.");
             IO.println(shardsNotCompleted + " shard/s remaining.");
-            IO.println(decoyNotDeleted + " decoy/s remaining.");
+            IO.println(decoyNotDeleted + " decoy/s remaining.\n\n");
 
             IO.print(">> ");
             String input = IO.readln().trim();
@@ -173,8 +173,8 @@ public class Stage9 extends Stage {
     public void moveFunction(String input, Mission mission) {
         String[] wordsArr = input.split(" ");
 
-        if (wordsArr.length == 2) {
-            String[] subWordsArr = wordsArr[1].split("/");
+        if (wordsArr.length == 3) {
+            String[] subWordsArr = wordsArr[2].split("/");
 
             if (subWordsArr[subWordsArr.length - 1].equals("target_point")) {
                 CommandResult result = level.sandbox.getExecutor().execute(input);
