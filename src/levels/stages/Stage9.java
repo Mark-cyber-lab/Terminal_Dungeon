@@ -11,7 +11,7 @@ import gameplay.CommandResult;
 import java.nio.file.Path;
 
 public class Stage9 extends Stage {
-    private static final String configPath = "./src/stages/stage9.txt";
+    private static final String configPath = "stages/stage9.txt";
 
     public Stage9(Level level) {
         super(9, level);
@@ -19,25 +19,26 @@ public class Stage9 extends Stage {
 
     @Override
     public String[] getStageHeader() {
-        return new String[]{"Stage 9 — Collecting The Lost Fragments Of The Past"};
+        return new String[] { "Stage 9 — Collecting The Lost Fragments Of The Past" };
     }
 
     @Override
     public void play() {
         Mission mission = new Mission(level.sandbox.getExecutor(), level.player);
 
-        Goblin corridorGoblin = new Goblin("corridor_goblin", Path.of("./sandbox/crumbling_corridor/goblin.mob"));//
-        Goblin hiddenGoblin = new Goblin("goblin_trap_setter", Path.of("./sandbox/echoing_caverns/ancient_grotto/hidden_alcove/goblin.mob"));
-        Kobold dustyKobold = new Kobold("dusty_kobold", Path.of("./sandbox/forgotten_library/dusty_archives/kobold.mob"));//
-        Kobold dungeonKobold = new Kobold("garbage_kobold", Path.of("./sandbox/dungeon_cache/.garbage/kobold.mob"));
-        Zombie forgottenZombie = new Zombie("forgotten_zombie", Path.of("./sandbox/forgotten_library/zombie.mob"));//
-        Zombie hauntedZombie = new Zombie("haunted_zombie", Path.of("./sandbox/haunted_crypt/deep_catacombs/zombie.mob"));//
-        Zombie dungeonZombie = new Zombie("cache_zombie", Path.of("./sandbox/dungeon_cache/.cache/zombie.mob"));
-        Ghoul hauntedGhoul = new Ghoul("haunted_ghoul", Path.of("./sandbox/haunted_crypt/ghoul.mob"));//
-        Ghoul vaultGhoul = new Ghoul("vault_ghoul", Path.of("./sandbox/spider_infested_vault/ghoul.mob"));
-        Ogre cavernOgre = new Ogre("cavern_ogre", Path.of(("./sandbox/echoing_caverns/ogre.mob")));//
-        Ogre ancientOgre = new Ogre("ancient_ogre", Path.of(("./sandbox/echoing_caverns/ancient_grotto/ogre.mob")));
-        Vampire ancientVampire = new Vampire("ancient_vampire", Path.of(("./sandbox/spider_infested_vault/vampire.mob")));
+        Goblin corridorGoblin = new Goblin("corridor_goblin", Path.of("sandbox/crumbling_corridor/goblin.mob"));//
+        Goblin hiddenGoblin = new Goblin("goblin_trap_setter",
+                Path.of("sandbox/echoing_caverns/ancient_grotto/hidden_alcove/goblin.mob"));
+        Kobold dustyKobold = new Kobold("dusty_kobold", Path.of("sandbox/forgotten_library/dusty_archives/kobold.mob"));//
+        Kobold dungeonKobold = new Kobold("garbage_kobold", Path.of("sandbox/dungeon_cache/.garbage/kobold.mob"));
+        Zombie forgottenZombie = new Zombie("forgotten_zombie", Path.of("sandbox/forgotten_library/zombie.mob"));//
+        Zombie hauntedZombie = new Zombie("haunted_zombie", Path.of("sandbox/haunted_crypt/deep_catacombs/zombie.mob"));//
+        Zombie dungeonZombie = new Zombie("cache_zombie", Path.of("sandbox/dungeon_cache/.cache/zombie.mob"));
+        Ghoul hauntedGhoul = new Ghoul("haunted_ghoul", Path.of("sandbox/haunted_crypt/ghoul.mob"));//
+        Ghoul vaultGhoul = new Ghoul("vault_ghoul", Path.of("sandbox/spider_infested_vault/ghoul.mob"));
+        Ogre cavernOgre = new Ogre("cavern_ogre", Path.of(("sandbox/echoing_caverns/ogre.mob")));//
+        Ogre ancientOgre = new Ogre("ancient_ogre", Path.of(("sandbox/echoing_caverns/ancient_grotto/ogre.mob")));
+        Vampire ancientVampire = new Vampire("ancient_vampire", Path.of(("sandbox/spider_infested_vault/vampire.mob")));
 
         Shards firstShard = new Shards("map_piece_1.txt", "map_piece_1", "target_point");
         Shards secondShard = new Shards("map_piece_2.txt", "map_piece_2", "target_point");
@@ -84,19 +85,41 @@ public class Stage9 extends Stage {
 
         mission.initialize();
 
-        CLIUtils.typewriter("\nYou step through the portal into utter darkness. The air is thick with the scent of damp stone and forgotten centuries.", 25);
-        CLIUtils.typewriter("As your eyes adjust, you see you're in a crumbling corridor. Ancient torches sputter to life along the walls.", 25);
-        CLIUtils.typewriter("Before you, a massive stone door lies shattered. Through the opening, you glimpse a chamber filled with... nothing.", 25);
-        CLIUtils.typewriter("A spectral figure materializes—a ghostly cartographer, translucent and shimmering with pale blue light.", 25);
-        CLIUtils.typewriter("\"Traveler... the Dungeon Map has been shattered!\" it whispers, voice echoing from all directions.", 25);
-        CLIUtils.typewriter("\"Fragments are scattered through the labyrinth: forgotten library, haunted crypt, echoing caverns...\"", 25);
-        CLIUtils.typewriter("The spirit gestures to the empty chamber. \"Only when all true pieces are assembled here will the path forward reveal itself.\"", 25);
-        CLIUtils.typewriter("It fades, leaving behind one final warning: \"Beware false fragments... and the creatures that guard them.\"", 25);
-        CLIUtils.typewriter("\nGoal: Rebuild the Deep Dungeon Map by finding real map pieces scattered through nested directories.", 25);
+        CLIUtils.typewriter(
+                "\nYou step through the portal into utter darkness. The air is thick with the scent of damp stone and forgotten centuries.",
+                25);
+        CLIUtils.typewriter(
+                "As your eyes adjust, you see you're in a crumbling corridor. Ancient torches sputter to life along the walls.",
+                25);
+        CLIUtils.typewriter(
+                "Before you, a massive stone door lies shattered. Through the opening, you glimpse a chamber filled with... nothing.",
+                25);
+        CLIUtils.typewriter(
+                "A spectral figure materializes—a ghostly cartographer, translucent and shimmering with pale blue light.",
+                25);
+        CLIUtils.typewriter(
+                "\"Traveler... the Dungeon Map has been shattered!\" it whispers, voice echoing from all directions.",
+                25);
+        CLIUtils.typewriter(
+                "\"Fragments are scattered through the labyrinth: forgotten library, haunted crypt, echoing caverns...\"",
+                25);
+        CLIUtils.typewriter(
+                "The spirit gestures to the empty chamber. \"Only when all true pieces are assembled here will the path forward reveal itself.\"",
+                25);
+        CLIUtils.typewriter(
+                "It fades, leaving behind one final warning: \"Beware false fragments... and the creatures that guard them.\"",
+                25);
+        CLIUtils.typewriter(
+                "\nGoal: Rebuild the Deep Dungeon Map by finding real map pieces scattered through nested directories.",
+                25);
         CLIUtils.typewriter("Tip: Real map pieces contain 'FRAGMENT:' on the first line. Fake pieces do not.", 25);
         CLIUtils.typewriter("Destroy the decoys!!!.", 25);
-        CLIUtils.typewriter("Use the skills that you've learned from the previous stages and this new skills\n Use 'mv' to move fragments, and 'mkdir' if you need to organize or create the blueprint.", 25);
-        CLIUtils.typewriter("Remember: The fragments must be assembled in the \"target_point\" directory.\nOnce you collect them go to the \"target_point\" directory and type \"ls\"", 25);
+        CLIUtils.typewriter(
+                "Use the skills that you've learned from the previous stages and this new skills\n Use 'mv' to move fragments, and 'mkdir' if you need to organize or create the blueprint.",
+                25);
+        CLIUtils.typewriter(
+                "Remember: The fragments must be assembled in the \"target_point\" directory.\nOnce you collect them go to the \"target_point\" directory and type \"ls\"",
+                25);
         CLIUtils.typewriter("Type your command to begin exploring the dungeon...", 25);
 
         long enemyCount;
@@ -125,7 +148,8 @@ public class Stage9 extends Stage {
                 rmFunction(input, mission);
             else if (input.startsWith("ls"))
                 success = lsFunction(input, mission);
-            else if (input.startsWith("cat") || input.startsWith("cd") || input.startsWith("pwd") || input.startsWith("tree"))
+            else if (input.startsWith("cat") || input.startsWith("cd") || input.startsWith("pwd")
+                    || input.startsWith("tree"))
                 level.sandbox.getExecutor().execute(input);
             else if (input.startsWith("mv")) // this is for moving the items to designated area
                 moveFunction(input, mission);
@@ -135,7 +159,8 @@ public class Stage9 extends Stage {
                 IO.println("The spirits whisper: \"That is not the command you were meant to use.\"");
             }
 
-            if(!level.player.getStats().isAlive()) break;
+            if (!level.player.getStats().isAlive())
+                break;
         }
 
         mission.cleanup();
@@ -237,7 +262,7 @@ public class Stage9 extends Stage {
 
     @Override
     public void onSuccessPlay() {
-        //        player.remember("Learned pwd (location awareness)");
+        // player.remember("Learned pwd (location awareness)");
         IO.println("Stage complete! Proceeding to Stage 7...\n");
         CLIUtils.waitAnyKey();
     }

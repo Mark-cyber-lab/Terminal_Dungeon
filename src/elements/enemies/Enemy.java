@@ -47,7 +47,6 @@ public class Enemy implements CommandMiddleware {
         this(name, id, enemyPath, damagePerUnit, false); // call main constructor
     }
 
-
     public Enemy setPlayer(Player player) {
         this.player = player;
         return this;
@@ -76,14 +75,15 @@ public class Enemy implements CommandMiddleware {
     // Helper: all alive enemies in the same directory
     // -------------------------------------------------
     private List<Enemy> aliveEnemiesInSameFolder() {
-        if (troupe == null) return List.of();
+        if (troupe == null)
+            return List.of();
 
         Path folder = enemyFilePath.getParent();
 
         if (!troupe.contains(this))
             troupe.add(this);
         return troupe.stream()
-//                .filter(e -> !e.id.equals(this.id))
+                // .filter(e -> !e.id.equals(this.id))
                 .filter(e -> !e.defeated)
                 .filter(e -> Objects.equals(e.enemyFilePath.getParent(), folder))
                 .toList();
@@ -101,7 +101,8 @@ public class Enemy implements CommandMiddleware {
     // Navigation block (cd/mv)
     // -------------------------------------------------
     public boolean blocksNavigation(Path targetDir) {
-        if (troupe == null) return false;
+        if (troupe == null)
+            return false;
 
         Path normalizedTarget = norm(targetDir);
 
@@ -117,8 +118,10 @@ public class Enemy implements CommandMiddleware {
         System.out.println("[Enemy damage] " + name +
                 " deals " + damagePerUnit + " damage. Reason: " + reason);
 
-        if (player != null) player.takeDamage(damagePerUnit);
-        else System.out.println("[WARNING] Player is null.");
+        if (player != null)
+            player.takeDamage(damagePerUnit);
+        else
+            System.out.println("[WARNING] Player is null.");
     }
 
     // -------------------------------------------------
@@ -132,14 +135,15 @@ public class Enemy implements CommandMiddleware {
         }
 
         // No arguments → no navigation
-        if (args.length < 1) return true;
+        if (args.length < 1)
+            return true;
 
         String target = args[0];
 
         // ---------------------------
         // 1. Allow backward movement
         // ---------------------------
-        // If user does: cd .. , cd ../.., cd ../../something
+        // If user does: cd .. , cd ..., cd ..something
         // → DO NOT block.
         if (target.startsWith("..")) {
             return true; // always allow upward navigation
@@ -159,25 +163,27 @@ public class Enemy implements CommandMiddleware {
         return true;
     }
 
-
     // -------------------------------------------------
     // CommandListener: afterExecute
     // -------------------------------------------------
     @Override
     public void after(String command, String[] args, CommandContext context, CommandResult result) {
 
-        if (!result.getContext().endDir.toAbsolutePath().normalize().equals(enemyFilePath.getParent().normalize().toAbsolutePath()))
+        if (!result.getContext().endDir.toAbsolutePath().normalize()
+                .equals(enemyFilePath.getParent().normalize().toAbsolutePath()))
             return;
 
         // Failed command always deals damage
-        if (!hasBeenDefeated() && !result.isSuccess() && norm(result.getContext().endDir).equals(norm(enemyFilePath.getParent()))) {
+        if (!hasBeenDefeated() && !result.isSuccess()
+                && norm(result.getContext().endDir).equals(norm(enemyFilePath.getParent()))) {
             damage("Command failed");
             return;
         }
 
         // If nothing deleted, no further logic
         List<Path> deleted = result.getContext().deleted;
-        if (deleted.isEmpty()) return;
+        if (deleted.isEmpty())
+            return;
 
         // Normalize deleted paths
         Set<Path> deletedNorm = deleted.stream()

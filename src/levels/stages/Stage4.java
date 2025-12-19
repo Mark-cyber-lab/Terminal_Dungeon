@@ -8,7 +8,7 @@ import levels.Level;
 import java.nio.file.Path;
 
 public class Stage4 extends Stage {
-    private static final String stageConfigPath = "./src/stages/stage4.txt";
+    private static final String stageConfigPath = "stages/stage4.txt";
 
     public Stage4(Level level) {
         super(4, level);
@@ -16,7 +16,7 @@ public class Stage4 extends Stage {
 
     @Override
     public String[] getStageHeader() {
-        return new String[]{"Stage 4 — Orientation of the Apprentice Knight"};
+        return new String[] { "Stage 4 — Orientation of the Apprentice Knight" };
     }
 
     @Override
@@ -28,7 +28,7 @@ public class Stage4 extends Stage {
         CLIUtils.typewriter("Goal: Go to the next_stage/portal to move on the next stage", 25);
         CommandResult commandResult;
 
-        Path portalPath = Path.of("./sandbox/lore_master/next_stage/portal");
+        Path portalPath = Path.of("sandbox/lore_master/next_stage/portal");
 
         while (true) {
             IO.print(">> ");
@@ -36,13 +36,15 @@ public class Stage4 extends Stage {
 
             commandResult = level.sandbox.getExecutor().execute(input);
 
-            if (!commandResult.isSuccess()) continue;
+            if (!commandResult.isSuccess())
+                continue;
 
             CommandContext context = commandResult.getContext();
 
             if ("cd".equals(context.command)) {
                 // CommandContext.endDir contains the Path of the file that is navigated
-                if (context.endDir.toString().equals(portalPath.toAbsolutePath().normalize().toString())) break;
+                if (context.endDir.toString().equals(portalPath.toAbsolutePath().normalize().toString()))
+                    break;
             }
         }
     }

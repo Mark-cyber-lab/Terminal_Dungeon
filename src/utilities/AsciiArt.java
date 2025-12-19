@@ -1,87 +1,90 @@
 package utilities;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 public class AsciiArt {
 
-    private static String[] readAsciiFromFile(String filePath) {
+    private static String[] readAsciiFromFile(String resourcePath) {
         try {
-            Path srcPath = Path.of("./src");
-
-            if(Files.exists(srcPath.resolve(filePath))) {
-                filePath = srcPath.resolve(filePath).toString();
-            } 
-            
-            List<String> lines = Files.readAllLines(Path.of(filePath));
-
-            return lines.stream()
-                    .map(line -> {
-                        if (line.length() >= 2 && line.startsWith("'") && line.endsWith("'")) {
-                            return line.substring(1, line.length() - 1);
-                        }
-                        return line;
-                    })
-                    .toArray(String[]::new);
+            // Fallback to reading from JAR
+            try (InputStream is = AsciiArt.class.getResourceAsStream("/" + resourcePath)) {
+                if (is == null) {
+                    return new String[] { "Error: Could not find resource: " + resourcePath };
+                }
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                List<String> lines = reader.lines().toList();
+                return processLines(lines);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
-            return new String[]{"Error: Could not read ASCII art from file."};
+            return new String[] { "Error: Could not read ASCII art from " + resourcePath };
         }
     }
 
-
-    public static String[] getTitleDungeon() {
-        return readAsciiFromFile("./ascii/terminal_dungeon.txt");
+    private static String[] processLines(List<String> lines) {
+        return lines.stream()
+                .map(line -> {
+                    if (line.length() >= 2 && line.startsWith("'") && line.endsWith("'")) {
+                        return line.substring(1, line.length() - 1);
+                    }
+                    return line;
+                })
+                .toArray(String[]::new);
     }
 
+    public static String[] getTitleDungeon() {
+        return readAsciiFromFile("ascii/terminal_dungeon.txt");
+    }
 
     public static String[] getLevelHeader() {
-        return new String[]{
+        return new String[] {
                 "::: ::: ::: ::: ::: ::: ::: ::: ::: ::: ::: ::: ::: ::: ::: ::: ::: ::: ::: ::: ::: ::: :::"
         };
     }
 
     public static String[] getLevel1Squire() {
-        return readAsciiFromFile("./ascii/level_1_squire.txt");
+        return readAsciiFromFile("ascii/level_1_squire.txt");
     }
 
     public static String[] getLevel2ApprenticeKnight() {
-        return readAsciiFromFile("./ascii/level_2_apprentice_knight.txt");
+        return readAsciiFromFile("ascii/level_2_apprentice_knight.txt");
     }
 
     public static String[] getLevel3ScoutKnight() {
-        return readAsciiFromFile("./ascii/level_3_scout_knight.txt");
+        return readAsciiFromFile("ascii/level_3_scout_knight.txt");
     }
 
     public static String[] getLevel4WarriorKnight() {
-        return readAsciiFromFile("./ascii/level_4_warrior_knight.txt");
+        return readAsciiFromFile("ascii/level_4_warrior_knight.txt");
     }
 
     public static String[] getLevel5GuardianKnight() {
-        return readAsciiFromFile("./ascii/level_5_guardian_knight.txt");
+        return readAsciiFromFile("ascii/level_5_guardian_knight.txt");
     }
 
     public static String[] getLevel5ArcaneKnight() {
-        return readAsciiFromFile("./ascii/level_5_arcane_knight.txt");
+        return readAsciiFromFile("ascii/level_5_arcane_knight.txt");
     }
 
     public static String[] getLevel6Paladin() {
-        return readAsciiFromFile("./ascii/level_6_paladin.txt");
+        return readAsciiFromFile("ascii/level_6_paladin.txt");
     }
 
     public static String[] getLevel6GrandmasterKnight() {
-        return readAsciiFromFile("./ascii/level_6_grandmaster_knight.txt");
+        return readAsciiFromFile("ascii/level_6_grandmaster_knight.txt");
     }
 
     public static String[] getLevel7ArcaneKnight() {
-        return readAsciiFromFile("./ascii/level_7_arcane_knight.txt");
+        return readAsciiFromFile("ascii/level_7_arcane_knight.txt");
     }
 
     public static String[] getGameOver() {
-        return readAsciiFromFile("./ascii/game_over.txt");
+        return readAsciiFromFile("ascii/game_over.txt");
     }
 
 }

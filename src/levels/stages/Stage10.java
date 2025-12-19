@@ -9,7 +9,7 @@ import utilities.CLIUtils;
 import java.nio.file.Path;
 
 public class Stage10 extends Stage {
-    private static final String configPath = "./src/stages/stage10.txt";
+    private static final String configPath = "stages/stage10.txt";
     private final String[] importantItems = {
             "ancient_scroll.txt", "artifact_fragment.txt", "spellbook.txt",
             "royal_decree.txt", "lost_artifact.txt", "ancient_tome.txt",
@@ -22,7 +22,7 @@ public class Stage10 extends Stage {
 
     @Override
     public String[] getStageHeader() {
-        return new String[]{"Stage 10 — A Dark Mysterious Aura that envelops the way"};
+        return new String[] { "Stage 10 — A Dark Mysterious Aura that envelops the way" };
     }
 
     @Override
@@ -40,12 +40,15 @@ public class Stage10 extends Stage {
         Decoy ninthDecoy = new Decoy("rusty_swords.garbage", "rusty_swords");
         Decoy tenthDecoy = new Decoy("old_bones.garbage", "old_bones");
 
-        Goblin garbageGoblin = new Goblin("garbage_goblin", Path.of("./sandbox/dungeon_cache/.tmp/trash_pit/goblin.mob"));
-        Zombie cacheGuardianZombie = new Zombie("cache_guardian_zombie", Path.of("./sandbox/dungeon_cache/.cache/important_vault/zombie.mob"));
-        Kobold koboldHoarder = new Kobold("kobold_hoarder", Path.of("./sandbox/dungeon_cache/.cache/hidden_chamber/kobold.mob"));
-        Ghoul ghoulFeaster = new Ghoul("ghoul_feaster", Path.of("./sandbox/dungeon_cache/.garbage/rotten_pile/ghoul.mob"));
-        Ogre junkOgre = new Ogre("junk_ogre", Path.of(("./sandbox/dungeon_cache/.garbage/scrap_heap/ogre.mob")));
-        Vampire cacheVampireLord = new Vampire("cache_vampire_lord", Path.of(("./sandbox/dungeon_cache/vampire.mob")));
+        Goblin garbageGoblin = new Goblin("garbage_goblin", Path.of("sandbox/dungeon_cache/.tmp/trash_pit/goblin.mob"));
+        Zombie cacheGuardianZombie = new Zombie("cache_guardian_zombie",
+                Path.of("sandbox/dungeon_cache/.cache/important_vault/zombie.mob"));
+        Kobold koboldHoarder = new Kobold("kobold_hoarder",
+                Path.of("sandbox/dungeon_cache/.cache/hidden_chamber/kobold.mob"));
+        Ghoul ghoulFeaster = new Ghoul("ghoul_feaster",
+                Path.of("sandbox/dungeon_cache/.garbage/rotten_pile/ghoul.mob"));
+        Ogre junkOgre = new Ogre("junk_ogre", Path.of(("sandbox/dungeon_cache/.garbage/scrap_heap/ogre.mob")));
+        Vampire cacheVampireLord = new Vampire("cache_vampire_lord", Path.of(("sandbox/dungeon_cache/vampire.mob")));
 
         // add decoys
         mission
@@ -71,15 +74,25 @@ public class Stage10 extends Stage {
 
         mission.initialize();
 
-        CLIUtils.typewriter("\nYou step into the dungeon cache, and the stench of old data hits immediately. Dusty code hangs in the air like fog.", 25);
-        CLIUtils.typewriter("As your eyes adjust, faint lights flicker across heaps of junk files scattered through cramped corridors.", 25);
-        CLIUtils.typewriter("Shredded .tmp scraps cling to the walls, and broken .cache fragments crunch under your boots.", 25);
+        CLIUtils.typewriter(
+                "\nYou step into the dungeon cache, and the stench of old data hits immediately. Dusty code hangs in the air like fog.",
+                25);
+        CLIUtils.typewriter(
+                "As your eyes adjust, faint lights flicker across heaps of junk files scattered through cramped corridors.",
+                25);
+        CLIUtils.typewriter(
+                "Shredded .tmp scraps cling to the walls, and broken .cache fragments crunch under your boots.", 25);
         CLIUtils.typewriter("A ghostly custodian drifts forward, its form glitching with static.", 25);
         CLIUtils.typewriter("\"Traveler... the cache is overflowing with decoys and trash,\" it warns softly.", 25);
-        CLIUtils.typewriter("\"Real relics are buried among the garbage. Clear the junk, but do not destroy the artifacts.\"", 25);
-        CLIUtils.typewriter("The specter fades, leaving only the faint echo: \"Remove the trash... but choose wisely.\"", 25);
-        CLIUtils.typewriter("\nGoal: Purge useless files in .tmp, .cache, and .garbage without harming valuable scrolls and relics.", 25);
-        CLIUtils.typewriter("Tip: Junk looks important, and important things look like junk. Use rm and rm -rf carefully.", 25);
+        CLIUtils.typewriter(
+                "\"Real relics are buried among the garbage. Clear the junk, but do not destroy the artifacts.\"", 25);
+        CLIUtils.typewriter(
+                "The specter fades, leaving only the faint echo: \"Remove the trash... but choose wisely.\"", 25);
+        CLIUtils.typewriter(
+                "\nGoal: Purge useless files in .tmp, .cache, and .garbage without harming valuable scrolls and relics.",
+                25);
+        CLIUtils.typewriter(
+                "Tip: Junk looks important, and important things look like junk. Use rm and rm -rf carefully.", 25);
         CLIUtils.typewriter("Type your command to begin the cleanup...", 25);
 
         long decoyNotDeleted;
@@ -100,7 +113,8 @@ public class Stage10 extends Stage {
                 success = rmFunction(input, mission);
             else if (input.startsWith("ls"))
                 lsFunction(input, mission);
-            else if (input.startsWith("cat") || input.startsWith("cd") || input.startsWith("pwd") || input.startsWith("tree"))
+            else if (input.startsWith("cat") || input.startsWith("cd") || input.startsWith("pwd")
+                    || input.startsWith("tree"))
                 level.sandbox.getExecutor().execute(input);
             else if (input.startsWith("mkdir") || input.startsWith("mv")) // this is for creating the destroyed dungeon
                 IO.println("The spirits whisper: \"Cannot use that command in this stage.\"");
@@ -109,7 +123,8 @@ public class Stage10 extends Stage {
                 continue;
             }
 
-            if(!level.player.getStats().isAlive()) break;
+            if (!level.player.getStats().isAlive())
+                break;
         }
         mission.cleanup();
     }
@@ -140,11 +155,11 @@ public class Stage10 extends Stage {
         return false;
     }
 
-    public void lsFunction (String input, Mission mission) {
-         level.sandbox.getExecutor().execute(input);
+    public void lsFunction(String input, Mission mission) {
+        level.sandbox.getExecutor().execute(input);
     }
 
-    public boolean rmFunction (String input, Mission mission) {
+    public boolean rmFunction(String input, Mission mission) {
         String[] words = input.split(" ");
         int wordCount = words.length;
 
@@ -175,7 +190,7 @@ public class Stage10 extends Stage {
 
     @Override
     public void onSuccessPlay() {
-        //        player.remember("Learned pwd (location awareness)");
+        // player.remember("Learned pwd (location awareness)");
         IO.println("Stage complete! Proceeding to Stage 11...\n");
         CLIUtils.waitAnyKey();
     }

@@ -40,3 +40,4 @@ build/
 *_data.json
 sandbox_*_backup/
 cache/
+app/

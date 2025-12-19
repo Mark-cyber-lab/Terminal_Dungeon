@@ -17,8 +17,15 @@ public class PlayerConfig {
     public PlayerConfig(String fileName, Player player) {
         this.player = player;
 
-        // cache/player directory beside sandbox
-        Path cacheDir = Path.of(fileName).getParent().resolve("cache").resolve("player");
+        Path basePath = Path.of(fileName);
+        Path parent = basePath.getParent();
+
+        Path cacheDir;
+        if (parent != null) {
+            cacheDir = parent.resolve("cache").resolve("player");
+        } else {
+            cacheDir = Path.of("cache").resolve("player");
+        }
 
         try {
             Files.createDirectories(cacheDir);
@@ -36,7 +43,9 @@ public class PlayerConfig {
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("level", player.getStats().getLevel());
         data.put("stage", player.getStats().getStage());
-        data.put("currentDir", player.getStats().getCurrentDir());
+        data.put(
+                "currentDir",
+                Path.of(player.getStats().getCurrentDir()).normalize().toString());
         data.put("health", player.getStats().getHealth());
         data.put("granted", player.getStats().getGrantedCommands());
 
@@ -56,7 +65,8 @@ public class PlayerConfig {
      * Loads the player state from a JSON file.
      */
     public void load() {
-        if (!Files.exists(configFile)) return;
+        if (!Files.exists(configFile))
+            return;
 
         try (BufferedReader reader = Files.newBufferedReader(configFile)) {
             StringBuilder sb = new StringBuilder();
@@ -110,7 +120,8 @@ public class PlayerConfig {
             }
 
             count++;
-            if (count < data.size()) sb.append(",");
+            if (count < data.size())
+                sb.append(",");
             sb.append("\n");
         }
 
@@ -125,17 +136,20 @@ public class PlayerConfig {
         Map<String, String> map = new LinkedHashMap<>();
 
         json = json.trim();
-        if (json.startsWith("{")) json = json.substring(1);
-        if (json.endsWith("}")) json = json.substring(0, json.length() - 1);
+        if (json.startsWith("{"))
+            json = json.substring(1);
+        if (json.endsWith("}"))
+            json = json.substring(0, json.length() - 1);
 
         String[] pairs = json.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 
         for (String pair : pairs) {
             String[] kv = pair.split(":", 2);
-            if (kv.length != 2) continue;
+            if (kv.length != 2)
+                continue;
 
             String key = kv[0].trim().replaceAll("\"", "");
-            String val = kv[1].trim();
+            String val = kv[1].trim().replaceAll("^\"|\"$", "");
             map.put(key, val);
         }
 
@@ -149,10 +163,13 @@ public class PlayerConfig {
         List<String> list = new ArrayList<>();
 
         jsonArray = jsonArray.trim();
-        if (jsonArray.startsWith("[")) jsonArray = jsonArray.substring(1);
-        if (jsonArray.endsWith("]")) jsonArray = jsonArray.substring(0, jsonArray.length() - 1);
+        if (jsonArray.startsWith("["))
+            jsonArray = jsonArray.substring(1);
+        if (jsonArray.endsWith("]"))
+            jsonArray = jsonArray.substring(0, jsonArray.length() - 1);
 
-        if (jsonArray.isBlank()) return list;
+        if (jsonArray.isBlank())
+            return list;
 
         for (String item : jsonArray.split(",")) {
             String val = item.trim().replaceAll("^\"|\"$", "");
