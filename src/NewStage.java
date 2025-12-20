@@ -100,7 +100,7 @@ public class NewStage implements Loggable {
                 }
 
                 playerPath = getPlayerPath();
-                config = new PlayerConfig(playerPath, player);
+                config = new PlayerConfig(playerPath, player, "@#$52kj3rf2309235$#@348fqwb34k23u5o8efe29g53br3urbiudf2k35h3u24i9ty923");
 
                 boolean load = sandbox.getBackupManager().confirmLoadBackup(userName);
                 if (load)
